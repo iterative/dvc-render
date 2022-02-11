@@ -5,8 +5,8 @@ from typing import Dict, Optional
 
 from dvc.render.base import BadTemplateError, Renderer
 from dvc.render.data import to_datapoints
+from dvc.render.template import Template
 from dvc.render.utils import get_files
-from dvc.repo.plots.template import Template
 
 
 class VegaRenderer(Renderer):
