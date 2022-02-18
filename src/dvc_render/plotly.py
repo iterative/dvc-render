@@ -1,11 +1,8 @@
 import json
 from collections import defaultdict
-from typing import TYPE_CHECKING, Any, Dict, Optional
+from typing import Any, Dict, Optional
 
-from dvc.render.base import Renderer
-
-if TYPE_CHECKING:
-    from dvc.compare import TabularData
+from .base import Renderer
 
 
 class ParallelCoordinatesRenderer(Renderer):
@@ -20,6 +17,8 @@ class ParallelCoordinatesRenderer(Renderer):
     </div>
     """
 
+    EXTENSIONS = {".json"}
+
     SCRIPTS = """
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     """
@@ -27,21 +26,22 @@ class ParallelCoordinatesRenderer(Renderer):
     # pylint: disable=W0231
     def __init__(
         self,
-        tabular_data: "TabularData",
+        datapoints,
+        name="pcp",
         color_by: Optional[str] = None,
         fill_value: str = "",
     ):
-        self.tabular_data = tabular_data
+        self.datapoints = datapoints
         self.color_by = color_by
-        self.filename = "experiments"
+        self.name = name
         self.fill_value = fill_value
 
-    def partial_html(self, **kwargs):
-        return self.as_json()
+    def partial_html(self) -> str:
+        return json.dumps(self._get_plotly_data())
 
-    def as_json(self, **kwargs) -> str:
+    def _get_plotly_data(self):
         tabular_dict = defaultdict(list)
-        for row in self.tabular_data.as_dict():
+        for row in self.datapoints:
             for col_name, value in row.items():
                 tabular_dict[col_name].append(str(value))
 
@@ -89,4 +89,4 @@ class ParallelCoordinatesRenderer(Renderer):
                     trace["line"]["colorbar"]["tickvals"] = dummy_values
                     trace["line"]["colorbar"]["ticktext"] = values
 
-        return json.dumps({"data": [trace], "layout": {}})
+        return {"data": [trace], "layout": {}}

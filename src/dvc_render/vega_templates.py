@@ -1,25 +1,26 @@
 import json
-import os
-from typing import Any, Dict, List, Optional
+from pathlib import Path
+from typing import TYPE_CHECKING, Any, Dict, List, Optional, Union
 
-from funcy import cached_property
+from .exceptions import DvcRenderException
 
-from dvc.exceptions import DvcException
+if TYPE_CHECKING:
+    from .base import StrPath
 
 
-class TemplateNotFoundError(DvcException):
+class TemplateNotFoundError(DvcRenderException):
     def __init__(self, path):
         super().__init__(f"Template '{path}' not found.")
 
 
-class NoFieldInDataError(DvcException):
+class NoFieldInDataError(DvcRenderException):
     def __init__(self, field_name):
         super().__init__(
             f"Field '{field_name}' does not exist in provided data."
         )
 
 
-class TemplateContentDoesNotMatch(DvcException):
+class TemplateContentDoesNotMatch(DvcRenderException):
     def __init__(self, template_name: str, path: str):
         super().__init__(
             f"Template '{path}' already exists "
@@ -56,24 +57,29 @@ class Template:
 
     @classmethod
     def anchor(cls, name):
+        "Get ANCHOR formatted with name."
         return cls.ANCHOR.format(name.upper())
 
-    def has_anchor(self, name):
+    def has_anchor(self, name) -> bool:
+        "Check if ANCHOR formatted with name is in content."
         return self.anchor_str(name) in self.content
 
     @classmethod
-    def fill_anchor(cls, content, name, value):
+    def fill_anchor(cls, content, name, value) -> str:
+        "Replace anchor `name` with `value` in content."
         value_str = json.dumps(
             value, indent=cls.INDENT, separators=cls.SEPARATORS, sort_keys=True
         )
         return content.replace(cls.anchor_str(name), value_str)
 
     @classmethod
-    def anchor_str(cls, name):
+    def anchor_str(cls, name) -> str:
+        "Get string wrapping ANCHOR formatted with name."
         return f'"{cls.anchor(name)}"'
 
     @staticmethod
     def check_field_exists(data, field):
+        "Raise NoFieldInDataError if `field` not in `data`."
         if not any(field in row for row in data):
             raise NoFieldInDataError(field)
 
@@ -499,97 +505,87 @@ class LinearTemplate(Template):
     }
 
 
-class PlotTemplates:
-    TEMPLATES_DIR = "plots"
-    TEMPLATES = [
-        SimpleLinearTemplate,
-        LinearTemplate,
-        ConfusionTemplate,
-        NormalizedConfusionTemplate,
-        ScatterTemplate,
-        SmoothLinearTemplate,
-    ]
+TEMPLATES = [
+    SimpleLinearTemplate,
+    LinearTemplate,
+    ConfusionTemplate,
+    NormalizedConfusionTemplate,
+    ScatterTemplate,
+    SmoothLinearTemplate,
+]
 
-    @cached_property
-    def templates_dir(self):
-        return os.path.join(self.dvc_dir, self.TEMPLATES_DIR)
 
-    def get_template(self, template_name: str):
-        template_path = os.path.abspath(template_name)
-        if os.path.exists(template_path):
-            return os.path.abspath(template_path)
+def _find_template(
+    template_name: str, template_dir: Optional[str] = None
+) -> Optional["StrPath"]:
+    if template_dir:
+        for template_path in Path(template_dir).rglob(f"{template_name}*"):
+            return template_path
 
-        if self.dvc_dir and os.path.exists(self.dvc_dir):
-            template_path = os.path.join(self.templates_dir, template_name)
-            if os.path.exists(template_path):
-                return template_path
+    template_path = Path(template_name).with_suffix(".json")
+    template_path = template_path.resolve()
+    if template_path.exists():
+        return template_path.resolve()
 
-            all_templates = [
-                os.path.join(root, file)
-                for root, _, files in os.walk(self.templates_dir)
-                for file in files
-            ]
-            matches = [
-                template
-                for template in all_templates
-                if os.path.splitext(template)[0] == template_path
-            ]
-            if matches:
-                assert len(matches) == 1
-                return matches[0]
-        raise TemplateNotFoundError(template_name)
+    return None
 
-    def __init__(self, dvc_dir):
-        self.dvc_dir = dvc_dir
 
-    def init(
-        self, output: Optional[str] = None, targets: Optional[List] = None
-    ):
-        from dvc.utils.fs import makedirs
+def get_template(
+    template: Union[Optional[str], Template] = None,
+    template_dir: Optional[str] = None,
+) -> Template:
+    """Return template instance based on given template arg.
 
-        output = output or self.templates_dir
+    If template is already an instance, return it.
+    If template is None, return default `linear` template.
+    If template is a path, will try to find it as absolute
+    path or inside template_dir.
+    If template matches one of the DEFAULT_NAMEs in TEMPLATES,
+    return an instance of the one matching.
+    """
+    if isinstance(template, Template):
+        return template
 
-        makedirs(output, exist_ok=True)
+    if template is None:
+        template = "linear"
 
-        if targets:
-            templates = [
-                template
-                for template in self.TEMPLATES
-                if template.DEFAULT_NAME in targets
-            ]
-        else:
-            templates = self.TEMPLATES
+    template_path = _find_template(template, template_dir)
 
-        for template in templates:
-            self._dump(template(), output)
+    if template_path:
+        with open(template_path, "r", encoding="utf-8") as f:
+            content = f.read()
+        return Template(content, name=template)
 
-    def _dump(self, template: Template, output: str):
-        path = os.path.join(output, template.filename)
+    for template_cls in TEMPLATES:
+        if template_cls.DEFAULT_NAME == template:
+            return template_cls()
 
-        if os.path.exists(path):
-            with open(path, "r", encoding="utf-8") as fd:
-                content = fd.read()
+    raise TemplateNotFoundError(template)
+
+
+def dump_templates(output: "StrPath", targets: Optional[List] = None) -> None:
+    "Write TEMPLATES in `.json` format to `output`."
+    output = Path(output)
+    output.mkdir(exist_ok=True)
+
+    if targets:
+        templates = [
+            template
+            for template in TEMPLATES
+            if template.DEFAULT_NAME in targets
+        ]
+    else:
+        templates = TEMPLATES
+
+    for template_cls in templates:
+        template = template_cls()
+        path = output / template.filename
+
+        if path.exists():
+            content = path.read_text(encoding="utf-8")
             if content != template.content:
                 raise TemplateContentDoesNotMatch(
                     template.DEFAULT_NAME or "", path
                 )
         else:
-            with open(path, "w", encoding="utf-8") as fd:
-                fd.write(template.content)
-
-    def load(self, template_name=None):
-        if not template_name:
-            template_name = "linear"
-
-        try:
-            path = self.get_template(template_name)
-
-            with open(path, "r", encoding="utf-8") as fd:
-                content = fd.read()
-
-            return Template(content, name=template_name)
-        except TemplateNotFoundError:
-            for template in self.TEMPLATES:
-                if template.DEFAULT_NAME == template_name:
-                    return template()
-            raise
+            path.write_text(template.content, encoding="utf-8")

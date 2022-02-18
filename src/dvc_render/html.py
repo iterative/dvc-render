@@ -2,11 +2,13 @@ import os
 from pathlib import Path
 from typing import TYPE_CHECKING, Dict, List, Optional
 
-from dvc.exceptions import DvcException
+import tabulate  # type: ignore
+
+from .exceptions import DvcRenderException
 
 if TYPE_CHECKING:
-    from dvc.render.base import Renderer
-    from dvc.types import StrPath
+    from .base import Renderer, StrPath
+
 
 PAGE_HTML = """<!DOCTYPE html>
 <html>
@@ -21,7 +23,7 @@ PAGE_HTML = """<!DOCTYPE html>
 </html>"""
 
 
-class MissingPlaceholderError(DvcException):
+class MissingPlaceholderError(DvcRenderException):
     def __init__(self, placeholder):
         super().__init__(f"HTML template has to contain '{placeholder}'.")
 
@@ -50,8 +52,7 @@ class HTML:
             self.refresh_tag = self.REFRESH_TAG.format(refresh_seconds)
 
     def with_metrics(self, metrics: Dict[str, Dict]) -> "HTML":
-        import tabulate
-
+        "Adds metrics element."
         header: List[str] = []
         rows: List[List[str]] = []
 
@@ -66,15 +67,18 @@ class HTML:
         return self
 
     def with_scripts(self, scripts: str) -> "HTML":
+        "Extend scripts element."
         if scripts not in self.scripts:
             self.scripts += f"\n{scripts}"
         return self
 
     def with_element(self, html: str) -> "HTML":
+        "Adds custom html element."
         self.elements.append(html)
         return self
 
     def embed(self) -> str:
+        "Format HTML template with all elements."
         kwargs = {
             self.SCRIPTS_PLACEHOLDER: self.scripts,
             self.PLOTS_PLACEHOLDER: "\n".join(self.elements),
@@ -83,14 +87,14 @@ class HTML:
         return self.template.format(**kwargs)
 
 
-def write(
-    path: "StrPath",
+def render_html(
     renderers: List["Renderer"],
+    path: "StrPath",
     metrics: Optional[Dict[str, Dict]] = None,
     template_path: Optional["StrPath"] = None,
     refresh_seconds: Optional[int] = None,
-):
-
+) -> "StrPath":
+    "User renderers to fill an HTML template and write to path."
     os.makedirs(path, exist_ok=True)
 
     page_html = None
@@ -105,10 +109,10 @@ def write(
 
     for renderer in renderers:
         document.with_scripts(renderer.SCRIPTS)
-        document.with_element(renderer.generate_html(path))
+        document.with_element(renderer.generate_html())
 
     index = Path(os.path.join(path, "index.html"))
 
-    with open(index, "w", encoding="utf-8") as fd:
-        fd.write(document.embed())
+    with open(index, "w", encoding="utf-8") as f:
+        f.write(document.embed())
     return index

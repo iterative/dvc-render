@@ -1,0 +1,2 @@
+class DvcRenderException(Exception):
+    pass
