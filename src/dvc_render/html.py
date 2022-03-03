@@ -1,4 +1,3 @@
-import os
 from pathlib import Path
 from typing import TYPE_CHECKING, Dict, List, Optional
 
@@ -89,13 +88,14 @@ class HTML:
 
 def render_html(
     renderers: List["Renderer"],
-    path: "StrPath",
+    output_file: "StrPath",
     metrics: Optional[Dict[str, Dict]] = None,
     template_path: Optional["StrPath"] = None,
     refresh_seconds: Optional[int] = None,
 ) -> "StrPath":
     "User renderers to fill an HTML template and write to path."
-    os.makedirs(path, exist_ok=True)
+    output_path = Path(output_file)
+    output_path.parent.mkdir(exist_ok=True)
 
     page_html = None
     if template_path:
@@ -111,8 +111,6 @@ def render_html(
         document.with_scripts(renderer.SCRIPTS)
         document.with_element(renderer.generate_html())
 
-    index = Path(os.path.join(path, "index.html"))
+    output_path.write_text(document.embed(), encoding="utf8")
 
-    with open(index, "w", encoding="utf-8") as f:
-        f.write(document.embed())
-    return index
+    return output_file
