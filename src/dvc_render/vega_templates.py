@@ -53,7 +53,7 @@ class Template:
 
         self.name = name or self.DEFAULT_NAME
         assert self.content and self.name
-        self.filename = self.name + self.EXTENSION
+        self.filename = Path(self.name).with_suffix(self.EXTENSION)
 
     @classmethod
     def anchor(cls, name):
@@ -522,8 +522,7 @@ def _find_template(
         for template_path in Path(template_dir).rglob(f"{template_name}*"):
             return template_path
 
-    template_path = Path(template_name).with_suffix(".json")
-    template_path = template_path.resolve()
+    template_path = Path(template_name)
     if template_path.exists():
         return template_path.resolve()
 

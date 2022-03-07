@@ -36,11 +36,16 @@ def test_raise_on_no_template():
         ("template.json", "template.json"),
     ],
 )
-def test_get_template(tmp_dir, template_path, target_name):
+def test_get_template_from_dir(tmp_dir, template_path, target_name):
     tmp_dir.gen(template_path, "template_content")
     assert (
         get_template(target_name, ".dvc/plots").content == "template_content"
     )
+
+
+def test_get_template_from_file(tmp_dir):
+    tmp_dir.gen("foo/bar.json", "template_content")
+    assert get_template("foo/bar.json").content == "template_content"
 
 
 def test_get_default_template():
