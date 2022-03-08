@@ -37,6 +37,18 @@ class VegaRenderer(Renderer):
             self.properties.get("template_dir", None),
         )
 
+    def _fill_properties(self, content: str) -> str:
+        self.properties.setdefault("title", "")
+        self.properties.setdefault("x_label", self.properties.get("x"))
+        self.properties.setdefault("y_label", self.properties.get("y"))
+
+        names = ["title", "x", "y", "x_label", "y_label"]
+        for name in names:
+            value = self.properties.get(name)
+            if value is not None:
+                content = self.template.fill_anchor(content, name, value)
+        return content
+
     def partial_html(self) -> str:
         content = deepcopy(self.template.content)
         if self.template.anchor_str("data") not in self.template.content:
@@ -55,15 +67,7 @@ class VegaRenderer(Renderer):
                 self.datapoints, self.properties.get("y")
             )
 
+        content = self._fill_properties(content)
         content = self.template.fill_anchor(content, "data", self.datapoints)
 
-        self.properties.setdefault("title", "")
-        self.properties.setdefault("x_label", self.properties.get("x"))
-        self.properties.setdefault("y_label", self.properties.get("y"))
-
-        names = ["title", "x", "y", "x_label", "y_label"]
-        for name in names:
-            value = self.properties.get(name)
-            if value is not None:
-                content = self.template.fill_anchor(content, name, value)
         return content
