@@ -1,5 +1,5 @@
 from copy import deepcopy
-from typing import Dict
+from typing import Dict, List, Optional
 
 from .base import Renderer
 from .exceptions import DvcRenderException
@@ -37,26 +37,14 @@ class VegaRenderer(Renderer):
             self.properties.get("template_dir", None),
         )
 
-    def _fill_properties(self, content: str) -> str:
-        self.properties.setdefault("title", "")
-        self.properties.setdefault("x_label", self.properties.get("x"))
-        self.properties.setdefault("y_label", self.properties.get("y"))
+    def get_filled_template(
+        self, skip_anchors: Optional[List[str]] = None
+    ) -> str:
+        """Returns a functional vega specification"""
+        if skip_anchors is None:
+            skip_anchors = []
 
-        names = ["title", "x", "y", "x_label", "y_label"]
-        for name in names:
-            value = self.properties.get(name)
-            if value is not None:
-                content = self.template.fill_anchor(content, name, value)
-        return content
-
-    def partial_html(self) -> str:
         content = deepcopy(self.template.content)
-        if self.template.anchor_str("data") not in self.template.content:
-            anchor = self.template.anchor("data")
-            raise BadTemplateError(
-                f"Template '{self.template.name}' "
-                f"is not using '{anchor}' anchor"
-            )
 
         if self.properties.get("x"):
             self.template.check_field_exists(
@@ -66,8 +54,27 @@ class VegaRenderer(Renderer):
             self.template.check_field_exists(
                 self.datapoints, self.properties.get("y")
             )
+        self.properties.setdefault("title", "")
+        self.properties.setdefault("x_label", self.properties.get("x"))
+        self.properties.setdefault("y_label", self.properties.get("y"))
+        self.properties.setdefault("data", self.datapoints)
 
-        content = self._fill_properties(content)
-        content = self.template.fill_anchor(content, "data", self.datapoints)
+        names = ["title", "x", "y", "x_label", "y_label", "data"]
+        for name in names:
+            if name in skip_anchors:
+                continue
+            value = self.properties.get(name)
+            if value is None:
+                continue
+            if self.template.anchor_str(name) not in self.template.content:
+                anchor = self.template.anchor(name)
+                raise BadTemplateError(
+                    f"Template '{self.template.name}' "
+                    f"is not using '{anchor}' anchor"
+                )
+            content = self.template.fill_anchor(content, name, value)
 
         return content
+
+    def partial_html(self) -> str:
+        return self.get_filled_template()
