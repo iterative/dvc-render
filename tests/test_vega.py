@@ -66,16 +66,19 @@ def test_confusion():
 def test_bad_template():
     datapoints = [{"val": 2}, {"val": 3}]
     props = {"template": Template("name", "content")}
+    renderer = VegaRenderer(datapoints, "foo", **props)
     with pytest.raises(BadTemplateError):
-        VegaRenderer(datapoints, "foo", **props).partial_html()
+        renderer.partial_html()
+    renderer.get_filled_template(skip_anchors=["data"], strict=False)
 
 
 def test_raise_on_wrong_field():
     datapoints = [{"val": 2}, {"val": 3}]
     props = {"x": "no_val"}
-
+    renderer = VegaRenderer(datapoints, "foo", **props)
     with pytest.raises(NoFieldInDataError):
-        VegaRenderer(datapoints, "foo", **props).partial_html()
+        renderer.partial_html()
+    renderer.get_filled_template(strict=False)
 
 
 @pytest.mark.parametrize(

@@ -38,7 +38,7 @@ class VegaRenderer(Renderer):
         )
 
     def get_filled_template(
-        self, skip_anchors: Optional[List[str]] = None
+        self, skip_anchors: Optional[List[str]] = None, strict: bool = True
     ) -> str:
         """Returns a functional vega specification"""
         if skip_anchors is None:
@@ -46,14 +46,15 @@ class VegaRenderer(Renderer):
 
         content = deepcopy(self.template.content)
 
-        if self.properties.get("x"):
-            self.template.check_field_exists(
-                self.datapoints, self.properties.get("x")
-            )
-        if self.properties.get("y"):
-            self.template.check_field_exists(
-                self.datapoints, self.properties.get("y")
-            )
+        if strict:
+            if self.properties.get("x"):
+                self.template.check_field_exists(
+                    self.datapoints, self.properties.get("x")
+                )
+            if self.properties.get("y"):
+                self.template.check_field_exists(
+                    self.datapoints, self.properties.get("y")
+                )
         self.properties.setdefault("title", "")
         self.properties.setdefault("x_label", self.properties.get("x"))
         self.properties.setdefault("y_label", self.properties.get("y"))
@@ -66,12 +67,13 @@ class VegaRenderer(Renderer):
             value = self.properties.get(name)
             if value is None:
                 continue
-            if self.template.anchor_str(name) not in self.template.content:
-                anchor = self.template.anchor(name)
-                raise BadTemplateError(
-                    f"Template '{self.template.name}' "
-                    f"is not using '{anchor}' anchor"
-                )
+            if name == "data" or strict:
+                if self.template.anchor_str(name) not in self.template.content:
+                    anchor = self.template.anchor(name)
+                    raise BadTemplateError(
+                        f"Template '{self.template.name}' "
+                        f"is not using '{anchor}' anchor"
+                    )
             content = self.template.fill_anchor(content, name, value)
 
         return content
