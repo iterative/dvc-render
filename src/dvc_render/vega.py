@@ -67,7 +67,7 @@ class VegaRenderer(Renderer):
             value = self.properties.get(name)
             if value is None:
                 continue
-            if name == "data" or strict:
+            if name == "data":
                 if self.template.anchor_str(name) not in self.template.content:
                     anchor = self.template.anchor(name)
                     raise BadTemplateError(
