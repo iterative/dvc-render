@@ -6,7 +6,17 @@ from funcy import first  # type: ignore
 from dvc_render.vega import BadTemplateError, VegaRenderer
 from dvc_render.vega_templates import NoFieldInDataError, Template
 
-# pylint: disable=missing-function-docstring
+# pylint: disable=missing-function-docstring, C1803
+
+
+def test_init_empty():
+    renderer = VegaRenderer(None, None)
+
+    assert renderer.datapoints == []
+    assert renderer.name == ""
+    assert renderer.properties == {}
+
+    assert renderer.generate_html() == ""
 
 
 def test_choose_axes():
