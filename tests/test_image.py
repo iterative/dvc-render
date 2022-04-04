@@ -25,7 +25,6 @@ def test_matches(extension, matches):
 
 def test_render(tmp_dir):
     tmp_dir.gen("workspace_file.jpg", b"content")
-
     datapoints = [
         {
             "filename": "file.jpg",
@@ -33,8 +32,14 @@ def test_render(tmp_dir):
             "src": "workspace_file.jpg",
         }
     ]
+    filename = "file.jpg"
 
-    html = ImageRenderer(datapoints, "file.jpg").generate_html()
+    html = ImageRenderer(datapoints, filename).generate_html()
 
     assert "<p>file.jpg</p>" in html
     assert '<img src="workspace_file.jpg">' in html
+
+
+def test_render_empty():
+    html = ImageRenderer(None, None).generate_html()
+    assert html == ""

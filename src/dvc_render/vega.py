@@ -1,5 +1,5 @@
 from copy import deepcopy
-from typing import Dict, List, Optional
+from typing import List, Optional
 
 from .base import Renderer
 from .exceptions import DvcRenderException
@@ -32,7 +32,7 @@ class VegaRenderer(Renderer):
 
     EXTENSIONS = {".yml", ".yaml", ".json", ".csv", ".tsv"}
 
-    def __init__(self, datapoints: Dict, name: str, **properties):
+    def __init__(self, datapoints: List, name: str, **properties):
         super().__init__(datapoints, name, **properties)
         self.template = get_template(
             self.properties.get("template", None),
@@ -43,6 +43,9 @@ class VegaRenderer(Renderer):
         self, skip_anchors: Optional[List[str]] = None, strict: bool = True
     ) -> str:
         """Returns a functional vega specification"""
+        if not self.datapoints:
+            return ""
+
         if skip_anchors is None:
             skip_anchors = []
 

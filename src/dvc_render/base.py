@@ -1,6 +1,6 @@
 import abc
 from pathlib import Path
-from typing import TYPE_CHECKING, Dict, Iterable, Union
+from typing import TYPE_CHECKING, Iterable, List, Union
 
 if TYPE_CHECKING:
     from os import PathLike
@@ -19,9 +19,11 @@ class Renderer(abc.ABC):
 
     EXTENSIONS: Iterable[str] = {}
 
-    def __init__(self, datapoints: Dict, name: str, **properties):
-        self.datapoints = datapoints
-        self.name = name
+    def __init__(
+        self, datapoints: List = None, name: str = None, **properties
+    ):
+        self.datapoints = datapoints or []
+        self.name = name or ""
         self.properties = properties
 
     @abc.abstractmethod
@@ -52,11 +54,13 @@ class Renderer(abc.ABC):
     def generate_html(self) -> str:
         "Return `DIV` formatted with `partial_html`."
         partial = self.partial_html()
+        if partial:
 
-        div_id = self.remove_special_chars(self.name)
-        div_id = f"plot_{div_id}"
+            div_id = self.remove_special_chars(self.name)
+            div_id = f"plot_{div_id}"
 
-        return self.DIV.format(id=div_id, partial=partial)
+            return self.DIV.format(id=div_id, partial=partial)
+        return ""
 
     @classmethod
     def matches(
