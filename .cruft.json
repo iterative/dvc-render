@@ -1,0 +1,26 @@
+{
+  "template": "https://github.com/iterative/py-template",
+  "commit": "08421f42aa053d96c6ff369f5999c457093cb3c6",
+  "context": {
+    "cookiecutter": {
+      "project_name": "dvc-render",
+      "package_name": "dvc_render",
+      "friendly_name": "Dvc Render",
+      "author": "Iterative",
+      "email": "support@dvc.org",
+      "github_user": "iterative",
+      "version": "0.0.4",
+      "copyright_year": "2022",
+      "license": "Apache-2.0",
+      "short_description": "",
+      "development_status": "Development Status :: 1 - Planning",
+      "_copy_without_render": [
+        ".github/workflows/release.yaml",
+        ".github/workflows/tests.yaml",
+        ".github/workflows/update-template.yaml"
+      ],
+      "_template": "https://github.com/iterative/py-template"
+    }
+  },
+  "directory": null
+}
