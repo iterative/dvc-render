@@ -2,6 +2,8 @@ from .base import Renderer
 
 
 class ImageRenderer(Renderer):
+    """Renderer for image plots."""
+
     TYPE = "image"
     DIV = """
         <div

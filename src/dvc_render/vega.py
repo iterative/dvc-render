@@ -11,6 +11,8 @@ class BadTemplateError(DvcRenderException):
 
 
 class VegaRenderer(Renderer):
+    """Renderer for vega plots."""
+
     TYPE = "vega"
 
     DIV = """

@@ -9,6 +9,7 @@ StrPath = Union[str, "PathLike[str]"]
 
 
 class Renderer(abc.ABC):
+    """Base Renderer class"""
 
     DIV = """
     <div id="{id}">

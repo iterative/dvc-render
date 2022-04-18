@@ -6,6 +6,12 @@ from .base import Renderer
 
 
 class ParallelCoordinatesRenderer(Renderer):
+    """
+    Renderer for Parallel Coordinates plot.
+
+    Using Plotly.
+    """
+
     TYPE = "plotly"
 
     DIV = """
