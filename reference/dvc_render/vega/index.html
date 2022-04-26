@@ -626,7 +626,10 @@
 <span class="normal">81</span>
 <span class="normal">82</span>
 <span class="normal">83</span>
-<span class="normal">84</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">VegaRenderer</span><span class="p">(</span><span class="n">Renderer</span><span class="p">):</span>
+<span class="normal">84</span>
+<span class="normal">85</span>
+<span class="normal">86</span>
+<span class="normal">87</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">VegaRenderer</span><span class="p">(</span><span class="n">Renderer</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Renderer for vega plots.&quot;&quot;&quot;</span>
 
     <span class="n">TYPE</span> <span class="o">=</span> <span class="s2">&quot;vega&quot;</span>
@@ -648,7 +651,7 @@
 
     <span class="n">EXTENSIONS</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;.yml&quot;</span><span class="p">,</span> <span class="s2">&quot;.yaml&quot;</span><span class="p">,</span> <span class="s2">&quot;.json&quot;</span><span class="p">,</span> <span class="s2">&quot;.csv&quot;</span><span class="p">,</span> <span class="s2">&quot;.tsv&quot;</span><span class="p">}</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">datapoints</span><span class="p">:</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">**</span><span class="n">properties</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">datapoints</span><span class="p">:</span> <span class="n">List</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">**</span><span class="n">properties</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">datapoints</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="o">**</span><span class="n">properties</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">template</span> <span class="o">=</span> <span class="n">get_template</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;template&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
@@ -659,6 +662,9 @@
         <span class="bp">self</span><span class="p">,</span> <span class="n">skip_anchors</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">strict</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Returns a functional vega specification&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">datapoints</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;&quot;</span>
+
         <span class="k">if</span> <span class="n">skip_anchors</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">skip_anchors</span> <span class="o">=</span> <span class="p">[]</span>
 
@@ -774,10 +780,16 @@
 <span class="normal">78</span>
 <span class="normal">79</span>
 <span class="normal">80</span>
-<span class="normal">81</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">get_filled_template</span><span class="p">(</span>
+<span class="normal">81</span>
+<span class="normal">82</span>
+<span class="normal">83</span>
+<span class="normal">84</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">get_filled_template</span><span class="p">(</span>
     <span class="bp">self</span><span class="p">,</span> <span class="n">skip_anchors</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">strict</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Returns a functional vega specification&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">datapoints</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;</span>
+
     <span class="k">if</span> <span class="n">skip_anchors</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">skip_anchors</span> <span class="o">=</span> <span class="p">[]</span>
 

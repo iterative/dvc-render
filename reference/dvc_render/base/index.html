@@ -652,7 +652,11 @@
 <span class="normal">63</span>
 <span class="normal">64</span>
 <span class="normal">65</span>
-<span class="normal">66</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">Renderer</span><span class="p">(</span><span class="n">abc</span><span class="o">.</span><span class="n">ABC</span><span class="p">):</span>
+<span class="normal">66</span>
+<span class="normal">67</span>
+<span class="normal">68</span>
+<span class="normal">69</span>
+<span class="normal">70</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">Renderer</span><span class="p">(</span><span class="n">abc</span><span class="o">.</span><span class="n">ABC</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Base Renderer class&quot;&quot;&quot;</span>
 
     <span class="n">DIV</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
@@ -663,9 +667,11 @@
 
     <span class="n">EXTENSIONS</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">datapoints</span><span class="p">:</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">**</span><span class="n">properties</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">datapoints</span> <span class="o">=</span> <span class="n">datapoints</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">datapoints</span><span class="p">:</span> <span class="n">List</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">properties</span>
+    <span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">datapoints</span> <span class="o">=</span> <span class="n">datapoints</span> <span class="ow">or</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span> <span class="ow">or</span> <span class="s2">&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">properties</span> <span class="o">=</span> <span class="n">properties</span>
 
     <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
@@ -696,11 +702,13 @@
     <span class="k">def</span> <span class="nf">generate_html</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
         <span class="s2">&quot;Return `DIV` formatted with `partial_html`.&quot;</span>
         <span class="n">partial</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">partial_html</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">partial</span><span class="p">:</span>
 
-        <span class="n">div_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">remove_special_chars</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
-        <span class="n">div_id</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;plot_</span><span class="si">{</span><span class="n">div_id</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="n">div_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">remove_special_chars</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+            <span class="n">div_id</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;plot_</span><span class="si">{</span><span class="n">div_id</span><span class="si">}</span><span class="s2">&quot;</span>
 
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">DIV</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">div_id</span><span class="p">,</span> <span class="n">partial</span><span class="o">=</span><span class="n">partial</span><span class="p">)</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">DIV</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">div_id</span><span class="p">,</span> <span class="n">partial</span><span class="o">=</span><span class="n">partial</span><span class="p">)</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;</span>
 
     <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">matches</span><span class="p">(</span>
@@ -747,21 +755,25 @@
 
         <details class="quote">
           <summary>Source code in <code>dvc_render/base.py</code></summary>
-          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">52</span>
-<span class="normal">53</span>
-<span class="normal">54</span>
+          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">54</span>
 <span class="normal">55</span>
 <span class="normal">56</span>
 <span class="normal">57</span>
 <span class="normal">58</span>
-<span class="normal">59</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">generate_html</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="normal">59</span>
+<span class="normal">60</span>
+<span class="normal">61</span>
+<span class="normal">62</span>
+<span class="normal">63</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">generate_html</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
     <span class="s2">&quot;Return `DIV` formatted with `partial_html`.&quot;</span>
     <span class="n">partial</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">partial_html</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">partial</span><span class="p">:</span>
 
-    <span class="n">div_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">remove_special_chars</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
-    <span class="n">div_id</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;plot_</span><span class="si">{</span><span class="n">div_id</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="n">div_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">remove_special_chars</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+        <span class="n">div_id</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;plot_</span><span class="si">{</span><span class="n">div_id</span><span class="si">}</span><span class="s2">&quot;</span>
 
-    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">DIV</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">div_id</span><span class="p">,</span> <span class="n">partial</span><span class="o">=</span><span class="n">partial</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">DIV</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">div_id</span><span class="p">,</span> <span class="n">partial</span><span class="o">=</span><span class="n">partial</span><span class="p">)</span>
+    <span class="k">return</span> <span class="s2">&quot;&quot;</span>
 </code></pre></div></td></tr></table></div>
         </details>
     </div>
@@ -790,12 +802,12 @@
 
         <details class="quote">
           <summary>Source code in <code>dvc_render/base.py</code></summary>
-          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">61</span>
-<span class="normal">62</span>
-<span class="normal">63</span>
-<span class="normal">64</span>
-<span class="normal">65</span>
-<span class="normal">66</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@classmethod</span>
+          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">65</span>
+<span class="normal">66</span>
+<span class="normal">67</span>
+<span class="normal">68</span>
+<span class="normal">69</span>
+<span class="normal">70</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@classmethod</span>
 <span class="k">def</span> <span class="nf">matches</span><span class="p">(</span>
     <span class="bp">cls</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">properties</span>  <span class="c1"># pylint: disable=unused-argument</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
@@ -830,13 +842,13 @@ to fill <code>{partial}</code> inside self.DIV.</p>
 
         <details class="quote">
           <summary>Source code in <code>dvc_render/base.py</code></summary>
-          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">27</span>
-<span class="normal">28</span>
-<span class="normal">29</span>
+          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">29</span>
 <span class="normal">30</span>
 <span class="normal">31</span>
 <span class="normal">32</span>
-<span class="normal">33</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
+<span class="normal">33</span>
+<span class="normal">34</span>
+<span class="normal">35</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
 <span class="k">def</span> <span class="nf">partial_html</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Us this method to generate HTML content,</span>
@@ -871,12 +883,12 @@ to fill <code>{partial}</code> inside self.DIV.</p>
 
         <details class="quote">
           <summary>Source code in <code>dvc_render/base.py</code></summary>
-          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">45</span>
-<span class="normal">46</span>
-<span class="normal">47</span>
+          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">47</span>
 <span class="normal">48</span>
 <span class="normal">49</span>
-<span class="normal">50</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@staticmethod</span>
+<span class="normal">50</span>
+<span class="normal">51</span>
+<span class="normal">52</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@staticmethod</span>
 <span class="k">def</span> <span class="nf">remove_special_chars</span><span class="p">(</span><span class="n">string</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
     <span class="s2">&quot;Ensure string is valid HTML id.&quot;</span>
     <span class="k">return</span> <span class="n">string</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span>
