@@ -27,7 +27,7 @@ class Renderer(abc.ABC):
         self.properties = properties
 
     @abc.abstractmethod
-    def partial_html(self) -> str:
+    def partial_html(self, **kwargs) -> str:
         """
         Us this method to generate HTML content,
         to fill `{partial}` inside self.DIV.
@@ -51,9 +51,9 @@ class Renderer(abc.ABC):
             {ord(c): "_" for c in r"!@#$%^&*()[]{};,<>?\/:.|`~=_+"}
         )
 
-    def generate_html(self) -> str:
+    def generate_html(self, html_path=None) -> str:
         "Return `DIV` formatted with `partial_html`."
-        partial = self.partial_html()
+        partial = self.partial_html(html_path=html_path)
         if partial:
 
             div_id = self.remove_special_chars(self.name)

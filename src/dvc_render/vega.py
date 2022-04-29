@@ -83,5 +83,5 @@ class VegaRenderer(Renderer):
 
         return content
 
-    def partial_html(self) -> str:
+    def partial_html(self, **kwargs) -> str:
         return self.get_filled_template()
