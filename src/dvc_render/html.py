@@ -109,7 +109,7 @@ def render_html(
 
     for renderer in renderers:
         document.with_scripts(renderer.SCRIPTS)
-        document.with_element(renderer.generate_html())
+        document.with_element(renderer.generate_html(html_path=output_path))
 
     output_path.write_text(document.embed(), encoding="utf8")
 

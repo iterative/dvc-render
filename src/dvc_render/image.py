@@ -1,3 +1,5 @@
+import os
+
 from .base import Renderer
 
 
@@ -20,9 +22,18 @@ class ImageRenderer(Renderer):
 
     EXTENSIONS = {".jpg", ".jpeg", ".gif", ".png"}
 
-    def partial_html(self) -> str:
+    def partial_html(self, html_path=None, **kwargs) -> str:
         div_content = []
         for datapoint in self.datapoints:
+            src = datapoint[self.SRC_FIELD]
+
+            if (
+                not src.startswith("data:image;base64")
+                and os.path.isabs(src)
+                and html_path
+            ):
+                src = os.path.relpath(src, os.path.dirname(html_path))
+
             div_content.append(
                 f"""
                 <div
@@ -30,7 +41,7 @@ class ImageRenderer(Renderer):
                     inline-block;
                     overflow:hidden;margin-left:8px;">
                     <p>{datapoint[self.TITLE_FIELD]}</p>
-                    <img src="{datapoint[self.SRC_FIELD]}">
+                    <img src="{src}">
                 </div>
                 """
             )
