@@ -176,6 +176,34 @@ class ConfusionTemplate(Template):
                     },
                 },
                 {
+                    "selection": {
+                        "label": {
+                            "type": "single",
+                            "on": "mouseover",
+                            "encodings": ["x", "y"],
+                            "empty": "none",
+                            "clear": "mouseout",
+                        }
+                    },
+                    "mark": "rect",
+                    "encoding": {
+                        "tooltip": [
+                            {"field": "actual", "type": "nominal"},
+                            {"field": "predicted", "type": "nominal"},
+                        ],
+                        "opacity": {
+                            "condition": {"selection": "label", "value": 1},
+                            "value": 0,
+                        },
+                    },
+                },
+                {
+                    "transform": [{"filter": {"selection": "label"}}],
+                    "layer": [
+                        {"mark": {"type": "rect", "color": "lightpink"}},
+                    ],
+                },
+                {
                     "mark": "text",
                     "encoding": {
                         "text": {"field": "xy_count", "type": "quantitative"},
@@ -256,6 +284,34 @@ class NormalizedConfusionTemplate(Template):
                             "scale": {"domain": [0, 1]},
                         }
                     },
+                },
+                {
+                    "selection": {
+                        "label": {
+                            "type": "single",
+                            "on": "mouseover",
+                            "encodings": ["x", "y"],
+                            "empty": "none",
+                            "clear": "mouseout",
+                        }
+                    },
+                    "mark": "rect",
+                    "encoding": {
+                        "tooltip": [
+                            {"field": "actual", "type": "nominal"},
+                            {"field": "predicted", "type": "nominal"},
+                        ],
+                        "opacity": {
+                            "condition": {"selection": "label", "value": 1},
+                            "value": 0,
+                        },
+                    },
+                },
+                {
+                    "transform": [{"filter": {"selection": "label"}}],
+                    "layer": [
+                        {"mark": {"type": "rect", "color": "lightpink"}},
+                    ],
                 },
                 {
                     "mark": "text",
