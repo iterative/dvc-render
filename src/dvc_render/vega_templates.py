@@ -188,8 +188,8 @@ class ConfusionTemplate(Template):
                     "mark": "rect",
                     "encoding": {
                         "tooltip": [
-                            {"field": "actual", "type": "nominal"},
-                            {"field": "predicted", "type": "nominal"},
+                            {"field": Template.anchor("x"), "type": "nominal"},
+                            {"field": Template.anchor("y"), "type": "nominal"},
                         ],
                         "opacity": {
                             "condition": {"selection": "label", "value": 1},
@@ -298,8 +298,8 @@ class NormalizedConfusionTemplate(Template):
                     "mark": "rect",
                     "encoding": {
                         "tooltip": [
-                            {"field": "actual", "type": "nominal"},
-                            {"field": "predicted", "type": "nominal"},
+                            {"field": Template.anchor("x"), "type": "nominal"},
+                            {"field": Template.anchor("y"), "type": "nominal"},
                         ],
                         "opacity": {
                             "condition": {"selection": "label", "value": 1},
