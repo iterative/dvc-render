@@ -982,7 +982,7 @@
 
     <span class="k">for</span> <span class="n">renderer</span> <span class="ow">in</span> <span class="n">renderers</span><span class="p">:</span>
         <span class="n">document</span><span class="o">.</span><span class="n">with_scripts</span><span class="p">(</span><span class="n">renderer</span><span class="o">.</span><span class="n">SCRIPTS</span><span class="p">)</span>
-        <span class="n">document</span><span class="o">.</span><span class="n">with_element</span><span class="p">(</span><span class="n">renderer</span><span class="o">.</span><span class="n">generate_html</span><span class="p">())</span>
+        <span class="n">document</span><span class="o">.</span><span class="n">with_element</span><span class="p">(</span><span class="n">renderer</span><span class="o">.</span><span class="n">generate_html</span><span class="p">(</span><span class="n">html_path</span><span class="o">=</span><span class="n">output_path</span><span class="p">))</span>
 
     <span class="n">output_path</span><span class="o">.</span><span class="n">write_text</span><span class="p">(</span><span class="n">document</span><span class="o">.</span><span class="n">embed</span><span class="p">(),</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf8&quot;</span><span class="p">)</span>
 
