@@ -83,7 +83,11 @@ class HTML:
             self.PLOTS_PLACEHOLDER: "\n".join(self.elements),
             self.REFRESH_PLACEHOLDER: self.refresh_tag,
         }
-        return self.template.format(**kwargs)
+        for placeholder, value in kwargs.items():
+            self.template = self.template.replace(
+                "{" + placeholder + "}", value
+            )
+        return self.template
 
 
 def render_html(

@@ -18,6 +18,24 @@ CUSTOM_PAGE_HTML = """<!DOCTYPE html>
 </body>
 </html>"""
 
+CSS_PAGE_HTML = """<!DOCTYPE html>
+<html>
+<head>
+    <title>TITLE</title>
+    <script type="text/javascript" src="vega"></script>
+    <script type="text/javascript" src="vega-lite"></script>
+    <script type="text/javascript" src="vega-embed"></script>
+    <style>
+        .test-malformed{
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    {plot_divs}
+</body>
+</html>"""
+
 
 @pytest.mark.parametrize(
     "template,page_elements,expected_page",
@@ -31,6 +49,11 @@ CUSTOM_PAGE_HTML = """<!DOCTYPE html>
             CUSTOM_PAGE_HTML,
             ["content"],
             CUSTOM_PAGE_HTML.format(plot_divs="content"),
+        ),
+        (
+            CSS_PAGE_HTML,
+            ["content"],
+            CSS_PAGE_HTML.replace("{plot_divs}", "content"),
         ),
     ],
 )
