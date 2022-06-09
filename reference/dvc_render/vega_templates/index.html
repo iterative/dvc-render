@@ -602,11 +602,11 @@
 
 <div class="doc doc-object doc-module">
 
+
 <a id="dvc_render.vega_templates"></a>
-    <div class="doc doc-contents first">
+  <div class="doc doc-contents first">
 
-
-
+  
 
   <div class="doc doc-children">
 
@@ -617,33 +617,24 @@
 
 
 
-
-
-
-
-
-
-
-  <div class="doc doc-object doc-class">
+<div class="doc doc-object doc-class">
 
 
 
 <h2 id="dvc_render.vega_templates.Template" class="doc doc-heading">
-          <code>Template</code>
-
+        <code>Template</code>
 
 
 </h2>
 
 
-    <div class="doc doc-contents ">
+  <div class="doc doc-contents ">
 
 
 
-
-          <details class="quote">
-            <summary>Source code in <code>dvc_render/vega_templates.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">32</span>
+        <details class="quote">
+          <summary>Source code in <code>dvc_render/vega_templates.py</code></summary>
+          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">32</span>
 <span class="normal">33</span>
 <span class="normal">34</span>
 <span class="normal">35</span>
@@ -749,9 +740,9 @@
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">any</span><span class="p">(</span><span class="n">field</span> <span class="ow">in</span> <span class="n">row</span> <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">data</span><span class="p">):</span>
             <span class="k">raise</span> <span class="n">NoFieldInDataError</span><span class="p">(</span><span class="n">field</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
-          </details>
+        </details>
 
-
+  
 
   <div class="doc doc-children">
 
@@ -763,36 +754,27 @@
 
 
 
-
-
-
-
-
-
-
-
-
-  <div class="doc doc-object doc-function">
+<div class="doc doc-object doc-function">
 
 
 
 <h3 id="dvc_render.vega_templates.Template.anchor" class="doc doc-heading">
 <code class="highlight language-python"><span class="n">anchor</span><span class="p">(</span><span class="n">name</span><span class="p">)</span></code>
-
-  <span class="doc doc-properties">
+  
+  <span class="doc doc-labels">
       <small class="doc doc-label doc-label-classmethod"><code>classmethod</code></small>
   </span>
 
 </h3>
 
 
-    <div class="doc doc-contents ">
-
+  <div class="doc doc-contents ">
+  
       <p>Get ANCHOR formatted with name.</p>
 
-        <details class="quote">
-          <summary>Source code in <code>dvc_render/vega_templates.py</code></summary>
-          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">58</span>
+      <details class="quote">
+        <summary>Source code in <code>dvc_render/vega_templates.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">58</span>
 <span class="normal">59</span>
 <span class="normal">60</span>
 <span class="normal">61</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@classmethod</span>
@@ -800,34 +782,32 @@
     <span class="s2">&quot;Get ANCHOR formatted with name.&quot;</span>
     <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">ANCHOR</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="o">.</span><span class="n">upper</span><span class="p">())</span>
 </code></pre></div></td></tr></table></div>
-        </details>
-    </div>
-
+      </details>
   </div>
 
+</div>
 
-
-  <div class="doc doc-object doc-function">
+<div class="doc doc-object doc-function">
 
 
 
 <h3 id="dvc_render.vega_templates.Template.anchor_str" class="doc doc-heading">
 <code class="highlight language-python"><span class="n">anchor_str</span><span class="p">(</span><span class="n">name</span><span class="p">)</span></code>
-
-  <span class="doc doc-properties">
+  
+  <span class="doc doc-labels">
       <small class="doc doc-label doc-label-classmethod"><code>classmethod</code></small>
   </span>
 
 </h3>
 
 
-    <div class="doc doc-contents ">
-
+  <div class="doc doc-contents ">
+  
       <p>Get string wrapping ANCHOR formatted with name.</p>
 
-        <details class="quote">
-          <summary>Source code in <code>dvc_render/vega_templates.py</code></summary>
-          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">75</span>
+      <details class="quote">
+        <summary>Source code in <code>dvc_render/vega_templates.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">75</span>
 <span class="normal">76</span>
 <span class="normal">77</span>
 <span class="normal">78</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@classmethod</span>
@@ -835,34 +815,32 @@
     <span class="s2">&quot;Get string wrapping ANCHOR formatted with name.&quot;</span>
     <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;&quot;</span><span class="si">{</span><span class="bp">cls</span><span class="o">.</span><span class="n">anchor</span><span class="p">(</span><span class="n">name</span><span class="p">)</span><span class="si">}</span><span class="s1">&quot;&#39;</span>
 </code></pre></div></td></tr></table></div>
-        </details>
-    </div>
-
+      </details>
   </div>
 
+</div>
 
-
-  <div class="doc doc-object doc-function">
+<div class="doc doc-object doc-function">
 
 
 
 <h3 id="dvc_render.vega_templates.Template.check_field_exists" class="doc doc-heading">
 <code class="highlight language-python"><span class="n">check_field_exists</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">field</span><span class="p">)</span></code>
-
-  <span class="doc doc-properties">
+  
+  <span class="doc doc-labels">
       <small class="doc doc-label doc-label-staticmethod"><code>staticmethod</code></small>
   </span>
 
 </h3>
 
 
-    <div class="doc doc-contents ">
-
+  <div class="doc doc-contents ">
+  
       <p>Raise NoFieldInDataError if <code>field</code> not in <code>data</code>.</p>
 
-        <details class="quote">
-          <summary>Source code in <code>dvc_render/vega_templates.py</code></summary>
-          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">80</span>
+      <details class="quote">
+        <summary>Source code in <code>dvc_render/vega_templates.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">80</span>
 <span class="normal">81</span>
 <span class="normal">82</span>
 <span class="normal">83</span>
@@ -872,34 +850,32 @@
     <span class="k">if</span> <span class="ow">not</span> <span class="nb">any</span><span class="p">(</span><span class="n">field</span> <span class="ow">in</span> <span class="n">row</span> <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">data</span><span class="p">):</span>
         <span class="k">raise</span> <span class="n">NoFieldInDataError</span><span class="p">(</span><span class="n">field</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
-        </details>
-    </div>
-
+      </details>
   </div>
 
+</div>
 
-
-  <div class="doc doc-object doc-function">
+<div class="doc doc-object doc-function">
 
 
 
 <h3 id="dvc_render.vega_templates.Template.fill_anchor" class="doc doc-heading">
 <code class="highlight language-python"><span class="n">fill_anchor</span><span class="p">(</span><span class="n">content</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span></code>
-
-  <span class="doc doc-properties">
+  
+  <span class="doc doc-labels">
       <small class="doc doc-label doc-label-classmethod"><code>classmethod</code></small>
   </span>
 
 </h3>
 
 
-    <div class="doc doc-contents ">
-
+  <div class="doc doc-contents ">
+  
       <p>Replace anchor <code>name</code> with <code>value</code> in content.</p>
 
-        <details class="quote">
-          <summary>Source code in <code>dvc_render/vega_templates.py</code></summary>
-          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">67</span>
+      <details class="quote">
+        <summary>Source code in <code>dvc_render/vega_templates.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">67</span>
 <span class="normal">68</span>
 <span class="normal">69</span>
 <span class="normal">70</span>
@@ -913,75 +889,64 @@
     <span class="p">)</span>
     <span class="k">return</span> <span class="n">content</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">anchor_str</span><span class="p">(</span><span class="n">name</span><span class="p">),</span> <span class="n">value_str</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
-        </details>
-    </div>
-
+      </details>
   </div>
 
+</div>
 
-
-  <div class="doc doc-object doc-function">
+<div class="doc doc-object doc-function">
 
 
 
 <h3 id="dvc_render.vega_templates.Template.has_anchor" class="doc doc-heading">
 <code class="highlight language-python"><span class="n">has_anchor</span><span class="p">(</span><span class="n">name</span><span class="p">)</span></code>
 
-
 </h3>
 
 
-    <div class="doc doc-contents ">
-
+  <div class="doc doc-contents ">
+  
       <p>Check if ANCHOR formatted with name is in content.</p>
 
-        <details class="quote">
-          <summary>Source code in <code>dvc_render/vega_templates.py</code></summary>
-          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">63</span>
+      <details class="quote">
+        <summary>Source code in <code>dvc_render/vega_templates.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">63</span>
 <span class="normal">64</span>
 <span class="normal">65</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">has_anchor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
     <span class="s2">&quot;Check if ANCHOR formatted with name is in content.&quot;</span>
     <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">anchor_str</span><span class="p">(</span><span class="n">name</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">content</span>
 </code></pre></div></td></tr></table></div>
-        </details>
-    </div>
+      </details>
+  </div>
+
+</div>
+
+
 
   </div>
 
-
-
-
-
   </div>
 
-    </div>
-
-  </div>
+</div>
 
 
-
-
-
-
-
-  <div class="doc doc-object doc-function">
+<div class="doc doc-object doc-function">
 
 
 
 <h2 id="dvc_render.vega_templates.dump_templates" class="doc doc-heading">
 <code class="highlight language-python"><span class="n">dump_templates</span><span class="p">(</span><span class="n">output</span><span class="p">,</span> <span class="n">targets</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
 
-
 </h2>
 
 
-    <div class="doc doc-contents ">
-
+  <div class="doc doc-contents ">
+  
       <p>Write TEMPLATES in <code>.json</code> format to <code>output</code>.</p>
 
-        <details class="quote">
-          <summary>Source code in <code>dvc_render/vega_templates.py</code></summary>
-          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">708</span>
+      <details class="quote">
+        <summary>Source code in <code>dvc_render/vega_templates.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">708</span>
 <span class="normal">709</span>
 <span class="normal">710</span>
 <span class="normal">711</span>
@@ -1033,26 +998,23 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="n">path</span><span class="o">.</span><span class="n">write_text</span><span class="p">(</span><span class="n">template</span><span class="o">.</span><span class="n">content</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
-        </details>
-    </div>
-
+      </details>
   </div>
 
+</div>
 
-
-  <div class="doc doc-object doc-function">
+<div class="doc doc-object doc-function">
 
 
 
 <h2 id="dvc_render.vega_templates.get_template" class="doc doc-heading">
 <code class="highlight language-python"><span class="n">get_template</span><span class="p">(</span><span class="n">template</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">template_dir</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
 
-
 </h2>
 
 
-    <div class="doc doc-contents ">
-
+  <div class="doc doc-contents ">
+  
       <p>Return template instance based on given template arg.</p>
 <p>If template is already an instance, return it.
 If template is None, return default <code>linear</code> template.
@@ -1061,9 +1023,9 @@ path or inside template_dir.
 If template matches one of the DEFAULT_NAMEs in TEMPLATES,
 return an instance of the one matching.</p>
 
-        <details class="quote">
-          <summary>Source code in <code>dvc_render/vega_templates.py</code></summary>
-          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">675</span>
+      <details class="quote">
+        <summary>Source code in <code>dvc_render/vega_templates.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">675</span>
 <span class="normal">676</span>
 <span class="normal">677</span>
 <span class="normal">678</span>
@@ -1125,20 +1087,18 @@ return an instance of the one matching.</p>
 
     <span class="k">raise</span> <span class="n">TemplateNotFoundError</span><span class="p">(</span><span class="n">template</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
-        </details>
-    </div>
+      </details>
+  </div>
+
+</div>
+
+
 
   </div>
 
-
-
-
-
   </div>
 
-    </div>
-
-  </div>
+</div>
 
               
             </article>

@@ -560,11 +560,11 @@
 
 <div class="doc doc-object doc-module">
 
+
 <a id="dvc_render.base"></a>
-    <div class="doc doc-contents first">
+  <div class="doc doc-contents first">
 
-
-
+  
 
   <div class="doc doc-children">
 
@@ -575,29 +575,28 @@
 
 
 
-  <div class="doc doc-object doc-class">
+<div class="doc doc-object doc-class">
 
 
 
 <h2 id="dvc_render.base.Renderer" class="doc doc-heading">
-          <code>Renderer</code>
-
+        <code>Renderer</code>
 
 
 </h2>
 
 
-    <div class="doc doc-contents ">
-        <p class="doc doc-class-bases">
-          Bases: <code>abc.<span title="abc.ABC">ABC</span></code></p>
+  <div class="doc doc-contents ">
+      <p class="doc doc-class-bases">
+        Bases: <code>abc.<span title="abc.ABC">ABC</span></code></p>
 
-
+  
       <p>Base Renderer class</p>
 
 
-          <details class="quote">
-            <summary>Source code in <code>dvc_render/base.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">11</span>
+        <details class="quote">
+          <summary>Source code in <code>dvc_render/base.py</code></summary>
+          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">11</span>
 <span class="normal">12</span>
 <span class="normal">13</span>
 <span class="normal">14</span>
@@ -717,9 +716,9 @@
         <span class="s2">&quot;Check if the Renderer is suitable.&quot;</span>
         <span class="k">return</span> <span class="n">Path</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span><span class="o">.</span><span class="n">suffix</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">EXTENSIONS</span>
 </code></pre></div></td></tr></table></div>
-          </details>
+        </details>
 
-
+  
 
   <div class="doc doc-children">
 
@@ -731,31 +730,23 @@
 
 
 
-
-
-
-
-
-
-
-  <div class="doc doc-object doc-function">
+<div class="doc doc-object doc-function">
 
 
 
 <h3 id="dvc_render.base.Renderer.generate_html" class="doc doc-heading">
 <code class="highlight language-python"><span class="n">generate_html</span><span class="p">(</span><span class="n">html_path</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
 
-
 </h3>
 
 
-    <div class="doc doc-contents ">
-
+  <div class="doc doc-contents ">
+  
       <p>Return <code>DIV</code> formatted with <code>partial_html</code>.</p>
 
-        <details class="quote">
-          <summary>Source code in <code>dvc_render/base.py</code></summary>
-          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">54</span>
+      <details class="quote">
+        <summary>Source code in <code>dvc_render/base.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">54</span>
 <span class="normal">55</span>
 <span class="normal">56</span>
 <span class="normal">57</span>
@@ -775,34 +766,32 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">DIV</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">div_id</span><span class="p">,</span> <span class="n">partial</span><span class="o">=</span><span class="n">partial</span><span class="p">)</span>
     <span class="k">return</span> <span class="s2">&quot;&quot;</span>
 </code></pre></div></td></tr></table></div>
-        </details>
-    </div>
-
+      </details>
   </div>
 
+</div>
 
-
-  <div class="doc doc-object doc-function">
+<div class="doc doc-object doc-function">
 
 
 
 <h3 id="dvc_render.base.Renderer.matches" class="doc doc-heading">
 <code class="highlight language-python"><span class="n">matches</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">properties</span><span class="p">)</span></code>
-
-  <span class="doc doc-properties">
+  
+  <span class="doc doc-labels">
       <small class="doc doc-label doc-label-classmethod"><code>classmethod</code></small>
   </span>
 
 </h3>
 
 
-    <div class="doc doc-contents ">
-
+  <div class="doc doc-contents ">
+  
       <p>Check if the Renderer is suitable.</p>
 
-        <details class="quote">
-          <summary>Source code in <code>dvc_render/base.py</code></summary>
-          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">65</span>
+      <details class="quote">
+        <summary>Source code in <code>dvc_render/base.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">65</span>
 <span class="normal">66</span>
 <span class="normal">67</span>
 <span class="normal">68</span>
@@ -814,35 +803,33 @@
     <span class="s2">&quot;Check if the Renderer is suitable.&quot;</span>
     <span class="k">return</span> <span class="n">Path</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span><span class="o">.</span><span class="n">suffix</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">EXTENSIONS</span>
 </code></pre></div></td></tr></table></div>
-        </details>
-    </div>
-
+      </details>
   </div>
 
+</div>
 
-
-  <div class="doc doc-object doc-function">
+<div class="doc doc-object doc-function">
 
 
 
 <h3 id="dvc_render.base.Renderer.partial_html" class="doc doc-heading">
 <code class="highlight language-python"><span class="n">partial_html</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></code>
-
-  <span class="doc doc-properties">
+  
+  <span class="doc doc-labels">
       <small class="doc doc-label doc-label-abstractmethod"><code>abstractmethod</code></small>
   </span>
 
 </h3>
 
 
-    <div class="doc doc-contents ">
-
+  <div class="doc doc-contents ">
+  
       <p>Us this method to generate HTML content,
 to fill <code>{partial}</code> inside self.DIV.</p>
 
-        <details class="quote">
-          <summary>Source code in <code>dvc_render/base.py</code></summary>
-          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">29</span>
+      <details class="quote">
+        <summary>Source code in <code>dvc_render/base.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">29</span>
 <span class="normal">30</span>
 <span class="normal">31</span>
 <span class="normal">32</span>
@@ -856,34 +843,32 @@ to fill <code>{partial}</code> inside self.DIV.</p>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">raise</span> <span class="ne">NotImplementedError</span>
 </code></pre></div></td></tr></table></div>
-        </details>
-    </div>
-
+      </details>
   </div>
 
+</div>
 
-
-  <div class="doc doc-object doc-function">
+<div class="doc doc-object doc-function">
 
 
 
 <h3 id="dvc_render.base.Renderer.remove_special_chars" class="doc doc-heading">
 <code class="highlight language-python"><span class="n">remove_special_chars</span><span class="p">(</span><span class="n">string</span><span class="p">)</span></code>
-
-  <span class="doc doc-properties">
+  
+  <span class="doc doc-labels">
       <small class="doc doc-label doc-label-staticmethod"><code>staticmethod</code></small>
   </span>
 
 </h3>
 
 
-    <div class="doc doc-contents ">
-
+  <div class="doc doc-contents ">
+  
       <p>Ensure string is valid HTML id.</p>
 
-        <details class="quote">
-          <summary>Source code in <code>dvc_render/base.py</code></summary>
-          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">47</span>
+      <details class="quote">
+        <summary>Source code in <code>dvc_render/base.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">47</span>
 <span class="normal">48</span>
 <span class="normal">49</span>
 <span class="normal">50</span>
@@ -895,31 +880,27 @@ to fill <code>{partial}</code> inside self.DIV.</p>
         <span class="p">{</span><span class="nb">ord</span><span class="p">(</span><span class="n">c</span><span class="p">):</span> <span class="s2">&quot;_&quot;</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="sa">r</span><span class="s2">&quot;!@#$%^&amp;*()[]</span><span class="si">{}</span><span class="s2">;,&lt;&gt;?\/:.|`~=_+&quot;</span><span class="p">}</span>
     <span class="p">)</span>
 </code></pre></div></td></tr></table></div>
-        </details>
-    </div>
+      </details>
+  </div>
+
+</div>
+
+
 
   </div>
 
-
-
-
-
   </div>
 
-    </div>
-
-  </div>
-
-
+</div>
 
 
 
 
   </div>
 
-    </div>
-
   </div>
+
+</div>
 
               
             </article>
