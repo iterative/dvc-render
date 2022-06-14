@@ -1,8 +1,6 @@
 from pathlib import Path
 from typing import TYPE_CHECKING, Dict, List, Optional
 
-import tabulate  # type: ignore
-
 from .exceptions import DvcRenderException
 
 if TYPE_CHECKING:
@@ -15,6 +13,11 @@ PAGE_HTML = """<!DOCTYPE html>
     {refresh_tag}
     <title>DVC Plot</title>
     {scripts}
+    <style>
+        table {
+            border-spacing: 15px;
+        }
+    </style>
 </head>
 <body>
     {plot_divs}
@@ -49,21 +52,6 @@ class HTML:
         self.refresh_tag = ""
         if refresh_seconds is not None:
             self.refresh_tag = self.REFRESH_TAG.format(refresh_seconds)
-
-    def with_metrics(self, metrics: Dict[str, Dict]) -> "HTML":
-        "Adds metrics element."
-        header: List[str] = []
-        rows: List[List[str]] = []
-
-        for _, rev_data in metrics.items():
-            for _, data in rev_data.items():
-                if not header:
-                    header.extend(sorted(data.keys()))
-
-                rows.append([data[key] for key in header])
-
-        self.elements.append(tabulate.tabulate(rows, header, tablefmt="html"))
-        return self
 
     def with_scripts(self, scripts: str) -> "HTML":
         "Extend scripts element."
@@ -108,7 +96,6 @@ def render_html(
 
     document = HTML(page_html, refresh_seconds=refresh_seconds)
     if metrics:
-        document.with_metrics(metrics)
         document.with_element("<br>")
 
     for renderer in renderers:

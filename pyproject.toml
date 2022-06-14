@@ -63,6 +63,10 @@ warn_redundant_casts = true
 warn_unreachable = true
 files = ["src", "tests"]
 
+[[tool.mypy.overrides]]
+module = "tabulate"
+ignore_missing_imports = true
+
 [tool.pylint.message_control]
 enable = ["c-extension-no-member", "no-else-return"]
 disable = ["missing-module-docstring", "missing-class-docstring", "invalid-name", "R0801"]
