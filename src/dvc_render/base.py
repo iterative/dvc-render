@@ -57,7 +57,6 @@ class Renderer(abc.ABC):
         if partial:
 
             div_id = self.remove_special_chars(self.name)
-            div_id = f"plot_{div_id}"
 
             return self.DIV.format(id=div_id, partial=partial)
         return ""
