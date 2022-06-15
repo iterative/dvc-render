@@ -144,7 +144,7 @@ def test_write_parallel_coordinates(tmp_dir):
     assert ParallelCoordinatesRenderer.SCRIPTS in html_text
 
     div = ParallelCoordinatesRenderer.DIV.format(
-        id="plot_pcp", partial=renderer.partial_html()
+        id="pcp", partial=renderer.partial_html()
     )
     assert div in html_text
 
