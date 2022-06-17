@@ -48,7 +48,7 @@ class Renderer(abc.ABC):
     def remove_special_chars(string: str) -> str:
         "Ensure string is valid HTML id."
         return string.translate(
-            {ord(c): "_" for c in r"!@#$%^&*()[]{};,<>?\/:.|`~=_+"}
+            {ord(c): "_" for c in r"!@#$%^&*()[]{};,<>?\/:.|`~=_+ "}
         )
 
     def generate_html(self, html_path=None) -> str:
