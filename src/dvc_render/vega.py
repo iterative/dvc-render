@@ -33,8 +33,6 @@ class VegaRenderer(Renderer):
     EXTENSIONS = {".yml", ".yaml", ".json", ".csv", ".tsv"}
 
     def __init__(self, datapoints: List, name: str, **properties):
-        if name and not name.startswith("plot_"):
-            name = f"plot_{name}"
         super().__init__(datapoints, name, **properties)
         self.template = get_template(
             self.properties.get("template", None),
