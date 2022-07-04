@@ -111,8 +111,8 @@ class SimpleLinearTemplate(Template):
     }
 
 
-class BarHorizontalOrderedTemplate(Template):
-    DEFAULT_NAME = "bar_horizontal_ordered"
+class BarHorizontalSortedTemplate(Template):
+    DEFAULT_NAME = "bar_horizontal_sorted"
 
     DEFAULT_CONTENT = {
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
@@ -140,8 +140,8 @@ class BarHorizontalOrderedTemplate(Template):
     }
 
 
-class BarHorizontalUnorderedTemplate(Template):
-    DEFAULT_NAME = "bar_horizontal_unordered"
+class BarHorizontalTemplate(Template):
+    DEFAULT_NAME = "bar_horizontal"
 
     DEFAULT_CONTENT = {
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
@@ -712,8 +712,8 @@ TEMPLATES = [
     NormalizedConfusionTemplate,
     ScatterTemplate,
     SmoothLinearTemplate,
-    BarHorizontalOrderedTemplate,
-    BarHorizontalUnorderedTemplate,
+    BarHorizontalSortedTemplate,
+    BarHorizontalTemplate,
 ]
 
 
