@@ -49,3 +49,14 @@ class ImageRenderer(Renderer):
             div_content.insert(0, f"<p>{self.name}</p>")
             return "\n".join(div_content)
         return ""
+
+    def generate_markdown(self, report_path=None) -> str:
+        content = []
+        for datapoint in self.datapoints:
+            src = datapoint[self.SRC_FIELD]
+            if src.startswith("data:image;base64"):
+                raise ValueError("`generate_markdown` doesn't support base64")
+            content.append(f"\n![{datapoint[self.TITLE_FIELD]}]({src})")
+        if content:
+            return "\n".join(content)
+        return ""

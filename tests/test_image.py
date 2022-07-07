@@ -29,7 +29,7 @@ def test_matches(extension, matches):
 @pytest.mark.parametrize(
     "src", ["relpath.jpg", "data:image;base64,encoded_image"]
 )
-def test_render(html_path, src):
+def test_generate_html(html_path, src):
     datapoints = [
         {
             "filename": "file.jpg",
@@ -44,6 +44,32 @@ def test_render(html_path, src):
 
     assert "<p>file.jpg</p>" in html
     assert f'<img src="{src}">' in html
+
+
+def test_generate_markdown():
+    datapoints = [
+        {
+            "rev": "workspace",
+            "src": "file.jpg",
+        }
+    ]
+
+    md = ImageRenderer(datapoints, "file.jpg").generate_markdown()
+
+    assert "![workspace](file.jpg)" in md
+
+
+def test_invalid_generate_markdown():
+    datapoints = [
+        {
+            "rev": "workspace",
+            "src": "data:image;base64,encoded_image",
+        }
+    ]
+    with pytest.raises(
+        ValueError, match="`generate_markdown` doesn't support base64"
+    ):
+        ImageRenderer(datapoints, "file.jpg").generate_markdown()
 
 
 @pytest.mark.parametrize(
@@ -81,6 +107,7 @@ def test_render_evaluate_path(tmp_dir, html_path, img_path, expected_path):
     assert f'<img src="{expected_path}">' in html
 
 
-def test_render_empty():
-    html = ImageRenderer(None, None).generate_html()
-    assert html == ""
+@pytest.mark.parametrize("method", ["generate_html", "generate_markdown"])
+def test_render_empty(method):
+    renderer = ImageRenderer(None, None)
+    assert getattr(renderer, method)() == ""

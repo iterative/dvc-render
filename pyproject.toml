@@ -64,12 +64,21 @@ warn_unreachable = true
 files = ["src", "tests"]
 
 [[tool.mypy.overrides]]
-module = "tabulate"
+module = [
+  "matplotlib.*",
+  "tabulate"
+]
 ignore_missing_imports = true
 
 [tool.pylint.message_control]
 enable = ["c-extension-no-member", "no-else-return"]
-disable = ["missing-module-docstring", "missing-class-docstring", "invalid-name", "R0801"]
+disable = [
+  "missing-module-docstring",
+  "missing-class-docstring",
+  "invalid-name",
+  "R0801",
+  "C0415"
+]
 
 [tool.pylint.variables]
 dummy-variables-rgx = "_+$|(_[a-zA-Z0-9_]*[a-zA-Z0-9]+?$)|dummy|^ignored_|^unused_"

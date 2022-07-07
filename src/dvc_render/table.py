@@ -1,4 +1,5 @@
 from .base import Renderer
+from .utils import list_dict_to_dict_list
 
 try:
     from tabulate import tabulate
@@ -22,12 +23,17 @@ class TableRenderer(Renderer):
 
     EXTENSIONS = {".yml", ".yaml", ".json"}
 
-    def partial_html(self, **kwargs) -> str:
-        # From list of dicts to dict of lists
-        data = {
-            k: [datapoint[k] for datapoint in self.datapoints]
-            for k in self.datapoints[0]
-        }
+    @classmethod
+    def to_tabulate(cls, datapoints, tablefmt):
+        """Convert datapoints to tabulate format"""
         if tabulate is None:
-            raise ImportError(f"{self.__class__} requires `tabulate`.")
-        return tabulate(data, headers="keys", tablefmt="html")
+            raise ImportError(f"{cls.__name__} requires `tabulate`.")
+        data = list_dict_to_dict_list(datapoints)
+        return tabulate(data, headers="keys", tablefmt=tablefmt)
+
+    def partial_html(self, **kwargs) -> str:
+        return self.to_tabulate(self.datapoints, tablefmt="html")
+
+    def generate_markdown(self, report_path=None) -> str:
+        table = self.to_tabulate(self.datapoints, tablefmt="github")
+        return f"{self.name}\n\n{table}"
