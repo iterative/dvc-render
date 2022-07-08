@@ -111,6 +111,63 @@ class SimpleLinearTemplate(Template):
     }
 
 
+class BarHorizontalSortedTemplate(Template):
+    DEFAULT_NAME = "bar_horizontal_sorted"
+
+    DEFAULT_CONTENT = {
+        "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+        "data": {"values": Template.anchor("data")},
+        "title": Template.anchor("title"),
+        "width": 300,
+        "height": 300,
+        "mark": {"type": "bar"},
+        "encoding": {
+            "x": {
+                "field": Template.anchor("x"),
+                "type": "quantitative",
+                "title": Template.anchor("x_label"),
+                "scale": {"zero": False},
+            },
+            "y": {
+                "field": Template.anchor("y"),
+                "type": "nominal",
+                "title": Template.anchor("y_label"),
+                "sort": "-x",
+            },
+            "yOffset": {"field": "rev"},
+            "color": {"field": "rev", "type": "nominal"},
+        },
+    }
+
+
+class BarHorizontalTemplate(Template):
+    DEFAULT_NAME = "bar_horizontal"
+
+    DEFAULT_CONTENT = {
+        "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+        "data": {"values": Template.anchor("data")},
+        "title": Template.anchor("title"),
+        "width": 300,
+        "height": 300,
+        "mark": {"type": "bar"},
+        "encoding": {
+            "x": {
+                "field": Template.anchor("x"),
+                "type": "quantitative",
+                "title": Template.anchor("x_label"),
+                "scale": {"zero": False},
+            },
+            "y": {
+                "field": Template.anchor("y"),
+                "type": "nominal",
+                "title": Template.anchor("y_label"),
+            },
+            "yOffset": {"field": "rev"},
+            "color": {"field": "rev", "type": "nominal"},
+        },
+    }
+
+
 class ConfusionTemplate(Template):
     DEFAULT_NAME = "confusion"
     DEFAULT_CONTENT = {
@@ -655,6 +712,8 @@ TEMPLATES = [
     NormalizedConfusionTemplate,
     ScatterTemplate,
     SmoothLinearTemplate,
+    BarHorizontalSortedTemplate,
+    BarHorizontalTemplate,
 ]
 
 
