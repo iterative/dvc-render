@@ -1,9 +1,11 @@
 from copy import deepcopy
+from pathlib import Path
 from typing import List, Optional
 
 from .base import Renderer
 from .exceptions import DvcRenderException
-from .vega_templates import get_template
+from .utils import list_dict_to_dict_list
+from .vega_templates import LinearTemplate, get_template
 
 
 class BadTemplateError(DvcRenderException):
@@ -85,3 +87,40 @@ class VegaRenderer(Renderer):
 
     def partial_html(self, **kwargs) -> str:
         return self.get_filled_template()
+
+    def generate_markdown(self, report_path=None) -> str:
+        if not isinstance(self.template, LinearTemplate):
+            raise ValueError(
+                "`generate_markdown` can only be used with `LinearTemplate`"
+            )
+        try:
+            from matplotlib import pyplot as plt
+        except ImportError as e:
+            raise ImportError(
+                "matplotlib is required for `generate_markdown`"
+            ) from e
+
+        data = list_dict_to_dict_list(self.datapoints)
+        if data:
+            report_folder = Path(report_path).parent
+            output_file = report_folder / self.name
+            output_file = output_file.with_suffix(".png")
+            output_file.parent.mkdir(exist_ok=True, parents=True)
+
+            x = self.properties.get("x")
+            y = self.properties.get("y")
+            data[x] = list(map(float, data[x]))
+            data[y] = list(map(float, data[y]))
+
+            plt.title(self.properties.get("title", output_file.stem))
+            plt.xlabel(self.properties.get("x_label", x))
+            plt.ylabel(self.properties.get("y_label", y))
+            plt.plot(x, y, data=data)
+            plt.tight_layout()
+            plt.savefig(output_file)
+            plt.close()
+
+            return (
+                f"\n![{self.name}]({output_file.relative_to(report_folder)})"
+            )
+        return ""

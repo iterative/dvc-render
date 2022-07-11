@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import TYPE_CHECKING, Dict, List, Optional
+from typing import TYPE_CHECKING, List, Optional
 
 from .exceptions import DvcRenderException
 
@@ -81,7 +81,6 @@ class HTML:
 def render_html(
     renderers: List["Renderer"],
     output_file: "StrPath",
-    metrics: Optional[Dict[str, Dict]] = None,
     template_path: Optional["StrPath"] = None,
     refresh_seconds: Optional[int] = None,
 ) -> "StrPath":
@@ -95,8 +94,6 @@ def render_html(
             page_html = fobj.read()
 
     document = HTML(page_html, refresh_seconds=refresh_seconds)
-    if metrics:
-        document.with_element("<br>")
 
     for renderer in renderers:
         document.with_scripts(renderer.SCRIPTS)

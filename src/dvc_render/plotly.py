@@ -1,8 +1,8 @@
 import json
-from collections import defaultdict
 from typing import Any, Dict, Optional
 
 from .base import Renderer
+from .utils import list_dict_to_dict_list
 
 
 class ParallelCoordinatesRenderer(Renderer):
@@ -46,10 +46,7 @@ class ParallelCoordinatesRenderer(Renderer):
         return json.dumps(self._get_plotly_data())
 
     def _get_plotly_data(self):
-        tabular_dict = defaultdict(list)
-        for row in self.datapoints:
-            for col_name, value in row.items():
-                tabular_dict[col_name].append(str(value))
+        tabular_dict = list_dict_to_dict_list(self.datapoints)
 
         trace: Dict[str, Any] = {"type": "parcoords", "dimensions": []}
         for label, values in tabular_dict.items():

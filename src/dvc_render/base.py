@@ -1,6 +1,6 @@
 import abc
 from pathlib import Path
-from typing import TYPE_CHECKING, Iterable, List, Union
+from typing import TYPE_CHECKING, Iterable, List, Optional, Union
 
 if TYPE_CHECKING:
     from os import PathLike
@@ -60,6 +60,12 @@ class Renderer(abc.ABC):
 
             return self.DIV.format(id=div_id, partial=partial)
         return ""
+
+    def generate_markdown(
+        self, report_path: Optional[StrPath] = None
+    ) -> str:  # pylint: disable=missing-function-docstring
+        "Generate a markdown element"
+        raise NotImplementedError
 
     @classmethod
     def matches(
