@@ -335,6 +335,13 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#dvc_render.base.Renderer.generate_markdown" class="md-nav__link">
+    generate_markdown()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#dvc_render.base.Renderer.matches" class="md-nav__link">
     matches()
   </a>
@@ -417,6 +424,20 @@
   
   
     <li class="md-nav__item">
+      <a href="../markdown/" class="md-nav__link">
+        Markdown
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../plotly/" class="md-nav__link">
         Plotly
       </a>
@@ -433,6 +454,20 @@
     <li class="md-nav__item">
       <a href="../table/" class="md-nav__link">
         Table
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../utils/" class="md-nav__link">
+        Utils
       </a>
     </li>
   
@@ -522,6 +557,13 @@
           <li class="md-nav__item">
   <a href="#dvc_render.base.Renderer.generate_html" class="md-nav__link">
     generate_html()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dvc_render.base.Renderer.generate_markdown" class="md-nav__link">
+    generate_markdown()
   </a>
   
 </li>
@@ -668,7 +710,13 @@
 <span class="normal">66</span>
 <span class="normal">67</span>
 <span class="normal">68</span>
-<span class="normal">69</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">Renderer</span><span class="p">(</span><span class="n">abc</span><span class="o">.</span><span class="n">ABC</span><span class="p">):</span>
+<span class="normal">69</span>
+<span class="normal">70</span>
+<span class="normal">71</span>
+<span class="normal">72</span>
+<span class="normal">73</span>
+<span class="normal">74</span>
+<span class="normal">75</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">Renderer</span><span class="p">(</span><span class="n">abc</span><span class="o">.</span><span class="n">ABC</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Base Renderer class&quot;&quot;&quot;</span>
 
     <span class="n">DIV</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
@@ -720,6 +768,12 @@
 
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">DIV</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">div_id</span><span class="p">,</span> <span class="n">partial</span><span class="o">=</span><span class="n">partial</span><span class="p">)</span>
         <span class="k">return</span> <span class="s2">&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">generate_markdown</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">report_path</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">StrPath</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>  <span class="c1"># pylint: disable=missing-function-docstring</span>
+        <span class="s2">&quot;Generate a markdown element&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
 
     <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">matches</span><span class="p">(</span>
@@ -785,6 +839,37 @@
 
 
 
+<h3 id="dvc_render.base.Renderer.generate_markdown" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">generate_markdown</span><span class="p">(</span><span class="n">report_path</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
+
+</h3>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Generate a markdown element</p>
+
+      <details class="quote">
+        <summary>Source code in <code>dvc_render/base.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">64</span>
+<span class="normal">65</span>
+<span class="normal">66</span>
+<span class="normal">67</span>
+<span class="normal">68</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">generate_markdown</span><span class="p">(</span>
+    <span class="bp">self</span><span class="p">,</span> <span class="n">report_path</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">StrPath</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>  <span class="c1"># pylint: disable=missing-function-docstring</span>
+    <span class="s2">&quot;Generate a markdown element&quot;</span>
+    <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+</code></pre></div></td></tr></table></div>
+      </details>
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+
 <h3 id="dvc_render.base.Renderer.matches" class="doc doc-heading">
 <code class="highlight language-python"><span class="n">matches</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">properties</span><span class="p">)</span></code>
   
@@ -801,12 +886,12 @@
 
       <details class="quote">
         <summary>Source code in <code>dvc_render/base.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">64</span>
-<span class="normal">65</span>
-<span class="normal">66</span>
-<span class="normal">67</span>
-<span class="normal">68</span>
-<span class="normal">69</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@classmethod</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">70</span>
+<span class="normal">71</span>
+<span class="normal">72</span>
+<span class="normal">73</span>
+<span class="normal">74</span>
+<span class="normal">75</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@classmethod</span>
 <span class="k">def</span> <span class="nf">matches</span><span class="p">(</span>
     <span class="bp">cls</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">properties</span>  <span class="c1"># pylint: disable=unused-argument</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>

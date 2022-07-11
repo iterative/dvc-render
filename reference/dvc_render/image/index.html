@@ -383,6 +383,20 @@
   
   
     <li class="md-nav__item">
+      <a href="../markdown/" class="md-nav__link">
+        Markdown
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../plotly/" class="md-nav__link">
         Plotly
       </a>
@@ -399,6 +413,20 @@
     <li class="md-nav__item">
       <a href="../table/" class="md-nav__link">
         Table
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../utils/" class="md-nav__link">
+        Utils
       </a>
     </li>
   
@@ -587,7 +615,18 @@
 <span class="normal">48</span>
 <span class="normal">49</span>
 <span class="normal">50</span>
-<span class="normal">51</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">ImageRenderer</span><span class="p">(</span><span class="n">Renderer</span><span class="p">):</span>
+<span class="normal">51</span>
+<span class="normal">52</span>
+<span class="normal">53</span>
+<span class="normal">54</span>
+<span class="normal">55</span>
+<span class="normal">56</span>
+<span class="normal">57</span>
+<span class="normal">58</span>
+<span class="normal">59</span>
+<span class="normal">60</span>
+<span class="normal">61</span>
+<span class="normal">62</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">ImageRenderer</span><span class="p">(</span><span class="n">Renderer</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Renderer for image plots.&quot;&quot;&quot;</span>
 
     <span class="n">TYPE</span> <span class="o">=</span> <span class="s2">&quot;image&quot;</span>
@@ -632,6 +671,17 @@
         <span class="k">if</span> <span class="n">div_content</span><span class="p">:</span>
             <span class="n">div_content</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;&lt;p&gt;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&lt;/p&gt;&quot;</span><span class="p">)</span>
             <span class="k">return</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">div_content</span><span class="p">)</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">generate_markdown</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">report_path</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="n">content</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">datapoint</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">datapoints</span><span class="p">:</span>
+            <span class="n">src</span> <span class="o">=</span> <span class="n">datapoint</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">SRC_FIELD</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">src</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;data:image;base64&quot;</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;`generate_markdown` doesn&#39;t support base64&quot;</span><span class="p">)</span>
+            <span class="n">content</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">![</span><span class="si">{</span><span class="n">datapoint</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">TITLE_FIELD</span><span class="p">]</span><span class="si">}</span><span class="s2">](</span><span class="si">{</span><span class="n">src</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">content</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">content</span><span class="p">)</span>
         <span class="k">return</span> <span class="s2">&quot;&quot;</span>
 </code></pre></div></td></tr></table></div>
         </details>
@@ -693,13 +743,13 @@
       
       
         
-        <a href="../plotly/" class="md-footer__link md-footer__link--next" aria-label="Next: Plotly" rel="next">
+        <a href="../markdown/" class="md-footer__link md-footer__link--next" aria-label="Next: Markdown" rel="next">
           <div class="md-footer__title">
             <div class="md-ellipsis">
               <span class="md-footer__direction">
                 Next
               </span>
-              Plotly
+              Markdown
             </div>
           </div>
           <div class="md-footer__button md-icon">

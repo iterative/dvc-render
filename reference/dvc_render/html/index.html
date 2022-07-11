@@ -417,6 +417,20 @@
   
   
     <li class="md-nav__item">
+      <a href="../markdown/" class="md-nav__link">
+        Markdown
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../plotly/" class="md-nav__link">
         Plotly
       </a>
@@ -433,6 +447,20 @@
     <li class="md-nav__item">
       <a href="../table/" class="md-nav__link">
         Table
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../utils/" class="md-nav__link">
+        Utils
       </a>
     </li>
   
@@ -831,7 +859,7 @@
 
 
 <h2 id="dvc_render.html.render_html" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">render_html</span><span class="p">(</span><span class="n">renderers</span><span class="p">,</span> <span class="n">output_file</span><span class="p">,</span> <span class="n">metrics</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">template_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">refresh_seconds</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
+<code class="highlight language-python"><span class="n">render_html</span><span class="p">(</span><span class="n">renderers</span><span class="p">,</span> <span class="n">output_file</span><span class="p">,</span> <span class="n">template_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">refresh_seconds</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
 
 </h2>
 
@@ -865,13 +893,9 @@
 <span class="normal">101</span>
 <span class="normal">102</span>
 <span class="normal">103</span>
-<span class="normal">104</span>
-<span class="normal">105</span>
-<span class="normal">106</span>
-<span class="normal">107</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">render_html</span><span class="p">(</span>
+<span class="normal">104</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">render_html</span><span class="p">(</span>
     <span class="n">renderers</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="s2">&quot;Renderer&quot;</span><span class="p">],</span>
     <span class="n">output_file</span><span class="p">:</span> <span class="s2">&quot;StrPath&quot;</span><span class="p">,</span>
-    <span class="n">metrics</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dict</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">template_path</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="s2">&quot;StrPath&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">refresh_seconds</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;StrPath&quot;</span><span class="p">:</span>
@@ -885,8 +909,6 @@
             <span class="n">page_html</span> <span class="o">=</span> <span class="n">fobj</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
 
     <span class="n">document</span> <span class="o">=</span> <span class="n">HTML</span><span class="p">(</span><span class="n">page_html</span><span class="p">,</span> <span class="n">refresh_seconds</span><span class="o">=</span><span class="n">refresh_seconds</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">metrics</span><span class="p">:</span>
-        <span class="n">document</span><span class="o">.</span><span class="n">with_element</span><span class="p">(</span><span class="s2">&quot;&lt;br&gt;&quot;</span><span class="p">)</span>
 
     <span class="k">for</span> <span class="n">renderer</span> <span class="ow">in</span> <span class="n">renderers</span><span class="p">:</span>
         <span class="n">document</span><span class="o">.</span><span class="n">with_scripts</span><span class="p">(</span><span class="n">renderer</span><span class="o">.</span><span class="n">SCRIPTS</span><span class="p">)</span>

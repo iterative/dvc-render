@@ -13,7 +13,7 @@
     
     
       
-        <title>Table - Dvc Render</title>
+        <title>Utils - Dvc Render</title>
       
     
     
@@ -65,7 +65,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#dvc_render.table" class="md-skip">
+        <a href="#dvc_render.utils" class="md-skip">
           Skip to content
         </a>
       
@@ -97,7 +97,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Table
+              Utils
             
           </span>
         </div>
@@ -365,6 +365,20 @@
               
   
   
+  
+    <li class="md-nav__item">
+      <a href="../table/" class="md-nav__link">
+        Table
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
     
   
   
@@ -375,12 +389,12 @@
       
       
         <label class="md-nav__link md-nav__link--active" for="__toc">
-          Table
+          Utils
           <span class="md-nav__icon md-icon"></span>
         </label>
       
       <a href="./" class="md-nav__link md-nav__link--active">
-        Table
+        Utils
       </a>
       
         
@@ -397,29 +411,16 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#dvc_render.table" class="md-nav__link">
-    dvc_render.table
+  <a href="#dvc_render.utils" class="md-nav__link">
+    dvc_render.utils
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#dvc_render.table.TableRenderer" class="md-nav__link">
-    TableRenderer
+  <a href="#dvc_render.utils.list_dict_to_dict_list" class="md-nav__link">
+    list_dict_to_dict_list()
   </a>
-  
-    <nav class="md-nav" aria-label="TableRenderer">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#dvc_render.table.TableRenderer.to_tabulate" class="md-nav__link">
-    to_tabulate()
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -427,20 +428,6 @@
   
 </nav>
       
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../utils/" class="md-nav__link">
-        Utils
-      </a>
     </li>
   
 
@@ -512,29 +499,16 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#dvc_render.table" class="md-nav__link">
-    dvc_render.table
+  <a href="#dvc_render.utils" class="md-nav__link">
+    dvc_render.utils
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#dvc_render.table.TableRenderer" class="md-nav__link">
-    TableRenderer
+  <a href="#dvc_render.utils.list_dict_to_dict_list" class="md-nav__link">
+    list_dict_to_dict_list()
   </a>
-  
-    <nav class="md-nav" aria-label="TableRenderer">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#dvc_render.table.TableRenderer.to_tabulate" class="md-nav__link">
-    to_tabulate()
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -550,113 +524,19 @@
             <article class="md-content__inner md-typeset">
               
                 
-  <a href="https://github.com/iterative/edit/master/docs/src/dvc_render/table.py" title="Edit this page" class="md-content__button md-icon">
+  <a href="https://github.com/iterative/edit/master/docs/src/dvc_render/utils.py" title="Edit this page" class="md-content__button md-icon">
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25Z"/></svg>
   </a>
 
 
 
-  <h1>Table</h1>
+  <h1>Utils</h1>
 
 <div class="doc doc-object doc-module">
 
 
-<a id="dvc_render.table"></a>
+<a id="dvc_render.utils"></a>
   <div class="doc doc-contents first">
-
-  
-
-  <div class="doc doc-children">
-
-
-
-
-
-
-
-
-<div class="doc doc-object doc-class">
-
-
-
-<h2 id="dvc_render.table.TableRenderer" class="doc doc-heading">
-        <code>TableRenderer</code>
-
-
-</h2>
-
-
-  <div class="doc doc-contents ">
-      <p class="doc doc-class-bases">
-        Bases: <code><a class="autorefs autorefs-internal" title="dvc_render.base.Renderer" href="../base/#dvc_render.base.Renderer">Renderer</a></code></p>
-
-  
-      <p>Renderer for tables.</p>
-
-
-        <details class="quote">
-          <summary>Source code in <code>dvc_render/table.py</code></summary>
-          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">10</span>
-<span class="normal">11</span>
-<span class="normal">12</span>
-<span class="normal">13</span>
-<span class="normal">14</span>
-<span class="normal">15</span>
-<span class="normal">16</span>
-<span class="normal">17</span>
-<span class="normal">18</span>
-<span class="normal">19</span>
-<span class="normal">20</span>
-<span class="normal">21</span>
-<span class="normal">22</span>
-<span class="normal">23</span>
-<span class="normal">24</span>
-<span class="normal">25</span>
-<span class="normal">26</span>
-<span class="normal">27</span>
-<span class="normal">28</span>
-<span class="normal">29</span>
-<span class="normal">30</span>
-<span class="normal">31</span>
-<span class="normal">32</span>
-<span class="normal">33</span>
-<span class="normal">34</span>
-<span class="normal">35</span>
-<span class="normal">36</span>
-<span class="normal">37</span>
-<span class="normal">38</span>
-<span class="normal">39</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">TableRenderer</span><span class="p">(</span><span class="n">Renderer</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Renderer for tables.&quot;&quot;&quot;</span>
-
-    <span class="n">TYPE</span> <span class="o">=</span> <span class="s2">&quot;table&quot;</span>
-    <span class="n">DIV</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
-<span class="s2">        &lt;div id=&quot;</span><span class="si">{id}</span><span class="s2">&quot; style=&quot;text-align: center; padding: 10x&quot;&gt;</span>
-<span class="s2">            &lt;p&gt;</span><span class="si">{id}</span><span class="s2">&lt;/p&gt;</span>
-<span class="s2">            &lt;div style=&quot;display: flex;justify-content: center;&quot;&gt;</span>
-<span class="s2">                </span><span class="si">{partial}</span><span class="s2"></span>
-<span class="s2">            &lt;/div&gt;</span>
-<span class="s2">        &lt;/div&gt;&quot;&quot;&quot;</span>
-
-    <span class="n">SCRIPTS</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
-
-    <span class="n">EXTENSIONS</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;.yml&quot;</span><span class="p">,</span> <span class="s2">&quot;.yaml&quot;</span><span class="p">,</span> <span class="s2">&quot;.json&quot;</span><span class="p">}</span>
-
-    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">to_tabulate</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">datapoints</span><span class="p">,</span> <span class="n">tablefmt</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Convert datapoints to tabulate format&quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="n">tabulate</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">cls</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> requires `tabulate`.&quot;</span><span class="p">)</span>
-        <span class="n">data</span> <span class="o">=</span> <span class="n">list_dict_to_dict_list</span><span class="p">(</span><span class="n">datapoints</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">tabulate</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="s2">&quot;keys&quot;</span><span class="p">,</span> <span class="n">tablefmt</span><span class="o">=</span><span class="n">tablefmt</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">partial_html</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">to_tabulate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">datapoints</span><span class="p">,</span> <span class="n">tablefmt</span><span class="o">=</span><span class="s2">&quot;html&quot;</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">generate_markdown</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">report_path</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-        <span class="n">table</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">to_tabulate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">datapoints</span><span class="p">,</span> <span class="n">tablefmt</span><span class="o">=</span><span class="s2">&quot;github&quot;</span><span class="p">)</span>
-        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="se">\n\n</span><span class="si">{</span><span class="n">table</span><span class="si">}</span><span class="s2">&quot;</span>
-</code></pre></div></td></tr></table></div>
-        </details>
 
   
 
@@ -674,49 +554,32 @@
 
 
 
-<h3 id="dvc_render.table.TableRenderer.to_tabulate" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">to_tabulate</span><span class="p">(</span><span class="n">datapoints</span><span class="p">,</span> <span class="n">tablefmt</span><span class="p">)</span></code>
-  
-  <span class="doc doc-labels">
-      <small class="doc doc-label doc-label-classmethod"><code>classmethod</code></small>
-  </span>
+<h2 id="dvc_render.utils.list_dict_to_dict_list" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">list_dict_to_dict_list</span><span class="p">(</span><span class="n">list_dict</span><span class="p">)</span></code>
 
-</h3>
+</h2>
 
 
   <div class="doc doc-contents ">
   
-      <p>Convert datapoints to tabulate format</p>
+      <p>Convert from list of dictionaries to dictionary of lists.</p>
 
       <details class="quote">
-        <summary>Source code in <code>dvc_render/table.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">26</span>
-<span class="normal">27</span>
-<span class="normal">28</span>
-<span class="normal">29</span>
-<span class="normal">30</span>
-<span class="normal">31</span>
-<span class="normal">32</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@classmethod</span>
-<span class="k">def</span> <span class="nf">to_tabulate</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">datapoints</span><span class="p">,</span> <span class="n">tablefmt</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Convert datapoints to tabulate format&quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="n">tabulate</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">cls</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> requires `tabulate`.&quot;</span><span class="p">)</span>
-    <span class="n">data</span> <span class="o">=</span> <span class="n">list_dict_to_dict_list</span><span class="p">(</span><span class="n">datapoints</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">tabulate</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="s2">&quot;keys&quot;</span><span class="p">,</span> <span class="n">tablefmt</span><span class="o">=</span><span class="n">tablefmt</span><span class="p">)</span>
+        <summary>Source code in <code>dvc_render/utils.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">list_dict_to_dict_list</span><span class="p">(</span><span class="n">list_dict</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Convert from list of dictionaries to dictionary of lists.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">list_dict</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">{}</span>
+    <span class="k">return</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="p">[</span><span class="n">x</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">list_dict</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">list_dict</span><span class="p">[</span><span class="mi">0</span><span class="p">]}</span>
 </code></pre></div></td></tr></table></div>
       </details>
   </div>
 
 </div>
-
-
-
-  </div>
-
-  </div>
-
-</div>
-
 
 
 
@@ -738,7 +601,7 @@
     <nav class="md-footer__inner md-grid" aria-label="Footer">
       
         
-        <a href="../plotly/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Plotly" rel="prev">
+        <a href="../table/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Table" rel="prev">
           <div class="md-footer__button md-icon">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
           </div>
@@ -747,20 +610,20 @@
               <span class="md-footer__direction">
                 Previous
               </span>
-              Plotly
+              Table
             </div>
           </div>
         </a>
       
       
         
-        <a href="../utils/" class="md-footer__link md-footer__link--next" aria-label="Next: Utils" rel="next">
+        <a href="../vega/" class="md-footer__link md-footer__link--next" aria-label="Next: Vega" rel="next">
           <div class="md-footer__title">
             <div class="md-ellipsis">
               <span class="md-footer__direction">
                 Next
               </span>
-              Utils
+              Vega
             </div>
           </div>
           <div class="md-footer__button md-icon">
