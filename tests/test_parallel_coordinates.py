@@ -3,7 +3,7 @@ import json
 from dvc_render.html import render_html
 from dvc_render.plotly import ParallelCoordinatesRenderer
 
-# pylint: disable=missing-function-docstring, unspecified-encoding
+# pylint: disable=C0116, W1514, W0212, R0903
 
 
 def expected_format(result):
@@ -170,3 +170,15 @@ def test_fill_value():
         "label": "scalar",
         "values": [None, 2.0],
     }
+
+
+def test_str_cast():
+    class Foo:
+        def __str__(self):
+            return "1"
+
+    datapoints = [{"foo": Foo()}]
+    renderer = ParallelCoordinatesRenderer(datapoints, fill_value="-")
+
+    result = renderer._get_plotly_data()
+    assert result["data"][0]["dimensions"][0]["values"] == [1.0]

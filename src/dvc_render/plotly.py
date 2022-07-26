@@ -50,6 +50,7 @@ class ParallelCoordinatesRenderer(Renderer):
 
         trace: Dict[str, Any] = {"type": "parcoords", "dimensions": []}
         for label, values in tabular_dict.items():
+            values = list(map(str, values))
             is_categorical = False
             try:
                 float_values = [
