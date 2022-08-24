@@ -1,6 +1,6 @@
 {
   "template": "https://github.com/iterative/py-template",
-  "commit": "f8dfd9b9f92abf2c1061d34399d7215df09184ca",
+  "commit": "f29fa72d72751294596bb5752c221acdb10f646d",
   "context": {
     "cookiecutter": {
       "project_name": "dvc-render",
