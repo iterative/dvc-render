@@ -73,6 +73,13 @@ class Template:
         return content.replace(cls.anchor_str(name), value_str)
 
     @classmethod
+    def escape_special_characters(cls, value: str) -> str:
+        "Escape special characters in `value`"
+        for character in (".", "[", "]"):
+            value = value.replace(character, "\\" + character)
+        return value
+
+    @classmethod
     def anchor_str(cls, name) -> str:
         "Get string wrapping ANCHOR formatted with name."
         return f'"{cls.anchor(name)}"'

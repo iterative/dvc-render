@@ -81,6 +81,8 @@ class VegaRenderer(Renderer):
                         f"Template '{self.template.name}' "
                         f"is not using '{anchor}' anchor"
                     )
+            else:
+                value = self.template.escape_special_characters(value)
             content = self.template.fill_anchor(content, name, value)
 
         return content
