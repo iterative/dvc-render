@@ -6,6 +6,7 @@ from dvc_render.vega_templates import (
     TEMPLATES,
     LinearTemplate,
     ScatterTemplate,
+    Template,
     TemplateContentDoesNotMatch,
     TemplateNotFoundError,
     dump_templates,
@@ -76,3 +77,8 @@ def test_raise_on_init_modified(tmp_dir):
 
     with pytest.raises(TemplateContentDoesNotMatch):
         dump_templates(output=".", targets=["linear"])
+
+
+def test_escape_special_characters():
+    value = "foo.bar[2]"
+    assert Template.escape_special_characters(value) == "foo\\.bar\\[2\\]"

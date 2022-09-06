@@ -159,3 +159,20 @@ def test_invalid_generate_markdown():
         match="`generate_markdown` can only be used with `LinearTemplate`",
     ):
         renderer.generate_markdown("output")
+
+
+def test_escape_special_characters():
+    datapoints = [
+        {"foo.bar[0]": 0, "foo.bar[1]": 3},
+        {"foo.bar[0]": 1, "foo.bar[1]": 4},
+    ]
+    props = {"template": "simple", "x": "foo.bar[0]", "y": "foo.bar[1]"}
+    renderer = VegaRenderer(datapoints, "foo", **props)
+    filled = json.loads(renderer.get_filled_template())
+    # data is not escaped
+    assert filled["data"]["values"][0] == datapoints[0]
+    # field and title yes
+    assert filled["encoding"]["x"]["field"] == "foo\\.bar\\[0\\]"
+    assert filled["encoding"]["x"]["title"] == "foo\\.bar\\[0\\]"
+    assert filled["encoding"]["y"]["field"] == "foo\\.bar\\[1\\]"
+    assert filled["encoding"]["y"]["title"] == "foo\\.bar\\[1\\]"
