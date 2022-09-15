@@ -173,6 +173,6 @@ def test_escape_special_characters():
     assert filled["data"]["values"][0] == datapoints[0]
     # field and title yes
     assert filled["encoding"]["x"]["field"] == "foo\\.bar\\[0\\]"
-    assert filled["encoding"]["x"]["title"] == "foo\\.bar\\[0\\]"
+    assert filled["encoding"]["x"]["title"] == "foo.bar[0]"
     assert filled["encoding"]["y"]["field"] == "foo\\.bar\\[1\\]"
-    assert filled["encoding"]["y"]["title"] == "foo\\.bar\\[1\\]"
+    assert filled["encoding"]["y"]["title"] == "foo.bar[1]"
