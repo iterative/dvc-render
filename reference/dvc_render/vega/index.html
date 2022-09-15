@@ -779,7 +779,7 @@
                         <span class="sa">f</span><span class="s2">&quot;Template &#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">template</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&#39; &quot;</span>
                         <span class="sa">f</span><span class="s2">&quot;is not using &#39;</span><span class="si">{</span><span class="n">anchor</span><span class="si">}</span><span class="s2">&#39; anchor&quot;</span>
                     <span class="p">)</span>
-            <span class="k">else</span><span class="p">:</span>
+            <span class="k">elif</span> <span class="n">name</span> <span class="ow">in</span> <span class="p">{</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">}:</span>
                 <span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">template</span><span class="o">.</span><span class="n">escape_special_characters</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
             <span class="n">content</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">template</span><span class="o">.</span><span class="n">fill_anchor</span><span class="p">(</span><span class="n">content</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
 
@@ -939,7 +939,7 @@
                     <span class="sa">f</span><span class="s2">&quot;Template &#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">template</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&#39; &quot;</span>
                     <span class="sa">f</span><span class="s2">&quot;is not using &#39;</span><span class="si">{</span><span class="n">anchor</span><span class="si">}</span><span class="s2">&#39; anchor&quot;</span>
                 <span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="n">name</span> <span class="ow">in</span> <span class="p">{</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">}:</span>
             <span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">template</span><span class="o">.</span><span class="n">escape_special_characters</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
         <span class="n">content</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">template</span><span class="o">.</span><span class="n">fill_anchor</span><span class="p">(</span><span class="n">content</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
 
