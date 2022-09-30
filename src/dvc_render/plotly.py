@@ -1,17 +1,11 @@
 import json
-from typing import Any, Dict, Optional
+from typing import Any, Dict, List, Optional
 
 from .base import Renderer
 from .utils import list_dict_to_dict_list
 
 
-class ParallelCoordinatesRenderer(Renderer):
-    """
-    Renderer for Parallel Coordinates plot.
-
-    Using Plotly.
-    """
-
+class PlotlyRenderer(Renderer):
     TYPE = "plotly"
 
     DIV = """
@@ -27,6 +21,36 @@ class ParallelCoordinatesRenderer(Renderer):
 
     SCRIPTS = """
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    """
+
+    def __init__(self, datapoints: List, name: str, **properties):
+        super().__init__(datapoints, name, **properties)
+
+    def convert_datapoints(self, datapoints):
+        traces = {}
+        for datapoint in datapoints:
+            revision = datapoint["rev"]
+            if revision not in traces:
+                traces[revision] = {"name": revision, "x": [], "y": []}
+            for axis in ("x", "y"):
+                value = datapoint[self.properties[axis]]
+                traces[revision][axis].append(value)
+        traces = list(traces.values())
+        template = self.properties["template"]
+        for trace in traces:
+            trace["type"] = template
+
+        return {"data": traces}
+
+    def partial_html(self, **kwargs) -> str:
+        return json.dumps(self.convert_datapoints(self.datapoints))
+
+
+class ParallelCoordinatesRenderer(PlotlyRenderer):
+    """
+    Renderer for Parallel Coordinates plot.
+
+    Using Plotly.
     """
 
     # pylint: disable=W0231
