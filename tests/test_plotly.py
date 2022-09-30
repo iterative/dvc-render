@@ -4,6 +4,8 @@ import pytest
 
 from dvc_render.plotly import PlotlyRenderer
 
+# pylint: disable=missing-function-docstring,
+
 
 def test_plotly_partial_html():
     props = {"x": "first_val", "y": "second_val", "template": "scatter"}

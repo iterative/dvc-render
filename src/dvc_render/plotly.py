@@ -6,6 +6,8 @@ from .utils import list_dict_to_dict_list
 
 
 class PlotlyRenderer(Renderer):
+    """Renderer using plotly.js mimicking VegaRenderer"""
+
     TYPE = "plotly"
 
     DIV = """
@@ -23,10 +25,12 @@ class PlotlyRenderer(Renderer):
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     """
 
+    # pylint: disable=W0231
     def __init__(self, datapoints: List, name: str, **properties):
         super().__init__(datapoints, name, **properties)
 
     def convert_datapoints(self, datapoints):
+        """Convert from dvc-render format to plotly json format"""
         traces = {}
         for datapoint in datapoints:
             revision = datapoint["rev"]
