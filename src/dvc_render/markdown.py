@@ -8,7 +8,6 @@ if TYPE_CHECKING:
 
 
 PAGE_MARKDOWN = """# DVC Report
-
 {renderers}
 """
 
