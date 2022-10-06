@@ -36,4 +36,4 @@ class TableRenderer(Renderer):
 
     def generate_markdown(self, report_path=None) -> str:
         table = self.to_tabulate(self.datapoints, tablefmt="github")
-        return f"{self.name}\n\n{table}"
+        return f"\n{self.name}\n\n{table}"
