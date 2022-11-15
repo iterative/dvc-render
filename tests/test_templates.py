@@ -44,9 +44,25 @@ def test_get_template_from_dir(tmp_dir, template_path, target_name):
     )
 
 
+def test_get_template_exact_match(tmp_dir):
+    tmp_dir.gen(os.path.join("foodir", "bar_template.json"), "bar")
+    with pytest.raises(TemplateNotFoundError):
+        # This was unexpectedly working when using rglob({template_name}*)
+        # and could cause bugs.
+        get_template("bar", "foodir")
+
+
 def test_get_template_from_file(tmp_dir):
     tmp_dir.gen("foo/bar.json", "template_content")
     assert get_template("foo/bar.json").content == "template_content"
+
+
+def test_get_template_fs(tmp_dir, mocker):
+    tmp_dir.gen("foo/bar.json", "template_content")
+    fs = mocker.MagicMock()
+    get_template("foo/bar.json", fs=fs)
+    fs.open.assert_called()
+    fs.exists.assert_called()
 
 
 def test_get_default_template():

@@ -725,14 +725,19 @@ TEMPLATES = [
 
 
 def _find_template(
-    template_name: str, template_dir: Optional[str] = None
+    template_name: str, template_dir: Optional[str] = None, fs=None
 ) -> Optional["StrPath"]:
+    _exists = Path.exists if fs is None else fs.exists
+
     if template_dir:
-        for template_path in Path(template_dir).rglob(f"{template_name}*"):
+        template_path = Path(template_dir) / template_name
+        if _exists(template_path):
             return template_path
+        if _exists(template_path.with_suffix(Template.EXTENSION)):
+            return template_path.with_suffix(Template.EXTENSION)
 
     template_path = Path(template_name)
-    if template_path.exists():
+    if _exists(template_path):
         return template_path.resolve()
 
     return None
@@ -741,13 +746,15 @@ def _find_template(
 def get_template(
     template: Union[Optional[str], Template] = None,
     template_dir: Optional[str] = None,
+    fs=None,
 ) -> Template:
     """Return template instance based on given template arg.
 
     If template is already an instance, return it.
     If template is None, return default `linear` template.
-    If template is a path, will try to find it as absolute
-    path or inside template_dir.
+    If template is a path, will try to find it:
+        - Inside `template_dir`
+        - As a relative path to cwd.
     If template matches one of the DEFAULT_NAMEs in TEMPLATES,
     return an instance of the one matching.
     """
@@ -757,10 +764,11 @@ def get_template(
     if template is None:
         template = "linear"
 
-    template_path = _find_template(template, template_dir)
+    template_path = _find_template(template, template_dir, fs)
 
+    _open = open if fs is None else fs.open
     if template_path:
-        with open(template_path, "r", encoding="utf-8") as f:
+        with _open(template_path, encoding="utf-8") as f:
             content = f.read()
         return Template(content, name=template)
 
