@@ -1054,15 +1054,7 @@
 
       <details class="quote">
         <summary>Source code in <code>dvc_render/vega_templates.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">774</span>
-<span class="normal">775</span>
-<span class="normal">776</span>
-<span class="normal">777</span>
-<span class="normal">778</span>
-<span class="normal">779</span>
-<span class="normal">780</span>
-<span class="normal">781</span>
-<span class="normal">782</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">782</span>
 <span class="normal">783</span>
 <span class="normal">784</span>
 <span class="normal">785</span>
@@ -1079,7 +1071,15 @@
 <span class="normal">796</span>
 <span class="normal">797</span>
 <span class="normal">798</span>
-<span class="normal">799</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">dump_templates</span><span class="p">(</span><span class="n">output</span><span class="p">:</span> <span class="s2">&quot;StrPath&quot;</span><span class="p">,</span> <span class="n">targets</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="normal">799</span>
+<span class="normal">800</span>
+<span class="normal">801</span>
+<span class="normal">802</span>
+<span class="normal">803</span>
+<span class="normal">804</span>
+<span class="normal">805</span>
+<span class="normal">806</span>
+<span class="normal">807</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">dump_templates</span><span class="p">(</span><span class="n">output</span><span class="p">:</span> <span class="s2">&quot;StrPath&quot;</span><span class="p">,</span> <span class="n">targets</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
     <span class="s2">&quot;Write TEMPLATES in `.json` format to `output`.&quot;</span>
     <span class="n">output</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">output</span><span class="p">)</span>
     <span class="n">output</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -1116,7 +1116,7 @@
 
 
 <h2 id="dvc_render.vega_templates.get_template" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">get_template</span><span class="p">(</span><span class="n">template</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">template_dir</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
+<code class="highlight language-python"><span class="n">get_template</span><span class="p">(</span><span class="n">template</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">template_dir</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">fs</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
 
 </h2>
 
@@ -1126,19 +1126,15 @@
       <p>Return template instance based on given template arg.</p>
 <p>If template is already an instance, return it.
 If template is None, return default <code>linear</code> template.
-If template is a path, will try to find it as absolute
-path or inside template_dir.
+If template is a path, will try to find it:
+    - Inside <code>template_dir</code>
+    - As a relative path to cwd.
 If template matches one of the DEFAULT_NAMEs in TEMPLATES,
 return an instance of the one matching.</p>
 
       <details class="quote">
         <summary>Source code in <code>dvc_render/vega_templates.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">741</span>
-<span class="normal">742</span>
-<span class="normal">743</span>
-<span class="normal">744</span>
-<span class="normal">745</span>
-<span class="normal">746</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">746</span>
 <span class="normal">747</span>
 <span class="normal">748</span>
 <span class="normal">749</span>
@@ -1163,16 +1159,26 @@ return an instance of the one matching.</p>
 <span class="normal">768</span>
 <span class="normal">769</span>
 <span class="normal">770</span>
-<span class="normal">771</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">get_template</span><span class="p">(</span>
+<span class="normal">771</span>
+<span class="normal">772</span>
+<span class="normal">773</span>
+<span class="normal">774</span>
+<span class="normal">775</span>
+<span class="normal">776</span>
+<span class="normal">777</span>
+<span class="normal">778</span>
+<span class="normal">779</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">get_template</span><span class="p">(</span>
     <span class="n">template</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">Template</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">template_dir</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">fs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Template</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Return template instance based on given template arg.</span>
 
 <span class="sd">    If template is already an instance, return it.</span>
 <span class="sd">    If template is None, return default `linear` template.</span>
-<span class="sd">    If template is a path, will try to find it as absolute</span>
-<span class="sd">    path or inside template_dir.</span>
+<span class="sd">    If template is a path, will try to find it:</span>
+<span class="sd">        - Inside `template_dir`</span>
+<span class="sd">        - As a relative path to cwd.</span>
 <span class="sd">    If template matches one of the DEFAULT_NAMEs in TEMPLATES,</span>
 <span class="sd">    return an instance of the one matching.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -1182,10 +1188,11 @@ return an instance of the one matching.</p>
     <span class="k">if</span> <span class="n">template</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">template</span> <span class="o">=</span> <span class="s2">&quot;linear&quot;</span>
 
-    <span class="n">template_path</span> <span class="o">=</span> <span class="n">_find_template</span><span class="p">(</span><span class="n">template</span><span class="p">,</span> <span class="n">template_dir</span><span class="p">)</span>
+    <span class="n">template_path</span> <span class="o">=</span> <span class="n">_find_template</span><span class="p">(</span><span class="n">template</span><span class="p">,</span> <span class="n">template_dir</span><span class="p">,</span> <span class="n">fs</span><span class="p">)</span>
 
+    <span class="n">_open</span> <span class="o">=</span> <span class="nb">open</span> <span class="k">if</span> <span class="n">fs</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">fs</span><span class="o">.</span><span class="n">open</span>
     <span class="k">if</span> <span class="n">template_path</span><span class="p">:</span>
-        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">template_path</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="k">with</span> <span class="n">_open</span><span class="p">(</span><span class="n">template_path</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
             <span class="n">content</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
         <span class="k">return</span> <span class="n">Template</span><span class="p">(</span><span class="n">content</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">template</span><span class="p">)</span>
 
