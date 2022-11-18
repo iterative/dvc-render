@@ -145,7 +145,7 @@ def test_generate_markdown(tmp_dir, mocker, name):
     savefig.assert_called_with((tmp_dir / "output" / name).with_suffix(".png"))
 
 
-def test_invalid_generate_markdown():
+def test_unsupported_template():
     datapoints = [
         {"predicted": "B", "actual": "A"},
         {"predicted": "A", "actual": "A"},
@@ -154,11 +154,12 @@ def test_invalid_generate_markdown():
 
     renderer = VegaRenderer(datapoints, "foo", **props)
 
-    with pytest.raises(
-        ValueError,
-        match="`generate_markdown` can only be used with `LinearTemplate`",
+    # Skip with warning instead of raising exception
+    with pytest.warns(
+        match="`generate_markdown` can only be used with `LinearTemplate`"
     ):
-        renderer.generate_markdown("output")
+        out = renderer.generate_markdown("output")
+    assert out == ""
 
 
 def test_escape_special_characters():
