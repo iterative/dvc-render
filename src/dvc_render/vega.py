@@ -1,6 +1,7 @@
 from copy import deepcopy
 from pathlib import Path
 from typing import List, Optional
+from warnings import warn
 
 from .base import Renderer
 from .exceptions import DvcRenderException
@@ -92,9 +93,8 @@ class VegaRenderer(Renderer):
 
     def generate_markdown(self, report_path=None) -> str:
         if not isinstance(self.template, LinearTemplate):
-            raise ValueError(
-                "`generate_markdown` can only be used with `LinearTemplate`"
-            )
+            warn("`generate_markdown` can only be used with `LinearTemplate`")
+            return ""
         try:
             from matplotlib import pyplot as plt
         except ImportError as e:
