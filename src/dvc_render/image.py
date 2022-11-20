@@ -20,7 +20,7 @@ class ImageRenderer(Renderer):
 
     SCRIPTS = ""
 
-    EXTENSIONS = {".jpg", ".jpeg", ".gif", ".png"}
+    EXTENSIONS = {".jpg", ".jpeg", ".gif", ".png", ".svg"}
 
     def partial_html(self, html_path=None, **kwargs) -> str:
         div_content = []
