@@ -20,6 +20,7 @@ from dvc_render.vega_templates import NoFieldInDataError, Template
         (".gif", False),
         (".jpeg", False),
         (".png", False),
+        (".svg", False),
     ),
 )
 def test_matches(extension, matches):

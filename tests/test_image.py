@@ -18,6 +18,7 @@ from dvc_render.image import ImageRenderer
         (".gif", True),
         (".jpeg", True),
         (".png", True),
+        (".svg", True),
     ),
 )
 def test_matches(extension, matches):
