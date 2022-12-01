@@ -635,79 +635,45 @@ class LinearTemplate(Template):
                         "scale": {"zero": False},
                     },
                     "color": {"field": "rev", "type": "nominal"},
+                    "tooltip": [
+                        {"field": "<DVC_METRIC_X>", "type": "quantitative"},
+                        {"field": "<DVC_METRIC_Y>", "type": "quantitative"},
+                        {"field": "rev", "type": "nominal"},
+                    ],
                 },
                 "layer": [
                     {"mark": "line"},
                     {
-                        "selection": {
-                            "label": {
-                                "type": "single",
-                                "nearest": True,
-                                "on": "mouseover",
-                                "encodings": ["x"],
-                                "empty": "none",
-                                "clear": "mouseout",
-                            }
-                        },
-                        "mark": "point",
-                        "encoding": {
-                            "opacity": {
-                                "condition": {
-                                    "selection": "label",
-                                    "value": 1,
-                                },
-                                "value": 0,
-                            }
-                        },
-                    },
-                ],
-            },
-            {
-                "transform": [{"filter": {"selection": "label"}}],
-                "layer": [
-                    {
-                        "mark": {"type": "rule", "color": "gray"},
-                        "encoding": {
-                            "x": {
-                                "field": Template.anchor("x"),
-                                "type": "quantitative",
-                            }
-                        },
+                        "transform": [
+                            {"filter": {"param": "hover", "empty": False}}
+                        ],
+                        "mark": "circle",
                     },
                     {
-                        "encoding": {
-                            "text": {
-                                "type": "quantitative",
-                                "field": Template.anchor("y"),
-                            },
-                            "x": {
-                                "field": Template.anchor("x"),
-                                "type": "quantitative",
-                            },
-                            "y": {
-                                "field": Template.anchor("y"),
-                                "type": "quantitative",
-                            },
-                        },
-                        "layer": [
+                        "mark": "rule",
+                        "params": [
                             {
-                                "mark": {
-                                    "type": "text",
-                                    "align": "left",
-                                    "dx": 5,
-                                    "dy": -5,
-                                },
-                                "encoding": {
-                                    "color": {
-                                        "type": "nominal",
-                                        "field": "rev",
-                                    }
+                                "name": "hover",
+                                "select": {
+                                    "type": "point",
+                                    "on": "mouseover",
+                                    "nearest": True,
                                 },
                             }
                         ],
+                        "encoding": {
+                            "color": {
+                                "condition": {
+                                    "param": "hover",
+                                    "empty": False,
+                                    "value": "1",
+                                },
+                                "value": "transparent",
+                            }
+                        },
                     },
                 ],
-            },
+            }
         ],
     }
 
