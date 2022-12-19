@@ -91,33 +91,6 @@ class Template:
             raise NoFieldInDataError(field)
 
 
-class SimpleLinearTemplate(Template):
-    DEFAULT_NAME = "simple"
-
-    DEFAULT_CONTENT = {
-        "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-        "data": {"values": Template.anchor("data")},
-        "title": Template.anchor("title"),
-        "width": 300,
-        "height": 300,
-        "mark": {"type": "line"},
-        "encoding": {
-            "x": {
-                "field": Template.anchor("x"),
-                "type": "quantitative",
-                "title": Template.anchor("x_label"),
-            },
-            "y": {
-                "field": Template.anchor("y"),
-                "type": "quantitative",
-                "title": Template.anchor("y_label"),
-                "scale": {"zero": False},
-            },
-            "color": {"field": "rev", "type": "nominal"},
-        },
-    }
-
-
 class BarHorizontalSortedTemplate(Template):
     DEFAULT_NAME = "bar_horizontal_sorted"
 
@@ -536,7 +509,7 @@ class SmoothLinearTemplate(Template):
                     "color": {"field": "rev", "type": "nominal"},
                 },
                 "layer": [
-                    {"mark": "line"},
+                    {"mark": "line", "point": True},
                     {
                         "selection": {
                             "label": {
@@ -620,62 +593,26 @@ class LinearTemplate(Template):
         "title": Template.anchor("title"),
         "width": 300,
         "height": 300,
-        "layer": [
-            {
-                "encoding": {
-                    "x": {
-                        "field": Template.anchor("x"),
-                        "type": "quantitative",
-                        "title": Template.anchor("x_label"),
-                    },
-                    "y": {
-                        "field": Template.anchor("y"),
-                        "type": "quantitative",
-                        "title": Template.anchor("y_label"),
-                        "scale": {"zero": False},
-                    },
-                    "color": {"field": "rev", "type": "nominal"},
-                    "tooltip": [
-                        {"field": "<DVC_METRIC_X>", "type": "quantitative"},
-                        {"field": "<DVC_METRIC_Y>", "type": "quantitative"},
-                        {"field": "rev", "type": "nominal"},
-                    ],
-                },
-                "layer": [
-                    {"mark": "line"},
-                    {
-                        "transform": [
-                            {"filter": {"param": "hover", "empty": False}}
-                        ],
-                        "mark": "circle",
-                    },
-                    {
-                        "mark": "rule",
-                        "params": [
-                            {
-                                "name": "hover",
-                                "select": {
-                                    "type": "point",
-                                    "on": "mouseover",
-                                    "nearest": True,
-                                },
-                            }
-                        ],
-                        "encoding": {
-                            "color": {
-                                "condition": {
-                                    "param": "hover",
-                                    "empty": False,
-                                    "value": "1",
-                                },
-                                "value": "transparent",
-                            }
-                        },
-                    },
-                ],
-            }
-        ],
+        "mark": {"type": "line", "point": True, "tooltip": True},
+        "encoding": {
+            "x": {
+                "field": Template.anchor("x"),
+                "type": "quantitative",
+                "title": Template.anchor("x_label"),
+            },
+            "y": {
+                "field": Template.anchor("y"),
+                "type": "quantitative",
+                "title": Template.anchor("y_label"),
+                "scale": {"zero": False},
+            },
+            "color": {"field": "rev", "type": "nominal"},
+        },
     }
+
+
+class SimpleLinearTemplate(LinearTemplate):
+    DEFAULT_NAME = "simple"
 
 
 TEMPLATES = [
