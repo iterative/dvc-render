@@ -1,7 +1,6 @@
 import json
 
 import pytest
-from funcy import first  # type: ignore
 
 from dvc_render.vega import BadTemplateError, VegaRenderer
 from dvc_render.vega_templates import NoFieldInDataError, Template
@@ -61,12 +60,8 @@ def test_choose_axes():
             "second_val": 300,
         },
     ]
-    assert (
-        first(plot_content["layer"])["encoding"]["x"]["field"] == "first_val"
-    )
-    assert (
-        first(plot_content["layer"])["encoding"]["y"]["field"] == "second_val"
-    )
+    assert plot_content["encoding"]["x"]["field"] == "first_val"
+    assert plot_content["encoding"]["y"]["field"] == "second_val"
 
 
 def test_confusion():
