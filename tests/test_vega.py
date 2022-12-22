@@ -37,6 +37,21 @@ def test_init_empty():
     assert renderer.generate_markdown("foo") == ""
 
 
+def test_default_template_mark():
+    datapoints = [
+        {"first_val": 100, "second_val": 100, "val": 2},
+        {"first_val": 200, "second_val": 300, "val": 3},
+    ]
+
+    plot_content = json.loads(VegaRenderer(datapoints, "foo").partial_html())
+
+    assert plot_content["mark"] == {
+        "type": "line",
+        "point": True,
+        "tooltip": {"content": "data"},
+    }
+
+
 def test_choose_axes():
     props = {"x": "first_val", "y": "second_val"}
     datapoints = [
