@@ -593,7 +593,11 @@ class LinearTemplate(Template):
         "title": Template.anchor("title"),
         "width": 300,
         "height": 300,
-        "mark": {"type": "line", "point": True, "tooltip": True},
+        "mark": {
+            "type": "line",
+            "point": True,
+            "tooltip": {"content": "data"},
+        },
         "encoding": {
             "x": {
                 "field": Template.anchor("x"),
