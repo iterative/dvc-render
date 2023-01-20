@@ -595,7 +595,9 @@ class LinearTemplate(Template):
         "height": 300,
         "mark": {
             "type": "line",
-            "point": True,
+            "point": {
+                "size": {"expr": "points"}
+            },
             "tooltip": {"content": "data"},
         },
         "encoding": {
@@ -612,6 +614,35 @@ class LinearTemplate(Template):
             },
             "color": {"field": "rev", "type": "nominal"},
         },
+        "params": [
+            {
+              "name": "points",
+              "value": 0,
+              "bind": {
+                "input": "radio",
+                "options": [30, 0],
+                "labels": ["show", "hide"]
+              }
+            },
+            {
+                "name": "smooth",
+                "value": 0.001,
+                "bind": {
+                    "input": "range",
+                    "min": 0.001,
+                    "max": 1,
+                    "step": 0.001,
+                },
+            },
+        ],
+        "transform": [
+            {
+                "loess": Template.anchor("y"),
+                "on": Template.anchor("x"),
+                "groupby": ["rev"],
+                "bandwidth": {"signal": "smooth"},
+            }
+        ],
     }
 
 
