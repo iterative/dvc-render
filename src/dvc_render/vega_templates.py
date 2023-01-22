@@ -488,7 +488,7 @@ class SmoothLinearTemplate(Template):
             {
                 "loess": Template.anchor("y"),
                 "on": Template.anchor("x"),
-                "groupby": ["rev"],
+                "groupby": ["rev", "filename"],
                 "bandwidth": {"signal": "smooth"},
             }
         ],
@@ -509,77 +509,15 @@ class SmoothLinearTemplate(Template):
                     "color": {"field": "rev", "type": "nominal"},
                 },
                 "layer": [
-                    {"mark": "line", "point": True},
                     {
-                        "selection": {
-                            "label": {
-                                "type": "single",
-                                "nearest": True,
-                                "on": "mouseover",
-                                "encodings": ["x"],
-                                "empty": "none",
-                                "clear": "mouseout",
-                            }
-                        },
-                        "mark": "point",
-                        "encoding": {
-                            "opacity": {
-                                "condition": {
-                                    "selection": "label",
-                                    "value": 1,
-                                },
-                                "value": 0,
-                            }
-                        },
-                    },
+                        "mark": {
+                            "type": "line",
+                            "point": True,
+                            "tooltip": {"content": "data"},
+                        }
+                    }
                 ],
-            },
-            {
-                "transform": [{"filter": {"selection": "label"}}],
-                "layer": [
-                    {
-                        "mark": {"type": "rule", "color": "gray"},
-                        "encoding": {
-                            "x": {
-                                "field": Template.anchor("x"),
-                                "type": "quantitative",
-                            }
-                        },
-                    },
-                    {
-                        "encoding": {
-                            "text": {
-                                "type": "quantitative",
-                                "field": Template.anchor("y"),
-                            },
-                            "x": {
-                                "field": Template.anchor("x"),
-                                "type": "quantitative",
-                            },
-                            "y": {
-                                "field": Template.anchor("y"),
-                                "type": "quantitative",
-                            },
-                        },
-                        "layer": [
-                            {
-                                "mark": {
-                                    "type": "text",
-                                    "align": "left",
-                                    "dx": 5,
-                                    "dy": -5,
-                                },
-                                "encoding": {
-                                    "color": {
-                                        "type": "nominal",
-                                        "field": "rev",
-                                    }
-                                },
-                            }
-                        ],
-                    },
-                ],
-            },
+            }
         ],
     }
 
