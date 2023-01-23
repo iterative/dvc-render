@@ -596,7 +596,7 @@ class LinearTemplate(Template):
         "mark": {
             "type": "line",
             "point": {
-                "size": {"expr": "points"}
+                "opacity": {"expr": "opacity"}
             },
             "tooltip": {"content": "data"},
         },
@@ -616,13 +616,14 @@ class LinearTemplate(Template):
         },
         "params": [
             {
-              "name": "points",
-              "value": 0,
-              "bind": {
-                "input": "radio",
-                "options": [30, 0],
-                "labels": ["show", "hide"]
-              }
+                "name": "opacity",
+                "value": 0.1,
+                "bind": {
+                    "input": "range",
+                    "min": 0,
+                    "max": 1,
+                    "step": 0.1,
+                },
             },
             {
                 "name": "smooth",
@@ -634,14 +635,6 @@ class LinearTemplate(Template):
                     "step": 0.001,
                 },
             },
-        ],
-        "transform": [
-            {
-                "loess": Template.anchor("y"),
-                "on": Template.anchor("x"),
-                "groupby": ["rev"],
-                "bandwidth": {"signal": "smooth"},
-            }
         ],
     }
 
