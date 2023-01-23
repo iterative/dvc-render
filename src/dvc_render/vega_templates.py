@@ -464,126 +464,6 @@ class ScatterTemplate(Template):
     }
 
 
-class SmoothLinearTemplate(Template):
-    DEFAULT_NAME = "smooth"
-    DEFAULT_CONTENT = {
-        "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-        "data": {"values": Template.anchor("data")},
-        "title": Template.anchor("title"),
-        "width": 300,
-        "height": 300,
-        "params": [
-            {
-                "name": "smooth",
-                "value": 0.2,
-                "bind": {
-                    "input": "range",
-                    "min": 0.001,
-                    "max": 1,
-                    "step": 0.01,
-                },
-            },
-        ],
-        "transform": [
-            {
-                "loess": Template.anchor("y"),
-                "on": Template.anchor("x"),
-                "groupby": ["rev"],
-                "bandwidth": {"signal": "smooth"},
-            }
-        ],
-        "layer": [
-            {
-                "encoding": {
-                    "x": {
-                        "field": Template.anchor("x"),
-                        "type": "quantitative",
-                        "title": Template.anchor("x_label"),
-                    },
-                    "y": {
-                        "field": Template.anchor("y"),
-                        "type": "quantitative",
-                        "title": Template.anchor("y_label"),
-                        "scale": {"zero": False},
-                    },
-                    "color": {"field": "rev", "type": "nominal"},
-                },
-                "layer": [
-                    {"mark": "line", "point": True},
-                    {
-                        "selection": {
-                            "label": {
-                                "type": "single",
-                                "nearest": True,
-                                "on": "mouseover",
-                                "encodings": ["x"],
-                                "empty": "none",
-                                "clear": "mouseout",
-                            }
-                        },
-                        "mark": "point",
-                        "encoding": {
-                            "opacity": {
-                                "condition": {
-                                    "selection": "label",
-                                    "value": 1,
-                                },
-                                "value": 0,
-                            }
-                        },
-                    },
-                ],
-            },
-            {
-                "transform": [{"filter": {"selection": "label"}}],
-                "layer": [
-                    {
-                        "mark": {"type": "rule", "color": "gray"},
-                        "encoding": {
-                            "x": {
-                                "field": Template.anchor("x"),
-                                "type": "quantitative",
-                            }
-                        },
-                    },
-                    {
-                        "encoding": {
-                            "text": {
-                                "type": "quantitative",
-                                "field": Template.anchor("y"),
-                            },
-                            "x": {
-                                "field": Template.anchor("x"),
-                                "type": "quantitative",
-                            },
-                            "y": {
-                                "field": Template.anchor("y"),
-                                "type": "quantitative",
-                            },
-                        },
-                        "layer": [
-                            {
-                                "mark": {
-                                    "type": "text",
-                                    "align": "left",
-                                    "dx": 5,
-                                    "dy": -5,
-                                },
-                                "encoding": {
-                                    "color": {
-                                        "type": "nominal",
-                                        "field": "rev",
-                                    }
-                                },
-                            }
-                        ],
-                    },
-                ],
-            },
-        ],
-    }
-
-
 class LinearTemplate(Template):
     DEFAULT_NAME = "linear"
 
@@ -645,6 +525,10 @@ class LinearTemplate(Template):
 
 class SimpleLinearTemplate(LinearTemplate):
     DEFAULT_NAME = "simple"
+
+
+class SmoothLinearTemplate(LinearTemplate):
+    DEFAULT_NAME = "smooth"
 
 
 TEMPLATES = [
