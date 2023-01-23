@@ -520,6 +520,14 @@ class LinearTemplate(Template):
                 },
             },
         ],
+        "transform": [
+            {
+                "loess": Template.anchor("y"),
+                "on": Template.anchor("x"),
+                "groupby": ["rev", "filename"],
+                "bandwidth": {"signal": "smooth"},
+            }
+        ],
     }
 
 
