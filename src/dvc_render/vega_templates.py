@@ -612,7 +612,11 @@ class LinearTemplate(Template):
                 "title": Template.anchor("y_label"),
                 "scale": {"zero": False},
             },
-            "color": {"field": "rev", "type": "nominal"},
+            "color": {
+                "field": "rev",
+                "type": "nominal",
+                "legend": {"symbolOpacity": 1},
+            },
         },
         "params": [
             {
