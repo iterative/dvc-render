@@ -480,20 +480,13 @@ class SmoothLinearTemplate(Template):
                     "input": "range",
                     "min": 0.001,
                     "max": 1,
-                    "step": 0.01,
+                    "step": 0.001,
                 },
             },
         ],
-        "transform": [
-            {
-                "loess": Template.anchor("y"),
-                "on": Template.anchor("x"),
-                "groupby": ["rev", "filename"],
-                "bandwidth": {"signal": "smooth"},
-            }
-        ],
         "layer": [
             {
+                "mark": "line",
                 "encoding": {
                     "x": {
                         "field": Template.anchor("x"),
@@ -508,16 +501,35 @@ class SmoothLinearTemplate(Template):
                     },
                     "color": {"field": "rev", "type": "nominal"},
                 },
-                "layer": [
+                "transform": [
                     {
-                        "mark": {
-                            "type": "line",
-                            "point": True,
-                            "tooltip": {"content": "data"},
-                        }
-                    }
+                        "loess": Template.anchor("y"),
+                        "on": Template.anchor("x"),
+                        "groupby": ["rev", "filename"],
+                        "bandwidth": {"signal": "smooth"},
+                    },
                 ],
-            }
+            },
+            {
+                "mark": {
+                    "type": "point",
+                    "tooltip": {"content": "data"},
+                },
+                "encoding": {
+                    "x": {
+                        "field": Template.anchor("x"),
+                        "type": "quantitative",
+                        "title": Template.anchor("x_label"),
+                    },
+                    "y": {
+                        "field": Template.anchor("y"),
+                        "type": "quantitative",
+                        "title": Template.anchor("y_label"),
+                        "scale": {"zero": False},
+                    },
+                    "color": {"field": "rev", "type": "nominal"},
+                },
+            },
         ],
     }
 
