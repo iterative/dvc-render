@@ -627,14 +627,14 @@
 <span class="normal">37</span>
 <span class="normal">38</span>
 <span class="normal">39</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">TableRenderer</span><span class="p">(</span><span class="n">Renderer</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Renderer for tables.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Renderer for tables.&quot;&quot;&quot;</span>
 
     <span class="n">TYPE</span> <span class="o">=</span> <span class="s2">&quot;table&quot;</span>
     <span class="n">DIV</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
 <span class="s2">        &lt;div id=&quot;</span><span class="si">{id}</span><span class="s2">&quot; style=&quot;text-align: center; padding: 10x&quot;&gt;</span>
 <span class="s2">            &lt;p&gt;</span><span class="si">{id}</span><span class="s2">&lt;/p&gt;</span>
 <span class="s2">            &lt;div style=&quot;display: flex;justify-content: center;&quot;&gt;</span>
-<span class="s2">                </span><span class="si">{partial}</span><span class="s2"></span>
+<span class="s2">                </span><span class="si">{partial}</span>
 <span class="s2">            &lt;/div&gt;</span>
 <span class="s2">        &lt;/div&gt;&quot;&quot;&quot;</span>
 
@@ -644,7 +644,7 @@
 
     <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">to_tabulate</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">datapoints</span><span class="p">,</span> <span class="n">tablefmt</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Convert datapoints to tabulate format&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Convert datapoints to tabulate format&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">tabulate</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">cls</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> requires `tabulate`.&quot;</span><span class="p">)</span>
         <span class="n">data</span> <span class="o">=</span> <span class="n">list_dict_to_dict_list</span><span class="p">(</span><span class="n">datapoints</span><span class="p">)</span>
@@ -699,7 +699,7 @@
 <span class="normal">31</span>
 <span class="normal">32</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@classmethod</span>
 <span class="k">def</span> <span class="nf">to_tabulate</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">datapoints</span><span class="p">,</span> <span class="n">tablefmt</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Convert datapoints to tabulate format&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert datapoints to tabulate format&quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">tabulate</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">cls</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> requires `tabulate`.&quot;</span><span class="p">)</span>
     <span class="n">data</span> <span class="o">=</span> <span class="n">list_dict_to_dict_list</span><span class="p">(</span><span class="n">datapoints</span><span class="p">)</span>
