@@ -505,7 +505,7 @@ class SmoothLinearTemplate(Template):
                     {
                         "loess": Template.anchor("y"),
                         "on": Template.anchor("x"),
-                        "groupby": ["rev", "filename"],
+                        "groupby": ["rev", "filename", "field"],
                         "bandwidth": {"signal": "smooth"},
                     },
                 ],
