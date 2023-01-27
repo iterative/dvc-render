@@ -506,7 +506,14 @@ class SmoothLinearTemplate(Template):
                         "title": Template.anchor("y_label"),
                         "scale": {"zero": False},
                     },
-                    "color": {"field": "rev", "type": "nominal"},
+                    "color": {
+                        "field": "rev",
+                        "type": "nominal",
+                        "legend": {
+                            "orient": "top",
+                            "direction": "vertical"
+                        }
+                    },
                 },
                 "layer": [
                     {
@@ -548,7 +555,14 @@ class LinearTemplate(Template):
                 "title": Template.anchor("y_label"),
                 "scale": {"zero": False},
             },
-            "color": {"field": "rev", "type": "nominal"},
+            "color": {
+                "field": "rev",
+                "type": "nominal",
+                "legend": {
+                    "orient": "top",
+                    "direction": "vertical"
+                }
+            },
         },
     }
 
