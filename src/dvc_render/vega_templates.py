@@ -114,8 +114,9 @@ class BarHorizontalSortedTemplate(Template):
                 "title": Template.anchor("y_label"),
                 "sort": "-x",
             },
-            "yOffset": {"field": "rev"},
-            "color": {"field": "rev", "type": "nominal"},
+            "yOffset": {"field": "dvc_id"},
+            "color": {"field": "dvc_rev", "type": "nominal"},
+            "strokeDash": {"field": "dvc_source", "type": "nominal"},
         },
     }
 
@@ -142,8 +143,9 @@ class BarHorizontalTemplate(Template):
                 "type": "nominal",
                 "title": Template.anchor("y_label"),
             },
-            "yOffset": {"field": "rev"},
-            "color": {"field": "rev", "type": "nominal"},
+            "yOffset": {"field": "dvc_id"},
+            "color": {"field": "dvc_rev", "type": "nominal"},
+            "strokeDash": {"field": "dvc_source", "type": "nominal"},
         },
     }
 
@@ -154,7 +156,11 @@ class ConfusionTemplate(Template):
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
         "data": {"values": Template.anchor("data")},
         "title": Template.anchor("title"),
-        "facet": {"field": "rev", "type": "nominal"},
+        "facet": {
+            "field": "dvc_id",
+            "type": "nominal",
+            "header": {"title": False}
+        },
         "spec": {
             "transform": [
                 {
@@ -163,13 +169,13 @@ class ConfusionTemplate(Template):
                 },
                 {
                     "impute": "xy_count",
-                    "groupby": ["rev", Template.anchor("y")],
+                    "groupby": ["dvc_id", Template.anchor("y")],
                     "key": Template.anchor("x"),
                     "value": 0,
                 },
                 {
                     "impute": "xy_count",
-                    "groupby": ["rev", Template.anchor("x")],
+                    "groupby": ["dvc_id", Template.anchor("x")],
                     "key": Template.anchor("y"),
                     "value": 0,
                 },
@@ -264,7 +270,11 @@ class NormalizedConfusionTemplate(Template):
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
         "data": {"values": Template.anchor("data")},
         "title": Template.anchor("title"),
-        "facet": {"field": "rev", "type": "nominal"},
+        "facet": {
+            "field": "dvc_id",
+            "type": "nominal",
+            "header": {"title": False}
+        },
         "spec": {
             "transform": [
                 {
@@ -273,13 +283,13 @@ class NormalizedConfusionTemplate(Template):
                 },
                 {
                     "impute": "xy_count",
-                    "groupby": ["rev", Template.anchor("y")],
+                    "groupby": ["dvc_id", Template.anchor("y")],
                     "key": Template.anchor("x"),
                     "value": 0,
                 },
                 {
                     "impute": "xy_count",
-                    "groupby": ["rev", Template.anchor("x")],
+                    "groupby": ["dvc_id", Template.anchor("x")],
                     "key": Template.anchor("y"),
                     "value": 0,
                 },
@@ -395,7 +405,8 @@ class ScatterTemplate(Template):
                         "title": Template.anchor("y_label"),
                         "scale": {"zero": False},
                     },
-                    "color": {"field": "rev", "type": "nominal"},
+                    "color": {"field": "dvc_rev", "type": "nominal"},
+                    "strokeDash": {"field": "dvc_source", "type": "nominal"},
                 },
                 "layer": [
                     {"mark": "point"},
@@ -452,8 +463,12 @@ class ScatterTemplate(Template):
                                 "encoding": {
                                     "color": {
                                         "type": "nominal",
-                                        "field": "rev",
-                                    }
+                                        "field": "dvc_rev",
+                                    },
+                                    "strokeDash": {
+                                        "field": "dvc_source",
+                                        "type": "nominal"
+                                    },
                                 },
                             }
                         ],
@@ -475,7 +490,7 @@ class SmoothLinearTemplate(Template):
         "params": [
             {
                 "name": "smooth",
-                "value": 0.2,
+                "value": 0.001,
                 "bind": {
                     "input": "range",
                     "min": 0.001,
@@ -499,13 +514,14 @@ class SmoothLinearTemplate(Template):
                         "title": Template.anchor("y_label"),
                         "scale": {"zero": False},
                     },
-                    "color": {"field": "rev", "type": "nominal"},
+                    "color": {"field": "dvc_rev", "type": "nominal"},
+                    "strokeDash": {"field": "dvc_source", "type": "nominal"},
                 },
                 "transform": [
                     {
                         "loess": Template.anchor("y"),
                         "on": Template.anchor("x"),
-                        "groupby": ["rev", "filename", "field"],
+                        "groupby": ["dvc_rev", "dvc_source"],
                         "bandwidth": {"signal": "smooth"},
                     },
                 ],
@@ -527,15 +543,20 @@ class SmoothLinearTemplate(Template):
                         "title": Template.anchor("y_label"),
                         "scale": {"zero": False},
                     },
-                    "color": {"field": "rev", "type": "nominal"},
+                    "color": {"field": "dvc_rev", "type": "nominal"},
+                    "strokeDash": {"field": "dvc_source", "type": "nominal"},
                 },
             },
         ],
     }
 
 
-class LinearTemplate(Template):
+class LinearTemplate(SmoothLinearTemplate):
     DEFAULT_NAME = "linear"
+
+
+class SimpleLinearTemplate(Template):
+    DEFAULT_NAME = "simple"
 
     DEFAULT_CONTENT = {
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
@@ -545,7 +566,6 @@ class LinearTemplate(Template):
         "height": 300,
         "mark": {
             "type": "line",
-            "point": True,
             "tooltip": {"content": "data"},
         },
         "encoding": {
@@ -560,14 +580,10 @@ class LinearTemplate(Template):
                 "title": Template.anchor("y_label"),
                 "scale": {"zero": False},
             },
-            "color": {"field": "rev", "type": "nominal"},
+            "color": {"field": "dvc_rev", "type": "nominal"},
+            "strokeDash": {"field": "dvc_source", "type": "nominal"},
         },
     }
-
-
-class SimpleLinearTemplate(LinearTemplate):
-    DEFAULT_NAME = "simple"
-
 
 TEMPLATES = [
     SimpleLinearTemplate,
