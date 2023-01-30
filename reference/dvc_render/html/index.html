@@ -678,9 +678,7 @@
 <span class="normal">73</span>
 <span class="normal">74</span>
 <span class="normal">75</span>
-<span class="normal">76</span>
-<span class="normal">77</span>
-<span class="normal">78</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">HTML</span><span class="p">:</span>
+<span class="normal">76</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">HTML</span><span class="p">:</span>
     <span class="n">SCRIPTS_PLACEHOLDER</span> <span class="o">=</span> <span class="s2">&quot;scripts&quot;</span>
     <span class="n">PLOTS_PLACEHOLDER</span> <span class="o">=</span> <span class="s2">&quot;plot_divs&quot;</span>
     <span class="n">PLOTS_PLACEHOLDER_FORMAT_STR</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="se">{{</span><span class="si">{</span><span class="n">PLOTS_PLACEHOLDER</span><span class="si">}</span><span class="se">}}</span><span class="s2">&quot;</span>
@@ -722,9 +720,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">REFRESH_PLACEHOLDER</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">refresh_tag</span><span class="p">,</span>
         <span class="p">}</span>
         <span class="k">for</span> <span class="n">placeholder</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">template</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">template</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span>
-                <span class="s2">&quot;{&quot;</span> <span class="o">+</span> <span class="n">placeholder</span> <span class="o">+</span> <span class="s2">&quot;}&quot;</span><span class="p">,</span> <span class="n">value</span>
-            <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">template</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">template</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;{&quot;</span> <span class="o">+</span> <span class="n">placeholder</span> <span class="o">+</span> <span class="s2">&quot;}&quot;</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">template</span>
 </code></pre></div></td></tr></table></div>
         </details>
@@ -766,9 +762,7 @@
 <span class="normal">73</span>
 <span class="normal">74</span>
 <span class="normal">75</span>
-<span class="normal">76</span>
-<span class="normal">77</span>
-<span class="normal">78</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">embed</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="normal">76</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">embed</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
     <span class="s2">&quot;Format HTML template with all elements.&quot;</span>
     <span class="n">kwargs</span> <span class="o">=</span> <span class="p">{</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">SCRIPTS_PLACEHOLDER</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">scripts</span><span class="p">,</span>
@@ -776,9 +770,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">REFRESH_PLACEHOLDER</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">refresh_tag</span><span class="p">,</span>
     <span class="p">}</span>
     <span class="k">for</span> <span class="n">placeholder</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">template</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">template</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span>
-            <span class="s2">&quot;{&quot;</span> <span class="o">+</span> <span class="n">placeholder</span> <span class="o">+</span> <span class="s2">&quot;}&quot;</span><span class="p">,</span> <span class="n">value</span>
-        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">template</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">template</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;{&quot;</span> <span class="o">+</span> <span class="n">placeholder</span> <span class="o">+</span> <span class="s2">&quot;}&quot;</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
     <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">template</span>
 </code></pre></div></td></tr></table></div>
       </details>
@@ -871,7 +863,9 @@
 
       <details class="quote">
         <summary>Source code in <code>dvc_render/html.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 81</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 79</span>
+<span class="normal"> 80</span>
+<span class="normal"> 81</span>
 <span class="normal"> 82</span>
 <span class="normal"> 83</span>
 <span class="normal"> 84</span>
@@ -892,9 +886,7 @@
 <span class="normal"> 99</span>
 <span class="normal">100</span>
 <span class="normal">101</span>
-<span class="normal">102</span>
-<span class="normal">103</span>
-<span class="normal">104</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">render_html</span><span class="p">(</span>
+<span class="normal">102</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">render_html</span><span class="p">(</span>
     <span class="n">renderers</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="s2">&quot;Renderer&quot;</span><span class="p">],</span>
     <span class="n">output_file</span><span class="p">:</span> <span class="s2">&quot;StrPath&quot;</span><span class="p">,</span>
     <span class="n">template_path</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="s2">&quot;StrPath&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
