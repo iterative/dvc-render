@@ -1,10 +1,6 @@
 import pytest
 
-from dvc_render.markdown import (
-    PAGE_MARKDOWN,
-    Markdown,
-    MissingPlaceholderError,
-)
+from dvc_render.markdown import PAGE_MARKDOWN, Markdown, MissingPlaceholderError
 
 # pylint: disable=missing-function-docstring, R0801
 

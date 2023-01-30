@@ -40,9 +40,7 @@ class Markdown:
             self.RENDERERS_PLACEHOLDER: "\n".join(self.elements),
         }
         for placeholder, value in kwargs.items():
-            self.template = self.template.replace(
-                "{" + placeholder + "}", value
-            )
+            self.template = self.template.replace("{" + placeholder + "}", value)
         return self.template
 
 
@@ -63,9 +61,7 @@ def render_markdown(
     document = Markdown(page)
 
     for renderer in renderers:
-        document.with_element(
-            renderer.generate_markdown(report_path=output_path)
-        )
+        document.with_element(renderer.generate_markdown(report_path=output_path))
 
     output_path.write_text(document.embed(), encoding="utf8")
 

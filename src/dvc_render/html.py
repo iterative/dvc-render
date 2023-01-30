@@ -72,9 +72,7 @@ class HTML:
             self.REFRESH_PLACEHOLDER: self.refresh_tag,
         }
         for placeholder, value in kwargs.items():
-            self.template = self.template.replace(
-                "{" + placeholder + "}", value
-            )
+            self.template = self.template.replace("{" + placeholder + "}", value)
         return self.template
 
 

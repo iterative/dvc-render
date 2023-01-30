@@ -59,9 +59,7 @@ def test_choose_axes():
         {"first_val": 200, "second_val": 300, "val": 3},
     ]
 
-    plot_content = json.loads(
-        VegaRenderer(datapoints, "foo", **props).partial_html()
-    )
+    plot_content = json.loads(VegaRenderer(datapoints, "foo", **props).partial_html())
 
     assert plot_content["data"]["values"] == [
         {
@@ -86,9 +84,7 @@ def test_confusion():
     ]
     props = {"template": "confusion", "x": "predicted", "y": "actual"}
 
-    plot_content = json.loads(
-        VegaRenderer(datapoints, "foo", **props).partial_html()
-    )
+    plot_content = json.loads(VegaRenderer(datapoints, "foo", **props).partial_html())
 
     assert plot_content["data"]["values"] == [
         {"predicted": "B", "actual": "A"},
