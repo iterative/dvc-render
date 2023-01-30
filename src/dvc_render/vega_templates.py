@@ -15,9 +15,7 @@ class TemplateNotFoundError(DvcRenderException):
 
 class NoFieldInDataError(DvcRenderException):
     def __init__(self, field_name):
-        super().__init__(
-            f"Field '{field_name}' does not exist in provided data."
-        )
+        super().__init__(f"Field '{field_name}' does not exist in provided data.")
 
 
 class TemplateContentDoesNotMatch(DvcRenderException):
@@ -631,9 +629,7 @@ def dump_templates(output: "StrPath", targets: Optional[List] = None) -> None:
 
     if targets:
         templates = [
-            template
-            for template in TEMPLATES
-            if template.DEFAULT_NAME in targets
+            template for template in TEMPLATES if template.DEFAULT_NAME in targets
         ]
     else:
         templates = TEMPLATES
@@ -645,8 +641,6 @@ def dump_templates(output: "StrPath", targets: Optional[List] = None) -> None:
         if path.exists():
             content = path.read_text(encoding="utf-8")
             if content != template.content:
-                raise TemplateContentDoesNotMatch(
-                    template.DEFAULT_NAME or "", path
-                )
+                raise TemplateContentDoesNotMatch(template.DEFAULT_NAME or "", path)
         else:
             path.write_text(template.content, encoding="utf-8")
