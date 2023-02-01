@@ -113,7 +113,11 @@ class BarHorizontalSortedTemplate(Template):
                 "sort": "-x",
             },
             "yOffset": {"field": "rev"},
-            "color": {"field": "rev", "type": "nominal"},
+            "color": {
+                "field": "rev",
+                "type": "nominal",
+                "legend": {"orient": "top", "direction": "vertical"},
+            },
         },
     }
 
@@ -141,7 +145,11 @@ class BarHorizontalTemplate(Template):
                 "title": Template.anchor("y_label"),
             },
             "yOffset": {"field": "rev"},
-            "color": {"field": "rev", "type": "nominal"},
+            "color": {
+                "field": "rev",
+                "type": "nominal",
+                "legend": {"orient": "top", "direction": "vertical"},
+            },
         },
     }
 
@@ -393,7 +401,11 @@ class ScatterTemplate(Template):
                         "title": Template.anchor("y_label"),
                         "scale": {"zero": False},
                     },
-                    "color": {"field": "rev", "type": "nominal"},
+                    "color": {
+                        "field": "rev",
+                        "type": "nominal",
+                        "legend": {"orient": "top", "direction": "vertical"},
+                    },
                 },
                 "layer": [
                     {"mark": "point"},
@@ -507,7 +519,7 @@ class SmoothLinearTemplate(Template):
                     {
                         "loess": Template.anchor("y"),
                         "on": Template.anchor("x"),
-                        "groupby": ["rev", "filename::field"],
+                        "groupby": ["rev", "filename", "field", "filename::field"],
                         "bandwidth": {"signal": "smooth"},
                     },
                 ],
