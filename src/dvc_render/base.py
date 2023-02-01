@@ -19,9 +19,7 @@ class Renderer(abc.ABC):
 
     EXTENSIONS: Iterable[str] = {}
 
-    def __init__(
-        self, datapoints: List = None, name: str = None, **properties
-    ):
+    def __init__(self, datapoints: List = None, name: str = None, **properties):
         self.datapoints = datapoints or []
         self.name = name or ""
         self.properties = properties
@@ -68,8 +66,6 @@ class Renderer(abc.ABC):
         raise NotImplementedError
 
     @classmethod
-    def matches(
-        cls, filename, properties  # pylint: disable=unused-argument
-    ) -> bool:
+    def matches(cls, filename, properties) -> bool:  # pylint: disable=unused-argument
         "Check if the Renderer is suitable."
         return Path(filename).suffix in cls.EXTENSIONS

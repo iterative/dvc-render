@@ -39,9 +39,7 @@ def test_raise_on_no_template():
 )
 def test_get_template_from_dir(tmp_dir, template_path, target_name):
     tmp_dir.gen(template_path, "template_content")
-    assert (
-        get_template(target_name, ".dvc/plots").content == "template_content"
-    )
+    assert get_template(target_name, ".dvc/plots").content == "template_content"
 
 
 def test_get_template_exact_match(tmp_dir):

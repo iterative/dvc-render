@@ -66,9 +66,7 @@ class ParallelCoordinatesRenderer(Renderer):
 
                 dummy_values = [unique_values.index(x) for x in values]
 
-                values = [
-                    x if x != self.fill_value else "Missing" for x in values
-                ]
+                values = [x if x != self.fill_value else "Missing" for x in values]
                 trace["dimensions"].append(
                     {
                         "label": label,
@@ -78,9 +76,7 @@ class ParallelCoordinatesRenderer(Renderer):
                     }
                 )
             else:
-                trace["dimensions"].append(
-                    {"label": label, "values": float_values}
-                )
+                trace["dimensions"].append({"label": label, "values": float_values})
 
             if label == self.color_by:
                 trace["line"] = {

@@ -135,9 +135,7 @@ def test_write_parallel_coordinates(tmp_dir):
     ]
 
     renderer = ParallelCoordinatesRenderer(datapoints)
-    html_path = render_html(
-        renderers=[renderer], output_file=tmp_dir / "index.html"
-    )
+    html_path = render_html(renderers=[renderer], output_file=tmp_dir / "index.html")
 
     html_text = html_path.read_text()
 
