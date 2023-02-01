@@ -98,9 +98,7 @@ class VegaRenderer(Renderer):
         try:
             from matplotlib import pyplot as plt
         except ImportError as e:
-            raise ImportError(
-                "matplotlib is required for `generate_markdown`"
-            ) from e
+            raise ImportError("matplotlib is required for `generate_markdown`") from e
 
         data = list_dict_to_dict_list(self.datapoints)
         if data:
@@ -122,7 +120,5 @@ class VegaRenderer(Renderer):
             plt.savefig(output_file)
             plt.close()
 
-            return (
-                f"\n![{self.name}]({output_file.relative_to(report_folder)})"
-            )
+            return f"\n![{self.name}]({output_file.relative_to(report_folder)})"
         return ""
