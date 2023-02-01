@@ -507,10 +507,7 @@ class SmoothLinearTemplate(Template):
                     "color": {
                         "field": "rev",
                         "type": "nominal",
-                        "legend": {
-                            "orient": "top",
-                            "direction": "vertical"
-                        }
+                        "legend": {"orient": "top", "direction": "vertical"},
                     },
                 },
                 "layer": [
@@ -556,10 +553,7 @@ class LinearTemplate(Template):
             "color": {
                 "field": "rev",
                 "type": "nominal",
-                "legend": {
-                    "orient": "top",
-                    "direction": "vertical"
-                }
+                "legend": {"orient": "top", "direction": "vertical"},
             },
         },
     }
