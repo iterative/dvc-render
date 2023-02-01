@@ -475,7 +475,7 @@ class SmoothLinearTemplate(Template):
         "params": [
             {
                 "name": "smooth",
-                "value": 0.2,
+                "value": 0.001,
                 "bind": {
                     "input": "range",
                     "min": 0.001,
@@ -505,7 +505,7 @@ class SmoothLinearTemplate(Template):
                     {
                         "loess": Template.anchor("y"),
                         "on": Template.anchor("x"),
-                        "groupby": ["rev", "filename", "field"],
+                        "groupby": ["rev", "filename::field"],
                         "bandwidth": {"signal": "smooth"},
                     },
                 ],
@@ -534,8 +534,12 @@ class SmoothLinearTemplate(Template):
     }
 
 
-class LinearTemplate(Template):
+class LinearTemplate(SmoothLinearTemplate):
     DEFAULT_NAME = "linear"
+
+
+class SimpleLinearTemplate(Template):
+    DEFAULT_NAME = "simple"
 
     DEFAULT_CONTENT = {
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
@@ -545,7 +549,6 @@ class LinearTemplate(Template):
         "height": 300,
         "mark": {
             "type": "line",
-            "point": True,
             "tooltip": {"content": "data"},
         },
         "encoding": {
@@ -563,10 +566,6 @@ class LinearTemplate(Template):
             "color": {"field": "rev", "type": "nominal"},
         },
     }
-
-
-class SimpleLinearTemplate(LinearTemplate):
-    DEFAULT_NAME = "simple"
 
 
 TEMPLATES = [
