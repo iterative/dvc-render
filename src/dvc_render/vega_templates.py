@@ -116,7 +116,6 @@ class BarHorizontalSortedTemplate(Template):
             "color": {
                 "field": "rev",
                 "type": "nominal",
-                "legend": {"orient": "top", "direction": "vertical"},
             },
         },
     }
@@ -148,7 +147,6 @@ class BarHorizontalTemplate(Template):
             "color": {
                 "field": "rev",
                 "type": "nominal",
-                "legend": {"orient": "top", "direction": "vertical"},
             },
         },
     }
@@ -404,7 +402,6 @@ class ScatterTemplate(Template):
                     "color": {
                         "field": "rev",
                         "type": "nominal",
-                        "legend": {"orient": "top", "direction": "vertical"},
                     },
                 },
                 "layer": [
@@ -512,7 +509,6 @@ class SmoothLinearTemplate(Template):
                     "color": {
                         "field": "rev",
                         "type": "nominal",
-                        "legend": {"orient": "top", "direction": "vertical"},
                     },
                 },
                 "transform": [
@@ -580,7 +576,6 @@ class SimpleLinearTemplate(Template):
             "color": {
                 "field": "rev",
                 "type": "nominal",
-                "legend": {"orient": "top", "direction": "vertical"},
             },
         },
     }
