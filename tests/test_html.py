@@ -1,9 +1,7 @@
+# pylint: disable=missing-function-docstring, R0801
 import pytest
 
-from dvc_render.html import HTML, PAGE_HTML, MissingPlaceholderError
-
-# pylint: disable=missing-function-docstring, R0801
-
+from dvc_render.html import HTML, PAGE_HTML, MissingPlaceholderError, render_html
 
 CUSTOM_PAGE_HTML = """<!DOCTYPE html>
 <html>
@@ -66,6 +64,23 @@ def test_html(template, page_elements, expected_page):
     result = page.embed()
 
     assert result == expected_page
+
+
+def test_render_html_with_custom_template(mocker, tmp_dir):
+    output_file = tmp_dir / "output_file"
+
+    render_html(mocker.MagicMock(), output_file)
+    assert output_file.read_text() == PAGE_HTML.replace("{plot_divs}", "").replace(
+        "{scripts}", ""
+    ).replace("{refresh_tag}", "")
+
+    render_html(mocker.MagicMock(), output_file, CUSTOM_PAGE_HTML)
+    assert output_file.read_text() == CUSTOM_PAGE_HTML.format(plot_divs="")
+
+    custom_template = tmp_dir / "custom_template"
+    custom_template.write_text(CUSTOM_PAGE_HTML)
+    render_html(mocker.MagicMock(), output_file, custom_template)
+    assert output_file.read_text() == CUSTOM_PAGE_HTML.format(plot_divs="")
 
 
 def test_no_placeholder():
