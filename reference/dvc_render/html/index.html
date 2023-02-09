@@ -852,14 +852,14 @@
 
 
 <h2 id="dvc_render.html.render_html" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">render_html</span><span class="p">(</span><span class="n">renderers</span><span class="p">,</span> <span class="n">output_file</span><span class="p">,</span> <span class="n">template_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">refresh_seconds</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
+<code class="highlight language-python"><span class="n">render_html</span><span class="p">(</span><span class="n">renderers</span><span class="p">,</span> <span class="n">output_file</span><span class="p">,</span> <span class="n">html_template</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">refresh_seconds</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
 
 </h2>
 
 
   <div class="doc doc-contents ">
   
-      <p>User renderers to fill an HTML template and write to path.</p>
+      <p>Use <code>renderers</code> to fill an HTML template and write to <code>output_file</code>.</p>
 
       <details class="quote">
         <summary>Source code in <code>dvc_render/html.py</code></summary>
@@ -886,20 +886,22 @@
 <span class="normal"> 99</span>
 <span class="normal">100</span>
 <span class="normal">101</span>
-<span class="normal">102</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">render_html</span><span class="p">(</span>
+<span class="normal">102</span>
+<span class="normal">103</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">render_html</span><span class="p">(</span>
     <span class="n">renderers</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="s2">&quot;Renderer&quot;</span><span class="p">],</span>
     <span class="n">output_file</span><span class="p">:</span> <span class="s2">&quot;StrPath&quot;</span><span class="p">,</span>
-    <span class="n">template_path</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="s2">&quot;StrPath&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">html_template</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="s2">&quot;StrPath&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">refresh_seconds</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;StrPath&quot;</span><span class="p">:</span>
-    <span class="s2">&quot;User renderers to fill an HTML template and write to path.&quot;</span>
+    <span class="s2">&quot;Use `renderers` to fill an HTML template and write to `output_file`.&quot;</span>
     <span class="n">output_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">output_file</span><span class="p">)</span>
     <span class="n">output_path</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
-    <span class="n">page_html</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="k">if</span> <span class="n">template_path</span><span class="p">:</span>
-        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">template_path</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fobj</span><span class="p">:</span>
-            <span class="n">page_html</span> <span class="o">=</span> <span class="n">fobj</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+    <span class="n">page_html</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="n">html_template</span> <span class="ow">and</span> <span class="n">Path</span><span class="p">(</span><span class="n">html_template</span><span class="p">)</span><span class="o">.</span><span class="n">is_file</span><span class="p">():</span>
+        <span class="n">page_html</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">html_template</span><span class="p">)</span><span class="o">.</span><span class="n">read_text</span><span class="p">(</span><span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf8&quot;</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">html_template</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">page_html</span> <span class="o">=</span> <span class="n">html_template</span>
 
     <span class="n">document</span> <span class="o">=</span> <span class="n">HTML</span><span class="p">(</span><span class="n">page_html</span><span class="p">,</span> <span class="n">refresh_seconds</span><span class="o">=</span><span class="n">refresh_seconds</span><span class="p">)</span>
 
