@@ -385,89 +385,56 @@ class ScatterTemplate(Template):
         "title": Template.anchor("title"),
         "width": 300,
         "height": 300,
-        "layer": [
-            {
-                "encoding": {
-                    "x": {
-                        "field": Template.anchor("x"),
-                        "type": "quantitative",
-                        "title": Template.anchor("x_label"),
-                    },
-                    "y": {
-                        "field": Template.anchor("y"),
-                        "type": "quantitative",
-                        "title": Template.anchor("y_label"),
-                        "scale": {"zero": False},
-                    },
-                    "color": {
-                        "field": "rev",
-                        "type": "nominal",
-                    },
-                },
-                "layer": [
-                    {"mark": "point"},
-                    {
-                        "selection": {
-                            "label": {
-                                "type": "single",
-                                "nearest": True,
-                                "on": "mouseover",
-                                "encodings": ["x"],
-                                "empty": "none",
-                                "clear": "mouseout",
-                            }
-                        },
-                        "mark": "point",
-                        "encoding": {
-                            "opacity": {
-                                "condition": {
-                                    "selection": "label",
-                                    "value": 1,
-                                },
-                                "value": 0,
-                            }
-                        },
-                    },
-                ],
+        "mark": {"type": "point", "tooltip": {"content": "data"}},
+        "encoding": {
+            "x": {
+                "field": Template.anchor("x"),
+                "type": "quantitative",
+                "title": Template.anchor("x_label"),
             },
-            {
-                "transform": [{"filter": {"selection": "label"}}],
-                "layer": [
-                    {
-                        "encoding": {
-                            "text": {
-                                "type": "quantitative",
-                                "field": Template.anchor("y"),
-                            },
-                            "x": {
-                                "field": Template.anchor("x"),
-                                "type": "quantitative",
-                            },
-                            "y": {
-                                "field": Template.anchor("y"),
-                                "type": "quantitative",
-                            },
-                        },
-                        "layer": [
-                            {
-                                "mark": {
-                                    "type": "text",
-                                    "align": "left",
-                                    "dx": 5,
-                                    "dy": -5,
-                                },
-                                "encoding": {
-                                    "color": {
-                                        "type": "nominal",
-                                        "field": "rev",
-                                    }
-                                },
-                            }
-                        ],
-                    }
-                ],
+            "y": {
+                "field": Template.anchor("y"),
+                "type": "quantitative",
+                "title": Template.anchor("y_label"),
             },
+            "color": {
+                "field": "rev",
+                "type": "nominal",
+            },
+        },
+    }
+
+
+class ScatterJitterTemplate(Template):
+    DEFAULT_NAME = "scatter_jitter"
+
+    DEFAULT_CONTENT = {
+        "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+        "data": {"values": Template.anchor("data")},
+        "title": Template.anchor("title"),
+        "width": 300,
+        "height": 300,
+        "transform": [
+            {"calculate": "random()", "as": "randomX"},
+            {"calculate": "random()", "as": "randomY"},
         ],
+        "mark": {"type": "point", "tooltip": {"content": "data"}},
+        "encoding": {
+            "x": {
+                "field": Template.anchor("x"),
+                "title": Template.anchor("x_label"),
+            },
+            "y": {
+                "field": Template.anchor("y"),
+                "title": Template.anchor("y_label"),
+            },
+            "color": {
+                "field": "rev",
+                "type": "nominal",
+            },
+            "xOffset": {"field": "randomX", "type": "quantitative"},
+            "yOffset": {"field": "randomY", "type": "quantitative"},
+        },
     }
 
 
@@ -587,6 +554,7 @@ TEMPLATES = [
     ConfusionTemplate,
     NormalizedConfusionTemplate,
     ScatterTemplate,
+    ScatterJitterTemplate,
     SmoothLinearTemplate,
     BarHorizontalSortedTemplate,
     BarHorizontalTemplate,
