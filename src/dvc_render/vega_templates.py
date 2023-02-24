@@ -116,7 +116,8 @@ class BarHorizontalSortedTemplate(Template):
             },
             "yOffset": {"field": "dvc_id"},
             "color": {"field": "dvc_rev", "type": "nominal"},
-            "strokeDash": {"field": "dvc_source", "type": "nominal"},
+            "strokeDash": {"field": "dvc_filename", "type": "nominal"},
+            "shape": {"field": "dvc_field", "type": "nominal"},
         },
     }
 
@@ -145,7 +146,8 @@ class BarHorizontalTemplate(Template):
             },
             "yOffset": {"field": "dvc_id"},
             "color": {"field": "dvc_rev", "type": "nominal"},
-            "strokeDash": {"field": "dvc_source", "type": "nominal"},
+            "strokeDash": {"field": "dvc_filename", "type": "nominal"},
+            "shape": {"field": "dvc_field", "type": "nominal"},
         },
     }
 
@@ -159,7 +161,7 @@ class ConfusionTemplate(Template):
         "facet": {
             "field": "dvc_id",
             "type": "nominal",
-            "header": {"title": False}
+            "header": {"title": False},
         },
         "spec": {
             "transform": [
@@ -273,7 +275,7 @@ class NormalizedConfusionTemplate(Template):
         "facet": {
             "field": "dvc_id",
             "type": "nominal",
-            "header": {"title": False}
+            "header": {"title": False},
         },
         "spec": {
             "transform": [
@@ -406,7 +408,8 @@ class ScatterTemplate(Template):
                         "scale": {"zero": False},
                     },
                     "color": {"field": "dvc_rev", "type": "nominal"},
-                    "strokeDash": {"field": "dvc_source", "type": "nominal"},
+                    "strokeDash": {"field": "dvc_filename", "type": "nominal"},
+                    "shape": {"field": "dvc_field", "type": "nominal"},
                 },
                 "layer": [
                     {"mark": "point"},
@@ -466,8 +469,12 @@ class ScatterTemplate(Template):
                                         "field": "dvc_rev",
                                     },
                                     "strokeDash": {
-                                        "field": "dvc_source",
-                                        "type": "nominal"
+                                        "field": "dvc_filename",
+                                        "type": "nominal",
+                                    },
+                                    "shape": {
+                                        "field": "dvc_field",
+                                        "type": "nominal",
                                     },
                                 },
                             }
@@ -515,13 +522,14 @@ class SmoothLinearTemplate(Template):
                         "scale": {"zero": False},
                     },
                     "color": {"field": "dvc_rev", "type": "nominal"},
-                    "strokeDash": {"field": "dvc_source", "type": "nominal"},
+                    "strokeDash": {"field": "dvc_filename", "type": "nominal"},
+                    "shape": {"field": "dvc_field", "type": "nominal"},
                 },
                 "transform": [
                     {
                         "loess": Template.anchor("y"),
                         "on": Template.anchor("x"),
-                        "groupby": ["dvc_rev", "dvc_source"],
+                        "groupby": ["dvc_id"],
                         "bandwidth": {"signal": "smooth"},
                     },
                 ],
@@ -544,7 +552,8 @@ class SmoothLinearTemplate(Template):
                         "scale": {"zero": False},
                     },
                     "color": {"field": "dvc_rev", "type": "nominal"},
-                    "strokeDash": {"field": "dvc_source", "type": "nominal"},
+                    "strokeDash": {"field": "dvc_filename", "type": "nominal"},
+                    "shape": {"field": "dvc_field", "type": "nominal"},
                 },
             },
         ],
@@ -581,9 +590,11 @@ class SimpleLinearTemplate(Template):
                 "scale": {"zero": False},
             },
             "color": {"field": "dvc_rev", "type": "nominal"},
-            "strokeDash": {"field": "dvc_source", "type": "nominal"},
+            "strokeDash": {"field": "dvc_filename", "type": "nominal"},
+            "shape": {"field": "dvc_field", "type": "nominal"},
         },
     }
+
 
 TEMPLATES = [
     SimpleLinearTemplate,
