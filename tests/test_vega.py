@@ -45,9 +45,10 @@ def test_default_template_mark():
 
     plot_content = json.loads(VegaRenderer(datapoints, "foo").partial_html())
 
-    assert plot_content["mark"] == {
-        "type": "line",
-        "point": True,
+    assert plot_content["layer"][0]["mark"] == "line"
+
+    assert plot_content["layer"][1]["mark"] == {
+        "type": "point",
         "tooltip": {"content": "data"},
     }
 
@@ -59,9 +60,7 @@ def test_choose_axes():
         {"first_val": 200, "second_val": 300, "val": 3},
     ]
 
-    plot_content = json.loads(
-        VegaRenderer(datapoints, "foo", **props).partial_html()
-    )
+    plot_content = json.loads(VegaRenderer(datapoints, "foo", **props).partial_html())
 
     assert plot_content["data"]["values"] == [
         {
@@ -75,8 +74,8 @@ def test_choose_axes():
             "second_val": 300,
         },
     ]
-    assert plot_content["encoding"]["x"]["field"] == "first_val"
-    assert plot_content["encoding"]["y"]["field"] == "second_val"
+    assert plot_content["layer"][0]["encoding"]["x"]["field"] == "first_val"
+    assert plot_content["layer"][0]["encoding"]["y"]["field"] == "second_val"
 
 
 def test_confusion():
@@ -86,9 +85,7 @@ def test_confusion():
     ]
     props = {"template": "confusion", "x": "predicted", "y": "actual"}
 
-    plot_content = json.loads(
-        VegaRenderer(datapoints, "foo", **props).partial_html()
-    )
+    plot_content = json.loads(VegaRenderer(datapoints, "foo", **props).partial_html())
 
     assert plot_content["data"]["values"] == [
         {"predicted": "B", "actual": "A"},

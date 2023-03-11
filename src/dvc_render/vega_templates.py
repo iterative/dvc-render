@@ -15,9 +15,7 @@ class TemplateNotFoundError(DvcRenderException):
 
 class NoFieldInDataError(DvcRenderException):
     def __init__(self, field_name):
-        super().__init__(
-            f"Field '{field_name}' does not exist in provided data."
-        )
+        super().__init__(f"Field '{field_name}' does not exist in provided data.")
 
 
 class TemplateContentDoesNotMatch(DvcRenderException):
@@ -393,96 +391,55 @@ class ScatterTemplate(Template):
         "title": Template.anchor("title"),
         "width": 300,
         "height": 300,
-        "layer": [
-            {
-                "encoding": {
-                    "x": {
-                        "field": Template.anchor("x"),
-                        "type": "quantitative",
-                        "title": Template.anchor("x_label"),
-                    },
-                    "y": {
-                        "field": Template.anchor("y"),
-                        "type": "quantitative",
-                        "title": Template.anchor("y_label"),
-                        "scale": {"zero": False},
-                    },
-                    "color": {"field": "dvc_rev", "type": "nominal"},
-                    "strokeDash": {"field": "dvc_filename", "type": "nominal"},
-                    "shape": {"field": "dvc_field", "type": "nominal"},
-                },
-                "layer": [
-                    {"mark": "point"},
-                    {
-                        "selection": {
-                            "label": {
-                                "type": "single",
-                                "nearest": True,
-                                "on": "mouseover",
-                                "encodings": ["x"],
-                                "empty": "none",
-                                "clear": "mouseout",
-                            }
-                        },
-                        "mark": "point",
-                        "encoding": {
-                            "opacity": {
-                                "condition": {
-                                    "selection": "label",
-                                    "value": 1,
-                                },
-                                "value": 0,
-                            }
-                        },
-                    },
-                ],
+        "mark": {"type": "point", "tooltip": {"content": "data"}},
+        "encoding": {
+            "x": {
+                "field": Template.anchor("x"),
+                "type": "quantitative",
+                "title": Template.anchor("x_label"),
             },
-            {
-                "transform": [{"filter": {"selection": "label"}}],
-                "layer": [
-                    {
-                        "encoding": {
-                            "text": {
-                                "type": "quantitative",
-                                "field": Template.anchor("y"),
-                            },
-                            "x": {
-                                "field": Template.anchor("x"),
-                                "type": "quantitative",
-                            },
-                            "y": {
-                                "field": Template.anchor("y"),
-                                "type": "quantitative",
-                            },
-                        },
-                        "layer": [
-                            {
-                                "mark": {
-                                    "type": "text",
-                                    "align": "left",
-                                    "dx": 5,
-                                    "dy": -5,
-                                },
-                                "encoding": {
-                                    "color": {
-                                        "type": "nominal",
-                                        "field": "dvc_rev",
-                                    },
-                                    "strokeDash": {
-                                        "field": "dvc_filename",
-                                        "type": "nominal",
-                                    },
-                                    "shape": {
-                                        "field": "dvc_field",
-                                        "type": "nominal",
-                                    },
-                                },
-                            }
-                        ],
-                    }
-                ],
+            "y": {
+                "field": Template.anchor("y"),
+                "type": "quantitative",
+                "title": Template.anchor("y_label"),
+                "color": {"field": "dvc_rev", "type": "nominal"},
+                "strokeDash": {"field": "dvc_filename", "type": "nominal"},
+                "shape": {"field": "dvc_field", "type": "nominal"},
             },
+        },
+    }
+
+
+class ScatterJitterTemplate(Template):
+    DEFAULT_NAME = "scatter_jitter"
+
+    DEFAULT_CONTENT = {
+        "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+        "data": {"values": Template.anchor("data")},
+        "title": Template.anchor("title"),
+        "width": 300,
+        "height": 300,
+        "transform": [
+            {"calculate": "random()", "as": "randomX"},
+            {"calculate": "random()", "as": "randomY"},
         ],
+        "mark": {"type": "point", "tooltip": {"content": "data"}},
+        "encoding": {
+            "x": {
+                "field": Template.anchor("x"),
+                "title": Template.anchor("x_label"),
+            },
+            "y": {
+                "field": Template.anchor("y"),
+                "title": Template.anchor("y_label"),
+            },
+            "color": {
+                "field": "rev",
+                "type": "nominal",
+            },
+            "xOffset": {"field": "randomX", "type": "quantitative"},
+            "yOffset": {"field": "randomY", "type": "quantitative"},
+        },
     }
 
 
@@ -602,6 +559,7 @@ TEMPLATES = [
     ConfusionTemplate,
     NormalizedConfusionTemplate,
     ScatterTemplate,
+    ScatterJitterTemplate,
     SmoothLinearTemplate,
     BarHorizontalSortedTemplate,
     BarHorizontalTemplate,
@@ -670,9 +628,7 @@ def dump_templates(output: "StrPath", targets: Optional[List] = None) -> None:
 
     if targets:
         templates = [
-            template
-            for template in TEMPLATES
-            if template.DEFAULT_NAME in targets
+            template for template in TEMPLATES if template.DEFAULT_NAME in targets
         ]
     else:
         templates = TEMPLATES
@@ -684,8 +640,6 @@ def dump_templates(output: "StrPath", targets: Optional[List] = None) -> None:
         if path.exists():
             content = path.read_text(encoding="utf-8")
             if content != template.content:
-                raise TemplateContentDoesNotMatch(
-                    template.DEFAULT_NAME or "", path
-                )
+                raise TemplateContentDoesNotMatch(template.DEFAULT_NAME or "", path)
         else:
             path.write_text(template.content, encoding="utf-8")

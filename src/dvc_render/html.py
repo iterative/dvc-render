@@ -72,26 +72,25 @@ class HTML:
             self.REFRESH_PLACEHOLDER: self.refresh_tag,
         }
         for placeholder, value in kwargs.items():
-            self.template = self.template.replace(
-                "{" + placeholder + "}", value
-            )
+            self.template = self.template.replace("{" + placeholder + "}", value)
         return self.template
 
 
 def render_html(
     renderers: List["Renderer"],
     output_file: "StrPath",
-    template_path: Optional["StrPath"] = None,
+    html_template: Optional["StrPath"] = None,
     refresh_seconds: Optional[int] = None,
 ) -> "StrPath":
-    "User renderers to fill an HTML template and write to path."
+    "Use `renderers` to fill an HTML template and write to `output_file`."
     output_path = Path(output_file)
     output_path.parent.mkdir(exist_ok=True)
 
-    page_html = None
-    if template_path:
-        with open(template_path, encoding="utf-8") as fobj:
-            page_html = fobj.read()
+    page_html: Optional[str] = None
+    if html_template and Path(html_template).is_file():
+        page_html = Path(html_template).read_text(encoding="utf8")
+    elif isinstance(html_template, str):
+        page_html = html_template
 
     document = HTML(page_html, refresh_seconds=refresh_seconds)
 
