@@ -53,7 +53,6 @@ class Renderer(abc.ABC):
         "Return `DIV` formatted with `partial_html`."
         partial = self.partial_html(html_path=html_path)
         if partial:
-
             div_id = self.remove_special_chars(self.name)
 
             return self.DIV.format(id=div_id, partial=partial)
