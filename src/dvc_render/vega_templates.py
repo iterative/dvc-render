@@ -402,10 +402,10 @@ class ScatterTemplate(Template):
                 "field": Template.anchor("y"),
                 "type": "quantitative",
                 "title": Template.anchor("y_label"),
-                "color": {"field": "dvc_rev", "type": "nominal"},
-                "strokeDash": {"field": "dvc_filename", "type": "nominal"},
-                "shape": {"field": "dvc_field", "type": "nominal"},
             },
+            "color": {"field": "dvc_rev", "type": "nominal"},
+            "strokeDash": {"field": "dvc_filename", "type": "nominal"},
+            "shape": {"field": "dvc_field", "type": "nominal"},
         },
     }
 
@@ -433,10 +433,9 @@ class ScatterJitterTemplate(Template):
                 "field": Template.anchor("y"),
                 "title": Template.anchor("y_label"),
             },
-            "color": {
-                "field": "rev",
-                "type": "nominal",
-            },
+            "color": {"field": "dvc_rev", "type": "nominal"},
+            "strokeDash": {"field": "dvc_filename", "type": "nominal"},
+            "shape": {"field": "dvc_field", "type": "nominal"},
             "xOffset": {"field": "randomX", "type": "quantitative"},
             "yOffset": {"field": "randomY", "type": "quantitative"},
         },
@@ -465,7 +464,10 @@ class SmoothLinearTemplate(Template):
         ],
         "layer": [
             {
-                "mark": "line",
+                "mark": {
+                    "type": "line",
+                    "fill": "transparent",
+                },
                 "encoding": {
                     "x": {
                         "field": Template.anchor("x"),
@@ -486,7 +488,7 @@ class SmoothLinearTemplate(Template):
                     {
                         "loess": Template.anchor("y"),
                         "on": Template.anchor("x"),
-                        "groupby": ["dvc_id"],
+                        "groupby": ["dvc_rev", "dvc_filename", "dvc_field"],
                         "bandwidth": {"signal": "smooth"},
                     },
                 ],
@@ -533,6 +535,7 @@ class SimpleLinearTemplate(Template):
         "mark": {
             "type": "line",
             "tooltip": {"content": "data"},
+            "fill": "transparent",
         },
         "encoding": {
             "x": {

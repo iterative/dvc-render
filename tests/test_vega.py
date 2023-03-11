@@ -45,7 +45,7 @@ def test_default_template_mark():
 
     plot_content = json.loads(VegaRenderer(datapoints, "foo").partial_html())
 
-    assert plot_content["layer"][0]["mark"] == "line"
+    assert plot_content["layer"][0]["mark"] == {"type": "line", "fill": "transparent"}
 
     assert plot_content["layer"][1]["mark"] == {
         "type": "point",
