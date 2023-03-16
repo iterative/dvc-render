@@ -1,6 +1,6 @@
 import json
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Union
 from warnings import warn
 
 from .base import Renderer
@@ -38,8 +38,11 @@ class VegaRenderer(Renderer):
         )
 
     def get_filled_template(
-        self, skip_anchors: Optional[List[str]] = None, strict: bool = True
-    ) -> Dict[str, Any]:
+        self,
+        skip_anchors: Optional[List[str]] = None,
+        strict: bool = True,
+        as_string: bool = True,
+    ) -> Union[str, Dict[str, Any]]:
         """Returns a functional vega specification"""
         self.template.reset()
         if not self.datapoints:
@@ -80,10 +83,13 @@ class VegaRenderer(Renderer):
                 value = self.template.escape_special_characters(value)
             self.template.fill_anchor(name, value)
 
+        if as_string:
+            return json.dumps(self.template.content)
+
         return self.template.content
 
     def partial_html(self, **kwargs) -> str:
-        return json.dumps(self.get_filled_template())
+        return self.get_filled_template()  # type: ignore
 
     def generate_markdown(self, report_path=None) -> str:
         if not isinstance(self.template, LinearTemplate):

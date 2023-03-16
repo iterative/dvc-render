@@ -40,7 +40,7 @@ def test_default_template_mark():
         {"first_val": 200, "second_val": 300, "val": 3},
     ]
 
-    plot_content = VegaRenderer(datapoints, "foo").get_filled_template()
+    plot_content = VegaRenderer(datapoints, "foo").get_filled_template(as_string=False)
 
     assert plot_content["layer"][0]["mark"] == "line"
 
@@ -57,7 +57,9 @@ def test_choose_axes():
         {"first_val": 200, "second_val": 300, "val": 3},
     ]
 
-    plot_content = VegaRenderer(datapoints, "foo", **props).get_filled_template()
+    plot_content = VegaRenderer(datapoints, "foo", **props).get_filled_template(
+        as_string=False
+    )
 
     assert plot_content["data"]["values"] == [
         {
@@ -82,7 +84,9 @@ def test_confusion():
     ]
     props = {"template": "confusion", "x": "predicted", "y": "actual"}
 
-    plot_content = VegaRenderer(datapoints, "foo", **props).get_filled_template()
+    plot_content = VegaRenderer(datapoints, "foo", **props).get_filled_template(
+        as_string=False
+    )
 
     assert plot_content["data"]["values"] == [
         {"predicted": "B", "actual": "A"},
@@ -170,7 +174,7 @@ def test_escape_special_characters():
     ]
     props = {"template": "simple", "x": "foo.bar[0]", "y": "foo.bar[1]"}
     renderer = VegaRenderer(datapoints, "foo", **props)
-    filled = renderer.get_filled_template()
+    filled = renderer.get_filled_template(as_string=False)
     # data is not escaped
     assert filled["data"]["values"][0] == datapoints[0]
     # field and title yes
