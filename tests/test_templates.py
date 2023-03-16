@@ -1,3 +1,4 @@
+import json
 import os
 
 import pytest
@@ -38,8 +39,9 @@ def test_raise_on_no_template():
     ],
 )
 def test_get_template_from_dir(tmp_dir, template_path, target_name):
-    tmp_dir.gen(template_path, "template_content")
-    assert get_template(target_name, ".dvc/plots").content == "template_content"
+    template_content = {"template_content": "foo"}
+    tmp_dir.gen(template_path, json.dumps(template_content))
+    assert get_template(target_name, ".dvc/plots").content == template_content
 
 
 def test_get_template_exact_match(tmp_dir):
@@ -51,13 +53,16 @@ def test_get_template_exact_match(tmp_dir):
 
 
 def test_get_template_from_file(tmp_dir):
-    tmp_dir.gen("foo/bar.json", "template_content")
-    assert get_template("foo/bar.json").content == "template_content"
+    template_content = {"template_content": "foo"}
+    tmp_dir.gen("foo/bar.json", json.dumps(template_content))
+    assert get_template("foo/bar.json").content == template_content
 
 
 def test_get_template_fs(tmp_dir, mocker):
-    tmp_dir.gen("foo/bar.json", "template_content")
+    template_content = {"template_content": "foo"}
+    tmp_dir.gen("foo/bar.json", json.dumps(template_content))
     fs = mocker.MagicMock()
+    mocker.patch("json.load", return_value={})
     get_template("foo/bar.json", fs=fs)
     fs.open.assert_called()
     fs.exists.assert_called()

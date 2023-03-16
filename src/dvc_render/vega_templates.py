@@ -1,3 +1,4 @@
+# pylint: disable=missing-function-docstring
 import json
 from pathlib import Path
 from typing import TYPE_CHECKING, Any, Dict, List, Optional, Union
@@ -27,48 +28,75 @@ class TemplateContentDoesNotMatch(DvcRenderException):
         )
 
 
+class BadTemplateError(DvcRenderException):
+    pass
+
+
+def dict_replace_value(d: dict, name: str, value: Any) -> dict:
+    x = {}
+    for k, v in d.items():
+        if isinstance(v, dict):
+            v = dict_replace_value(v, name, value)
+        elif isinstance(v, list):
+            v = list_replace_value(v, name, value)
+        elif isinstance(v, str):
+            if v == name:
+                x[k] = value
+                continue
+        x[k] = v
+    return x
+
+
+def list_replace_value(l: list, name: str, value: str) -> list:  # noqa: E741
+    x = []
+    for e in l:
+        if isinstance(e, list):
+            e = list_replace_value(e, name, value)
+        elif isinstance(e, dict):
+            e = dict_replace_value(e, name, value)
+        elif isinstance(e, str):
+            if e == name:
+                e = value
+        x.append(e)
+    return x
+
+
+def dict_find_value(d: dict, value: str) -> bool:
+    for v in d.values():
+        if isinstance(v, dict):
+            return dict_find_value(v, value)
+        if isinstance(v, str):
+            if v == value:
+                return True
+    return False
+
+
 class Template:
-    INDENT = 4
-    SEPARATORS = (",", ": ")
     EXTENSION = ".json"
     ANCHOR = "<DVC_METRIC_{}>"
 
-    DEFAULT_CONTENT: Optional[Dict[str, Any]] = None
-    DEFAULT_NAME: Optional[str] = None
+    DEFAULT_CONTENT: Dict[str, Any] = {}
+    DEFAULT_NAME: str = ""
 
-    def __init__(self, content=None, name=None):
-        if content:
-            self.content = content
-        else:
-            self.content = (
-                json.dumps(
-                    self.DEFAULT_CONTENT,
-                    indent=self.INDENT,
-                    separators=self.SEPARATORS,
-                )
-                + "\n"
-            )
-
+    def __init__(
+        self, content: Optional[Dict[str, Any]] = None, name: Optional[str] = None
+    ):
+        if (
+            content
+            and not isinstance(content, dict)
+            or self.DEFAULT_CONTENT
+            and not isinstance(self.DEFAULT_CONTENT, dict)
+        ):
+            raise BadTemplateError()
+        self._original_content = content or self.DEFAULT_CONTENT
+        self.content: Dict[str, Any] = self._original_content
         self.name = name or self.DEFAULT_NAME
-        assert self.content and self.name
         self.filename = Path(self.name).with_suffix(self.EXTENSION)
 
     @classmethod
     def anchor(cls, name):
         "Get ANCHOR formatted with name."
         return cls.ANCHOR.format(name.upper())
-
-    def has_anchor(self, name) -> bool:
-        "Check if ANCHOR formatted with name is in content."
-        return self.anchor_str(name) in self.content
-
-    @classmethod
-    def fill_anchor(cls, content, name, value) -> str:
-        "Replace anchor `name` with `value` in content."
-        value_str = json.dumps(
-            value, indent=cls.INDENT, separators=cls.SEPARATORS, sort_keys=True
-        )
-        return content.replace(cls.anchor_str(name), value_str)
 
     @classmethod
     def escape_special_characters(cls, value: str) -> str:
@@ -77,16 +105,24 @@ class Template:
             value = value.replace(character, "\\" + character)
         return value
 
-    @classmethod
-    def anchor_str(cls, name) -> str:
-        "Get string wrapping ANCHOR formatted with name."
-        return f'"{cls.anchor(name)}"'
-
     @staticmethod
     def check_field_exists(data, field):
         "Raise NoFieldInDataError if `field` not in `data`."
         if not any(field in row for row in data):
             raise NoFieldInDataError(field)
+
+    def reset(self):
+        """Reset self.content to its original state."""
+        self.content = self._original_content
+
+    def has_anchor(self, name) -> bool:
+        "Check if ANCHOR formatted with name is in content."
+        found = dict_find_value(self.content, self.anchor(name))
+        return found
+
+    def fill_anchor(self, name, value) -> None:
+        "Replace anchor `name` with `value` in content."
+        self.content = dict_replace_value(self.content, self.anchor(name), value)
 
 
 class BarHorizontalSortedTemplate(Template):
@@ -606,7 +642,7 @@ def get_template(
     _open = open if fs is None else fs.open
     if template_path:
         with _open(template_path, encoding="utf-8") as f:
-            content = f.read()
+            content = json.load(f)
         return Template(content, name=template)
 
     for template_cls in TEMPLATES:
@@ -635,6 +671,6 @@ def dump_templates(output: "StrPath", targets: Optional[List] = None) -> None:
         if path.exists():
             content = path.read_text(encoding="utf-8")
             if content != template.content:
-                raise TemplateContentDoesNotMatch(template.DEFAULT_NAME or "", path)
+                raise TemplateContentDoesNotMatch(template.DEFAULT_NAME, str(path))
         else:
-            path.write_text(template.content, encoding="utf-8")
+            path.write_text(json.dumps(template.content), encoding="utf-8")

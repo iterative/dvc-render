@@ -1,16 +1,11 @@
-from copy import deepcopy
+import json
 from pathlib import Path
-from typing import List, Optional
+from typing import Any, Dict, List, Optional
 from warnings import warn
 
 from .base import Renderer
-from .exceptions import DvcRenderException
 from .utils import list_dict_to_dict_list
-from .vega_templates import LinearTemplate, get_template
-
-
-class BadTemplateError(DvcRenderException):
-    pass
+from .vega_templates import BadTemplateError, LinearTemplate, get_template
 
 
 class VegaRenderer(Renderer):
@@ -44,15 +39,14 @@ class VegaRenderer(Renderer):
 
     def get_filled_template(
         self, skip_anchors: Optional[List[str]] = None, strict: bool = True
-    ) -> str:
+    ) -> Dict[str, Any]:
         """Returns a functional vega specification"""
+        self.template.reset()
         if not self.datapoints:
-            return ""
+            return {}
 
         if skip_anchors is None:
             skip_anchors = []
-
-        content = deepcopy(self.template.content)
 
         if strict:
             if self.properties.get("x"):
@@ -76,7 +70,7 @@ class VegaRenderer(Renderer):
             if value is None:
                 continue
             if name == "data":
-                if self.template.anchor_str(name) not in self.template.content:
+                if not self.template.has_anchor(name):
                     anchor = self.template.anchor(name)
                     raise BadTemplateError(
                         f"Template '{self.template.name}' "
@@ -84,12 +78,12 @@ class VegaRenderer(Renderer):
                     )
             elif name in {"x", "y"}:
                 value = self.template.escape_special_characters(value)
-            content = self.template.fill_anchor(content, name, value)
+            self.template.fill_anchor(name, value)
 
-        return content
+        return self.template.content
 
     def partial_html(self, **kwargs) -> str:
-        return self.get_filled_template()
+        return json.dumps(self.get_filled_template())
 
     def generate_markdown(self, report_path=None) -> str:
         if not isinstance(self.template, LinearTemplate):
