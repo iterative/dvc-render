@@ -33,7 +33,7 @@ dvc-render
 dvc-render is a library for **rendering** data stored in `DVC plots format`_ into different output formats, like Vega_. It can also generate HTML and MarkDown **reports** containing multiple plots.
 
 It is used internally by DVC_, DVCLive_, and Studio_.
- 
+
 
 Features
 --------
