@@ -54,6 +54,11 @@ Support for customizing Vega_ plots using custom of pre-defined templates.
 Requirements
 ------------
 
+The basic usage of rendering Vega Plots doesn't have any dependencies outside
+`Python>=3.8`.
+
+Additional features are specified as optional requirements:
+
 https://github.com/iterative/dvc-render/blob/49b8f8a81c4e06b8f675197b8dd57e2a773cf283/setup.cfg#L27-L32
 
 
