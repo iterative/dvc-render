@@ -48,7 +48,7 @@ Take multiple renderers and build an HTML or MarkDown report.
 
 * Templates
 
-Support for customizing Vega_ plots using custom of pre-defined templates.
+Support for rendering Vega_ plots using custom of pre-defined templates.
 
 
 Requirements
