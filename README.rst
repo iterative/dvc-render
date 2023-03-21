@@ -1,4 +1,4 @@
-DVC render
+dvc-render
 ==========
 
 |PyPI| |Status| |Python Version| |License|
@@ -30,17 +30,31 @@ DVC render
    :target: https://github.com/psf/black
    :alt: Black
 
+dvc-render is a library for **rendering** data stored in [DVC plots format](https://dvc.org/doc/user-guide/experiment-management/visualizing-plots#supported-plot-file-formats) in different formats, like Vega_. It can also generate HTML and MarkDown **reports** containing multiple plots.
+
+It is used internally by DVC_, DVCLive_, and Studio_.
+ 
 
 Features
 --------
 
-* TODO
+* Renderers
+
+Take data stored in [DVC plots format](https://dvc.org/doc/user-guide/experiment-management/visualizing-plots#supported-plot-file-formats) alongside plot properties in order to render a plot in different formats.
+
+* Reports
+
+Take multiple renderers and build an HTML or MarkDown report.
+
+* Templates
+
+Support for customizing Vega_ plots using custom of pre-defined templates.
 
 
 Requirements
 ------------
 
-* TODO
+https://github.com/iterative/dvc-render/blob/49b8f8a81c4e06b8f675197b8dd57e2a773cf283/setup.cfg#L27-L32
 
 
 Installation
@@ -56,6 +70,28 @@ You can install *DVC render* via pip_ from PyPI_:
 Usage
 -----
 
+* Renderer & Templates
+
+.. code-block::
+
+      from dvc_render import VegaRenderer
+      properties = {"template": "confusion", "x": "predicted", "y": "actual"}
+       datapoints = [
+           {"predicted": "B", "actual": "A"},
+           {"predicted": "A", "actual": "A"},
+       ]
+
+      renderer = VegaRenderer(datapoints, "foo", **properties)
+      plot_content = renderer.get_filled_template()
+
+`plot_content` contains a valid Vega_ plot using the confusion matrix template.
+
+* Report
+
+.. code-block::
+
+      from dvc_render import render_html
+      render_html([renderer], "report.html")
 
 Contributing
 ------------
@@ -84,3 +120,7 @@ please `file an issue`_ along with a detailed description.
 .. _pip: https://pip.pypa.io/
 .. github-only
 .. _Contributor Guide: CONTRIBUTING.rst
+.. _DVC: https://github.com/iterative/dvc
+.. _DVCLive: https://github.com/iterative/dvclive
+.. _Studio: https://github.com/iterative/studio
+.. _Vega: https://vega.github.io/
