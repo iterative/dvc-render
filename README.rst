@@ -30,7 +30,7 @@ dvc-render
    :target: https://github.com/psf/black
    :alt: Black
 
-dvc-render is a library for **rendering** data stored in [DVC plots format](https://dvc.org/doc/user-guide/experiment-management/visualizing-plots#supported-plot-file-formats) in different formats, like Vega_. It can also generate HTML and MarkDown **reports** containing multiple plots.
+dvc-render is a library for **rendering** data stored in `DVC plots format`_ into different output formats, like Vega_. It can also generate HTML and MarkDown **reports** containing multiple plots.
 
 It is used internally by DVC_, DVCLive_, and Studio_.
  
@@ -124,3 +124,4 @@ please `file an issue`_ along with a detailed description.
 .. _DVCLive: https://github.com/iterative/dvclive
 .. _Studio: https://github.com/iterative/studio
 .. _Vega: https://vega.github.io/
+.. _`DVC plots format`: https://dvc.org/doc/user-guide/experiment-management/visualizing-plots#supported-plot-file-formats
