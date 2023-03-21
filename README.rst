@@ -77,7 +77,7 @@ Usage
 
 * Renderer & Templates
 
-.. code-block::
+.. code-block:: python
 
       from dvc_render import VegaRenderer
       properties = {"template": "confusion", "x": "predicted", "y": "actual"}
@@ -93,7 +93,7 @@ Usage
 
 * Report
 
-.. code-block::
+.. code-block:: python
 
       from dvc_render import render_html
       render_html([renderer], "report.html")
