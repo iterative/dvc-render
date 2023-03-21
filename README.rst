@@ -40,7 +40,7 @@ Features
 
 * Renderers
 
-Take data stored in [DVC plots format](https://dvc.org/doc/user-guide/experiment-management/visualizing-plots#supported-plot-file-formats) alongside plot properties in order to render a plot in different formats.
+Take data stored in `DVC plots format`_ alongside plot properties in order to render a plot in different formats.
 
 * Reports
 
