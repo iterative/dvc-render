@@ -267,6 +267,7 @@ class ConfusionTemplate(Template):
                         "tooltip": [
                             {"field": Template.anchor("x"), "type": "nominal"},
                             {"field": Template.anchor("y"), "type": "nominal"},
+                            {"field": "xy_count", "type": "quantitative"},
                         ],
                         "opacity": {
                             "condition": {"selection": "label", "value": 1},
@@ -283,7 +284,6 @@ class ConfusionTemplate(Template):
                 {
                     "mark": "text",
                     "encoding": {
-                        "text": {"field": "xy_count", "type": "quantitative"},
                         "color": {
                             "condition": {
                                 "test": "datum.percent_of_max > 0.5",
@@ -377,6 +377,11 @@ class NormalizedConfusionTemplate(Template):
                         "tooltip": [
                             {"field": Template.anchor("x"), "type": "nominal"},
                             {"field": Template.anchor("y"), "type": "nominal"},
+                            {
+                                "field": "percent_of_y",
+                                "type": "quantitative",
+                                "format": ".2f",
+                            },
                         ],
                         "opacity": {
                             "condition": {"selection": "label", "value": 1},
@@ -393,11 +398,6 @@ class NormalizedConfusionTemplate(Template):
                 {
                     "mark": "text",
                     "encoding": {
-                        "text": {
-                            "field": "percent_of_y",
-                            "type": "quantitative",
-                            "format": ".2f",
-                        },
                         "color": {
                             "condition": {
                                 "test": "datum.percent_of_y > 0.5",
