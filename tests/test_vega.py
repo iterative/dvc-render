@@ -1,3 +1,5 @@
+import base64
+
 import pytest
 
 from dvc_render.vega import BadTemplateError, VegaRenderer
@@ -132,7 +134,7 @@ def test_generate_markdown(tmp_dir, mocker, name):
     renderer = VegaRenderer(datapoints, name, **props)
 
     (tmp_dir / "output").mkdir()
-    renderer.generate_markdown(tmp_dir / "output" / "report.md")
+    md = renderer.generate_markdown(tmp_dir / "output" / "report.md")
 
     assert (tmp_dir / "output" / renderer.name).with_suffix(".png").exists()
     plot.assert_called_with(
@@ -148,6 +150,9 @@ def test_generate_markdown(tmp_dir, mocker, name):
     xlabel.assert_called_with("first_val")
     ylabel.assert_called_with("second_val")
     savefig.assert_called_with((tmp_dir / "output" / name).with_suffix(".png"))
+    bytes_obj = (tmp_dir / "output" / renderer.name).with_suffix(".png").read_bytes()
+    base64_str = base64.b64encode(bytes_obj).decode()
+    assert f"![{name}](data:image/png;base64,{base64_str})" in md
 
 
 def test_unsupported_template():

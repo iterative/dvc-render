@@ -1,3 +1,4 @@
+import base64
 import json
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Union
@@ -120,5 +121,8 @@ class VegaRenderer(Renderer):
             plt.savefig(output_file)
             plt.close()
 
-            return f"\n![{self.name}]({output_file.relative_to(report_folder)})"
+            base64_str = base64.b64encode(output_file.read_bytes()).decode()
+            src = f"data:image/png;base64,{base64_str}"
+
+            return f"\n![{self.name}]({src})"
         return ""

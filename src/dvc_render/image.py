@@ -55,7 +55,7 @@ class ImageRenderer(Renderer):
         for datapoint in self.datapoints:
             src = datapoint[self.SRC_FIELD]
             if src.startswith("data:image;base64"):
-                raise ValueError("`generate_markdown` doesn't support base64")
+                src = src.replace("data:image;base64", "data:image/png;base64")
             content.append(f"\n![{datapoint[self.TITLE_FIELD]}]({src})")
         if content:
             return "\n".join(content)
