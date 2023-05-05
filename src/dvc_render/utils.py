@@ -11,6 +11,7 @@ def list_dict_to_dict_list(list_dict):
 
 # https://stackoverflow.com/questions/6027558/flatten-nested-dictionaries-compressing-keys
 def flatten(d, parent_key="", sep="."):
+    """Flatten dictionary."""
     items = []
     for k, v in d.items():
         new_key = parent_key + sep + k if parent_key else k
