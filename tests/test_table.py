@@ -24,3 +24,11 @@ def test_generate_markdown():
     assert "|   foo |   bar |" in md
     assert "|-------|-------|" in md
     assert "|     1 |     2 |" in md
+
+
+def test_nested():
+    datapoints = [{"foo": {"bar": 1}}]
+    html = TableRenderer(datapoints, "metrics.json").generate_html()
+    assert "<p>metrics_json</p>" in html
+    assert '<tr><th style="text-align: right;">  foo.bar</th></tr>' in html
+    assert '<tr><td style="text-align: right;">        1</td></tr>' in html
