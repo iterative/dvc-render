@@ -1,4 +1,5 @@
 import base64
+import io
 import json
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Union
@@ -103,17 +104,19 @@ class VegaRenderer(Renderer):
 
         data = list_dict_to_dict_list(self.datapoints)
         if data:
-            report_folder = Path(report_path).parent
-            output_file = report_folder / self.name
-            output_file = output_file.with_suffix(".png")
-            output_file.parent.mkdir(exist_ok=True, parents=True)
+            output_file = io.BytesIO()
+            if report_path:
+                report_folder = Path(report_path).parent
+                output_file = report_folder / self.name
+                output_file = output_file.with_suffix(".png")
+                output_file.parent.mkdir(exist_ok=True, parents=True)
 
             x = self.properties.get("x")
             y = self.properties.get("y")
             data[x] = list(map(float, data[x]))
             data[y] = list(map(float, data[y]))
 
-            plt.title(self.properties.get("title", output_file.stem))
+            plt.title(self.properties.get("title", Path(self.name).stem))
             plt.xlabel(self.properties.get("x_label", x))
             plt.ylabel(self.properties.get("y_label", y))
             plt.plot(x, y, data=data)
@@ -121,8 +124,12 @@ class VegaRenderer(Renderer):
             plt.savefig(output_file)
             plt.close()
 
-            base64_str = base64.b64encode(output_file.read_bytes()).decode()
+            if report_path:
+                return f"\n![{self.name}]({output_file.relative_to(report_folder)})"
+
+            base64_str = base64.b64encode(output_file.getvalue()).decode()
             src = f"data:image/png;base64,{base64_str}"
 
             return f"\n![{self.name}]({src})"
+
         return ""
