@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import TYPE_CHECKING, List, Optional, Union
+from typing import TYPE_CHECKING, List, Optional
 
 from .exceptions import MissingPlaceholderError
 
@@ -48,7 +48,7 @@ def render_markdown(
     renderers: List["Renderer"],
     output_file: Optional["StrPath"] = None,
     template_path: Optional["StrPath"] = None,
-) -> Union["StrPath", "str"]:
+) -> "StrPath":
     "User renderers to fill an Markdown template and write to path."
     output_path = None
     if output_file:
@@ -65,7 +65,7 @@ def render_markdown(
     for renderer in renderers:
         document.with_element(renderer.generate_markdown(report_path=output_path))
 
-    if output_file:
+    if output_file and output_path:
         output_path.write_text(document.embed(), encoding="utf8")
 
         return output_file

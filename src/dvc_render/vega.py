@@ -104,12 +104,13 @@ class VegaRenderer(Renderer):
 
         data = list_dict_to_dict_list(self.datapoints)
         if data:
-            output_file = io.BytesIO()
             if report_path:
                 report_folder = Path(report_path).parent
                 output_file = report_folder / self.name
                 output_file = output_file.with_suffix(".png")
                 output_file.parent.mkdir(exist_ok=True, parents=True)
+            else:
+                output_file = io.BytesIO()  # type: ignore
 
             x = self.properties.get("x")
             y = self.properties.get("y")
@@ -127,7 +128,9 @@ class VegaRenderer(Renderer):
             if report_path:
                 return f"\n![{self.name}]({output_file.relative_to(report_folder)})"
 
-            base64_str = base64.b64encode(output_file.getvalue()).decode()
+            base64_str = base64.b64encode(
+                output_file.getvalue()  # type: ignore
+            ).decode()
             src = f"data:image/png;base64,{base64_str}"
 
             return f"\n![{self.name}]({src})"

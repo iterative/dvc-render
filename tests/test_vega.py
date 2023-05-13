@@ -117,6 +117,7 @@ def test_raise_on_wrong_field():
 @pytest.mark.parametrize("name", ["foo", "foo/bar", "foo/bar.tsv"])
 @pytest.mark.parametrize("to_file", [True, False])
 def test_generate_markdown(tmp_dir, mocker, name, to_file):
+    # pylint: disable-msg=too-many-locals
     import matplotlib.pyplot
 
     plot = mocker.spy(matplotlib.pyplot, "plot")
