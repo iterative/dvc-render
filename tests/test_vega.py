@@ -115,7 +115,9 @@ def test_raise_on_wrong_field():
 
 
 @pytest.mark.parametrize("name", ["foo", "foo/bar", "foo/bar.tsv"])
-def test_generate_markdown(tmp_dir, mocker, name):
+@pytest.mark.parametrize("to_file", [True, False])
+def test_generate_markdown(tmp_dir, mocker, name, to_file):
+    # pylint: disable-msg=too-many-locals
     import matplotlib.pyplot
 
     plot = mocker.spy(matplotlib.pyplot, "plot")
@@ -131,10 +133,18 @@ def test_generate_markdown(tmp_dir, mocker, name):
     ]
     renderer = VegaRenderer(datapoints, name, **props)
 
-    (tmp_dir / "output").mkdir()
-    renderer.generate_markdown(tmp_dir / "output" / "report.md")
+    if to_file:
+        report_folder = tmp_dir / "output"
+        report_folder.mkdir()
+        md = renderer.generate_markdown(tmp_dir / "output" / "report.md")
+        output_file = (tmp_dir / "output" / renderer.name).with_suffix(".png")
+        assert output_file.exists()
+        savefig.assert_called_with(output_file)
+        assert f"![{name}]({output_file.relative_to(report_folder)})" in md
+    else:
+        md = renderer.generate_markdown()
+        assert f"![{name}](data:image/png;base64," in md
 
-    assert (tmp_dir / "output" / renderer.name).with_suffix(".png").exists()
     plot.assert_called_with(
         "first_val",
         "second_val",
@@ -147,7 +157,6 @@ def test_generate_markdown(tmp_dir, mocker, name):
     title.assert_called_with("FOO")
     xlabel.assert_called_with("first_val")
     ylabel.assert_called_with("second_val")
-    savefig.assert_called_with((tmp_dir / "output" / name).with_suffix(".png"))
 
 
 def test_unsupported_template():

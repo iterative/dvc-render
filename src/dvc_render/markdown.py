@@ -46,12 +46,14 @@ class Markdown:
 
 def render_markdown(
     renderers: List["Renderer"],
-    output_file: "StrPath",
+    output_file: Optional["StrPath"] = None,
     template_path: Optional["StrPath"] = None,
 ) -> "StrPath":
     "User renderers to fill an Markdown template and write to path."
-    output_path = Path(output_file)
-    output_path.parent.mkdir(exist_ok=True)
+    output_path = None
+    if output_file:
+        output_path = Path(output_file)
+        output_path.parent.mkdir(exist_ok=True)
 
     page = None
     if template_path:
@@ -63,6 +65,9 @@ def render_markdown(
     for renderer in renderers:
         document.with_element(renderer.generate_markdown(report_path=output_path))
 
-    output_path.write_text(document.embed(), encoding="utf8")
+    if output_file and output_path:
+        output_path.write_text(document.embed(), encoding="utf8")
 
-    return output_file
+        return output_file
+
+    return document.embed()

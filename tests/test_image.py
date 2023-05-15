@@ -63,8 +63,9 @@ def test_invalid_generate_markdown():
             "src": "data:image;base64,encoded_image",
         }
     ]
-    with pytest.raises(ValueError, match="`generate_markdown` doesn't support base64"):
-        ImageRenderer(datapoints, "file.jpg").generate_markdown()
+    md = ImageRenderer(datapoints, "file.jpg").generate_markdown()
+
+    assert "![workspace](data:image/png;base64,encoded_image)" in md
 
 
 @pytest.mark.parametrize(
