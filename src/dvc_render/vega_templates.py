@@ -513,6 +513,18 @@ class SmoothLinearTemplate(Template):
                         "field": "rev",
                         "type": "nominal",
                     },
+                    "tooltip": [
+                        {
+                            "field": Template.anchor("x"),
+                            "title": Template.anchor("x_label"),
+                            "type": "quantitative",
+                        },
+                        {
+                            "field": Template.anchor("y"),
+                            "title": Template.anchor("y_label"),
+                            "type": "quantitative",
+                        },
+                    ],
                 },
                 "transform": [
                     {
@@ -524,10 +536,7 @@ class SmoothLinearTemplate(Template):
                 ],
             },
             {
-                "mark": {
-                    "type": "point",
-                    "tooltip": {"content": "data"},
-                },
+                "mark": {"type": "line", "opacity": 0.2},
                 "encoding": {
                     "x": {
                         "field": Template.anchor("x"),
@@ -535,6 +544,41 @@ class SmoothLinearTemplate(Template):
                         "title": Template.anchor("x_label"),
                     },
                     "y": {
+                        "field": Template.anchor("y"),
+                        "type": "quantitative",
+                        "title": Template.anchor("y_label"),
+                        "scale": {"zero": False},
+                    },
+                    "color": {"field": "rev", "type": "nominal"},
+                    "tooltip": [
+                        {
+                            "field": Template.anchor("x"),
+                            "title": Template.anchor("x_label"),
+                            "type": "quantitative",
+                        },
+                        {
+                            "field": Template.anchor("y"),
+                            "title": Template.anchor("y_label"),
+                            "type": "quantitative",
+                        },
+                    ],
+                },
+            },
+            {
+                "mark": {
+                    "type": "circle",
+                    "size": 10,
+                    "tooltip": {"content": "encoding"},
+                },
+                "encoding": {
+                    "x": {
+                        "aggregate": "max",
+                        "field": Template.anchor("x"),
+                        "type": "quantitative",
+                        "title": Template.anchor("x_label"),
+                    },
+                    "y": {
+                        "aggregate": {"argmax": Template.anchor("x")},
                         "field": Template.anchor("y"),
                         "type": "quantitative",
                         "title": Template.anchor("y_label"),

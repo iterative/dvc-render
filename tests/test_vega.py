@@ -44,9 +44,12 @@ def test_default_template_mark():
 
     assert plot_content["layer"][0]["mark"] == "line"
 
-    assert plot_content["layer"][1]["mark"] == {
-        "type": "point",
-        "tooltip": {"content": "data"},
+    assert plot_content["layer"][1]["mark"] == {"type": "line", "opacity": 0.2}
+
+    assert plot_content["layer"][2]["mark"] == {
+        "type": "circle",
+        "size": 10,
+        "tooltip": {"content": "encoding"},
     }
 
 
