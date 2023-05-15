@@ -775,7 +775,7 @@
 
 
 <h2 id="dvc_render.markdown.render_markdown" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">render_markdown</span><span class="p">(</span><span class="n">renderers</span><span class="p">,</span> <span class="n">output_file</span><span class="p">,</span> <span class="n">template_path</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
+<code class="highlight language-python"><span class="n">render_markdown</span><span class="p">(</span><span class="n">renderers</span><span class="p">,</span> <span class="n">output_file</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">template_path</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
 
 </h2>
 
@@ -807,14 +807,21 @@
 <span class="normal">65</span>
 <span class="normal">66</span>
 <span class="normal">67</span>
-<span class="normal">68</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">render_markdown</span><span class="p">(</span>
+<span class="normal">68</span>
+<span class="normal">69</span>
+<span class="normal">70</span>
+<span class="normal">71</span>
+<span class="normal">72</span>
+<span class="normal">73</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">render_markdown</span><span class="p">(</span>
     <span class="n">renderers</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="s2">&quot;Renderer&quot;</span><span class="p">],</span>
-    <span class="n">output_file</span><span class="p">:</span> <span class="s2">&quot;StrPath&quot;</span><span class="p">,</span>
+    <span class="n">output_file</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="s2">&quot;StrPath&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">template_path</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="s2">&quot;StrPath&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;StrPath&quot;</span><span class="p">:</span>
     <span class="s2">&quot;User renderers to fill an Markdown template and write to path.&quot;</span>
-    <span class="n">output_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">output_file</span><span class="p">)</span>
-    <span class="n">output_path</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">output_path</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="n">output_file</span><span class="p">:</span>
+        <span class="n">output_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">output_file</span><span class="p">)</span>
+        <span class="n">output_path</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
     <span class="n">page</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="k">if</span> <span class="n">template_path</span><span class="p">:</span>
@@ -826,9 +833,12 @@
     <span class="k">for</span> <span class="n">renderer</span> <span class="ow">in</span> <span class="n">renderers</span><span class="p">:</span>
         <span class="n">document</span><span class="o">.</span><span class="n">with_element</span><span class="p">(</span><span class="n">renderer</span><span class="o">.</span><span class="n">generate_markdown</span><span class="p">(</span><span class="n">report_path</span><span class="o">=</span><span class="n">output_path</span><span class="p">))</span>
 
-    <span class="n">output_path</span><span class="o">.</span><span class="n">write_text</span><span class="p">(</span><span class="n">document</span><span class="o">.</span><span class="n">embed</span><span class="p">(),</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf8&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">output_file</span> <span class="ow">and</span> <span class="n">output_path</span><span class="p">:</span>
+        <span class="n">output_path</span><span class="o">.</span><span class="n">write_text</span><span class="p">(</span><span class="n">document</span><span class="o">.</span><span class="n">embed</span><span class="p">(),</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf8&quot;</span><span class="p">)</span>
 
-    <span class="k">return</span> <span class="n">output_file</span>
+        <span class="k">return</span> <span class="n">output_file</span>
+
+    <span class="k">return</span> <span class="n">document</span><span class="o">.</span><span class="n">embed</span><span class="p">()</span>
 </code></pre></div></td></tr></table></div>
       </details>
   </div>
