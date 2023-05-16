@@ -64,7 +64,8 @@ def list_replace_value(l: list, name: str, value: str) -> list:  # noqa: E741
 def dict_find_value(d: dict, value: str) -> bool:
     for v in d.values():
         if isinstance(v, dict):
-            return dict_find_value(v, value)
+            if dict_find_value(v, value):
+                return True
         if isinstance(v, str):
             if v == value:
                 return True

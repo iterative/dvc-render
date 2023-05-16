@@ -1,3 +1,5 @@
+import json
+
 import pytest
 
 from dvc_render.vega import BadTemplateError, VegaRenderer
@@ -103,9 +105,27 @@ def test_confusion():
     assert plot_content["spec"]["encoding"]["y"]["field"] == "actual"
 
 
-def test_bad_template():
+def test_bad_template_on_init():
     with pytest.raises(BadTemplateError):
         Template("name", "content")
+
+
+def test_bad_template_on_missing_data(tmp_dir):
+    template_content = {"data": {"values": "BAD_ANCHOR"}}
+    tmp_dir.gen("bar.json", json.dumps(template_content))
+    datapoints = [{"val": 2}, {"val": 3}]
+    renderer = VegaRenderer(datapoints, "foo", template="bar.json")
+
+    with pytest.raises(BadTemplateError):
+        renderer.get_filled_template()
+
+    template_content = {
+        "mark": {"type": "bar"},
+        "data": {"values": Template.anchor("data")},
+    }
+    tmp_dir.gen("bar.json", json.dumps(template_content))
+    renderer = VegaRenderer(datapoints, "foo", template="bar.json")
+    assert renderer.get_filled_template()
 
 
 def test_raise_on_wrong_field():
