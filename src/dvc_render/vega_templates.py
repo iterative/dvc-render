@@ -68,6 +68,8 @@ def dict_find_value(d: dict, value: str) -> bool:
         if isinstance(v, str):
             if v == value:
                 return True
+        if isinstance(v, list):
+            return any(dict_find_value(e, value) for e in v)
     return False
 
 
