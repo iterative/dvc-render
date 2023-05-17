@@ -10,6 +10,7 @@ from dvc_render.vega_templates import (
     Template,
     TemplateContentDoesNotMatch,
     TemplateNotFoundError,
+    dict_find_value,
     dump_templates,
     get_template,
 )
@@ -101,3 +102,15 @@ def test_raise_on_init_modified(tmp_dir):
 def test_escape_special_characters():
     value = "foo.bar[2]"
     assert Template.escape_special_characters(value) == "foo\\.bar\\[2\\]"
+
+
+@pytest.mark.parametrize(
+    "content_dict, value_name",
+    [
+        ({"key": "value"}, "value"),
+        ({"key": {"subkey": "value"}}, "value"),
+        ({"key": [{"subkey": "value"}]}, "value"),
+    ],
+)
+def test_dict_find_value(content_dict, value_name):
+    assert dict_find_value(content_dict, value_name)
