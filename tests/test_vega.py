@@ -110,20 +110,35 @@ def test_bad_template_on_init():
         Template("name", "content")
 
 
-def test_bad_template_on_missing_data(tmp_dir):
-    template_content = {"data": {"values": "BAD_ANCHOR"}}
-    tmp_dir.gen("bar.json", json.dumps(template_content))
+@pytest.mark.parametrize(
+    "bad_content,good_content",
+    (
+        (
+            {"data": {"values": "BAD_ANCHOR"}},
+            {"data": {"values": Template.anchor("data")}},
+        ),
+        (
+            {"mark": {"type": "bar"}, "data": {"values": "BAD_ANCHOR"}},
+            {"mark": {"type": "bar"}, "data": {"values": Template.anchor("data")}},
+        ),
+        (
+            {"repeat": ["quintile"], "spec": {"data": {"values": "BAD_ANCHOR"}}},
+            {
+                "repeat": ["quintile"],
+                "spec": {"data": {"values": Template.anchor("data")}},
+            },
+        ),
+    ),
+)
+def test_bad_template_on_missing_data(tmp_dir, bad_content, good_content):
+    tmp_dir.gen("bar.json", json.dumps(bad_content))
     datapoints = [{"val": 2}, {"val": 3}]
     renderer = VegaRenderer(datapoints, "foo", template="bar.json")
 
     with pytest.raises(BadTemplateError):
         renderer.get_filled_template()
 
-    template_content = {
-        "mark": {"type": "bar"},
-        "data": {"values": Template.anchor("data")},
-    }
-    tmp_dir.gen("bar.json", json.dumps(template_content))
+    tmp_dir.gen("bar.json", json.dumps(good_content))
     renderer = VegaRenderer(datapoints, "foo", template="bar.json")
     assert renderer.get_filled_template()
 

@@ -10,8 +10,8 @@ from dvc_render.vega_templates import (
     Template,
     TemplateContentDoesNotMatch,
     TemplateNotFoundError,
-    dict_find_value,
     dump_templates,
+    find_value,
     get_template,
 )
 
@@ -110,7 +110,8 @@ def test_escape_special_characters():
         ({"key": "value"}, "value"),
         ({"key": {"subkey": "value"}}, "value"),
         ({"key": [{"subkey": "value"}]}, "value"),
+        ({"key1": [{"subkey": "foo"}], "key2": {"subkey2": "value"}}, "value"),
     ],
 )
-def test_dict_find_value(content_dict, value_name):
-    assert dict_find_value(content_dict, value_name)
+def test_find_value(content_dict, value_name):
+    assert find_value(content_dict, value_name)
