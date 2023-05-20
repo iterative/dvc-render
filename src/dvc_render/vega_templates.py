@@ -61,7 +61,7 @@ def list_replace_value(l: list, name: str, value: str) -> list:  # noqa: E741
     return x
 
 
-def find_value(d: Union[dict, str], value: str) -> bool:
+def find_value(d: Union[dict, list, str], value: str) -> bool:
     if isinstance(d, dict):
         for v in d.values():
             if isinstance(v, dict):
