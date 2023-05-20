@@ -61,17 +61,17 @@ def list_replace_value(l: list, name: str, value: str) -> list:  # noqa: E741
     return x
 
 
-def dict_find_value(d: Union[dict, str], value: str) -> bool:
+def find_value(d: Union[dict, str], value: str) -> bool:
     if isinstance(d, dict):
         for v in d.values():
             if isinstance(v, dict):
-                if dict_find_value(v, value):
+                if find_value(v, value):
                     return True
             if isinstance(v, str):
                 if v == value:
                     return True
             if isinstance(v, list):
-                if any(dict_find_value(e, value) for e in v):
+                if any(find_value(e, value) for e in v):
                     return True
     elif isinstance(d, str):
         if d == value:
@@ -125,7 +125,7 @@ class Template:
 
     def has_anchor(self, name) -> bool:
         "Check if ANCHOR formatted with name is in content."
-        found = dict_find_value(self.content, self.anchor(name))
+        found = find_value(self.content, self.anchor(name))
         return found
 
     def fill_anchor(self, name, value) -> None:
