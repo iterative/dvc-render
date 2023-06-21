@@ -598,6 +598,123 @@ class LinearTemplate(SmoothLinearTemplate):
     DEFAULT_NAME = "linear"
 
 
+class LogLinearTemplate(Template):
+    DEFAULT_NAME = "log_linear"
+    DEFAULT_CONTENT = {
+        "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+        "data": {"values": Template.anchor("data")},
+        "title": Template.anchor("title"),
+        "width": 300,
+        "height": 300,
+        "params": [
+            {
+                "name": "smooth",
+                "value": 0.001,
+                "bind": {
+                    "input": "range",
+                    "min": 0.001,
+                    "max": 1,
+                    "step": 0.001,
+                },
+            },
+        ],
+        "layer": [
+            {
+                "mark": "line",
+                "encoding": {
+                    "x": {
+                        "field": Template.anchor("x"),
+                        "type": "quantitative",
+                        "title": Template.anchor("x_label"),
+                    },
+                    "y": {
+                        "field": Template.anchor("y"),
+                        "type": "quantitative",
+                        "title": Template.anchor("y_label"),
+                        "scale": {"type": "log"},
+                    },
+                    "color": {
+                        "field": "rev",
+                        "type": "nominal",
+                    },
+                    "tooltip": [
+                        {
+                            "field": Template.anchor("x"),
+                            "title": Template.anchor("x_label"),
+                            "type": "quantitative",
+                        },
+                        {
+                            "field": Template.anchor("y"),
+                            "title": Template.anchor("y_label"),
+                            "type": "quantitative",
+                        },
+                    ],
+                },
+                "transform": [
+                    {
+                        "loess": Template.anchor("y"),
+                        "on": Template.anchor("x"),
+                        "groupby": ["rev", "filename", "field", "filename::field"],
+                        "bandwidth": {"signal": "smooth"},
+                    },
+                ],
+            },
+            {
+                "mark": {"type": "line", "opacity": 0.2},
+                "encoding": {
+                    "x": {
+                        "field": Template.anchor("x"),
+                        "type": "quantitative",
+                        "title": Template.anchor("x_label"),
+                    },
+                    "y": {
+                        "field": Template.anchor("y"),
+                        "type": "quantitative",
+                        "title": Template.anchor("y_label"),
+                        "scale": {"type": "log"},
+                    },
+                    "color": {"field": "rev", "type": "nominal"},
+                    "tooltip": [
+                        {
+                            "field": Template.anchor("x"),
+                            "title": Template.anchor("x_label"),
+                            "type": "quantitative",
+                        },
+                        {
+                            "field": Template.anchor("y"),
+                            "title": Template.anchor("y_label"),
+                            "type": "quantitative",
+                        },
+                    ],
+                },
+            },
+            {
+                "mark": {
+                    "type": "circle",
+                    "size": 10,
+                    "tooltip": {"content": "encoding"},
+                },
+                "encoding": {
+                    "x": {
+                        "aggregate": "max",
+                        "field": Template.anchor("x"),
+                        "type": "quantitative",
+                        "title": Template.anchor("x_label"),
+                    },
+                    "y": {
+                        "aggregate": {"argmax": Template.anchor("x")},
+                        "field": Template.anchor("y"),
+                        "type": "quantitative",
+                        "title": Template.anchor("y_label"),
+                        "scale": {"type": "log"},
+                    },
+                    "color": {"field": "rev", "type": "nominal"},
+                },
+            },
+        ],
+    }
+
+
 class SimpleLinearTemplate(Template):
     DEFAULT_NAME = "simple"
 
@@ -639,6 +756,7 @@ TEMPLATES = [
     ScatterTemplate,
     ScatterJitterTemplate,
     SmoothLinearTemplate,
+    LogLinearTemplate,
     BarHorizontalSortedTemplate,
     BarHorizontalTemplate,
 ]
