@@ -39,11 +39,22 @@ class PlotlyRenderer(Renderer):
                 value = datapoint[self.properties[axis]]
                 traces[revision][axis].append(value)
         traces = list(traces.values())
-        template = self.properties["template"]
+
+        template = self.properties.pop("template", "linear")
         for trace in traces:
             trace["type"] = template
 
-        return {"data": traces}
+        layout = {
+            "title": self.properties.get("title", ""),
+            "xaxis": {
+                "title": self.properties.get("x_label", self.properties.get("x"))
+            },
+            "yaxis": {
+                "title": self.properties.get("y_label", self.properties.get("y"))
+            },
+        }
+
+        return {"data": traces, "layout": layout}
 
     def partial_html(self, **kwargs) -> str:
         return json.dumps(self.convert_datapoints(self.datapoints))

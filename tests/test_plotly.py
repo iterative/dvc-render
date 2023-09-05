@@ -1,7 +1,5 @@
 import json
 
-import pytest
-
 from dvc_render.plotly import PlotlyRenderer
 
 # pylint: disable=missing-function-docstring,
@@ -16,19 +14,21 @@ def test_plotly_partial_html():
         {"first_val": 7, "second_val": 8, "rev": "HEAD"},
     ]
 
-    plot_content = json.loads(
-        PlotlyRenderer(datapoints, "foo", **props).partial_html()
-    )
+    plot_content = json.loads(PlotlyRenderer(datapoints, "foo", **props).partial_html())
 
     assert plot_content == {
         "data": [
             {"x": [1, 3], "y": [2, 4], "type": "scatter", "name": "workspace"},
             {"x": [5, 7], "y": [6, 8], "type": "scatter", "name": "HEAD"},
-        ]
+        ],
+        "layout": {
+            "title": "",
+            "xaxis": {"title": "first_val"},
+            "yaxis": {"title": "second_val"},
+        },
     }
 
 
-@pytest.mark.xfail(reason="TODO")
 def test_plotly_layout():
     props = {"x": "first_val", "y": "second_val", "title": "TITLE"}
     datapoints = [
@@ -38,14 +38,16 @@ def test_plotly_layout():
         {"first_val": 7, "second_val": 8, "rev": "HEAD"},
     ]
 
-    plot_content = json.loads(
-        PlotlyRenderer(datapoints, "foo", **props).partial_html()
-    )
+    plot_content = json.loads(PlotlyRenderer(datapoints, "foo", **props).partial_html())
 
     assert plot_content == {
         "data": [
-            {"x": [1, 3], "y": [2, 4], "type": "scatter", "name": "workspace"},
-            {"x": [5, 7], "y": [6, 8], "type": "scatter", "name": "HEAD"},
+            {"x": [1, 3], "y": [2, 4], "type": "linear", "name": "workspace"},
+            {"x": [5, 7], "y": [6, 8], "type": "linear", "name": "HEAD"},
         ],
-        "layout": {"title": "TITLE"},
+        "layout": {
+            "title": "TITLE",
+            "xaxis": {"title": "first_val"},
+            "yaxis": {"title": "second_val"},
+        },
     }
