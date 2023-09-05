@@ -32,7 +32,9 @@ class PlotlyRenderer(Renderer):
         """Convert from dvc-render format to plotly json format"""
         traces = {}
         for datapoint in datapoints:
-            revision = datapoint["rev"]
+            revision = datapoint.get("dvc_data_version_info", {}).get(
+                "revision", "workspace"
+            )
             if revision not in traces:
                 traces[revision] = {"name": revision, "x": [], "y": []}
             for axis in ("x", "y"):
