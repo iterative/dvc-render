@@ -502,15 +502,17 @@ class SmoothLinearTemplate(Template):
                 },
             },
         ],
+        "encoding": {
+            "x": {
+                "field": Template.anchor("x"),
+                "type": "quantitative",
+                "title": Template.anchor("x_label"),
+            },
+        },
         "layer": [
             {
                 "mark": "line",
                 "encoding": {
-                    "x": {
-                        "field": Template.anchor("x"),
-                        "type": "quantitative",
-                        "title": Template.anchor("x_label"),
-                    },
                     "y": {
                         "field": Template.anchor("y"),
                         "type": "quantitative",
@@ -521,19 +523,14 @@ class SmoothLinearTemplate(Template):
                         "field": "rev",
                         "type": "nominal",
                     },
-                    "tooltip": [
-                        {
-                            "field": Template.anchor("x"),
-                            "title": Template.anchor("x_label"),
-                            "type": "quantitative",
-                        },
-                        {
-                            "field": Template.anchor("y"),
-                            "title": Template.anchor("y_label"),
-                            "type": "quantitative",
-                        },
-                    ],
                 },
+                "layer": [
+                    {"mark": "line"},
+                    {
+                        "transform": [{"filter": {"param": "hover", "empty": False}}],
+                        "mark": "point",
+                    },
+                ],
                 "transform": [
                     {
                         "loess": Template.anchor("y"),
@@ -558,18 +555,6 @@ class SmoothLinearTemplate(Template):
                         "scale": {"zero": False},
                     },
                     "color": {"field": "rev", "type": "nominal"},
-                    "tooltip": [
-                        {
-                            "field": Template.anchor("x"),
-                            "title": Template.anchor("x_label"),
-                            "type": "quantitative",
-                        },
-                        {
-                            "field": Template.anchor("y"),
-                            "title": Template.anchor("y_label"),
-                            "type": "quantitative",
-                        },
-                    ],
                 },
             },
             {
@@ -594,6 +579,38 @@ class SmoothLinearTemplate(Template):
                     },
                     "color": {"field": "rev", "type": "nominal"},
                 },
+            },
+            {
+                "transform": [
+                    {
+                        "calculate": "datum.rev + '::' + datum.filename + '::' + datum.field",  # noqa: E501
+                        "as": "tooltip_group",
+                    },
+                    {
+                        "pivot": "tooltip_group",
+                        "value": Template.anchor("y"),
+                        "groupby": [Template.anchor("x")],
+                    },
+                ],
+                "mark": {"type": "rule", "tooltip": {"content": "data"}},
+                "encoding": {
+                    "opacity": {
+                        "condition": {"value": 0.3, "param": "hover", "empty": False},
+                        "value": 0,
+                    }
+                },
+                "params": [
+                    {
+                        "name": "hover",
+                        "select": {
+                            "type": "point",
+                            "fields": [Template.anchor("x")],
+                            "nearest": True,
+                            "on": "mouseover",
+                            "clear": "mouseout",
+                        },
+                    }
+                ],
             },
         ],
     }
