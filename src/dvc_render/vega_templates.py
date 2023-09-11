@@ -143,6 +143,7 @@ class BarHorizontalSortedTemplate(Template):
         "width": 300,
         "height": 300,
         "mark": {"type": "bar"},
+        "params": [{"bind": "scales", "name": "grid", "select": "interval"}],
         "encoding": {
             "x": {
                 "field": Template.anchor("x"),
@@ -175,6 +176,7 @@ class BarHorizontalTemplate(Template):
         "width": 300,
         "height": 300,
         "mark": {"type": "bar"},
+        "params": [{"bind": "scales", "name": "grid", "select": "interval"}],
         "encoding": {
             "x": {
                 "field": Template.anchor("x"),
@@ -541,6 +543,7 @@ class SmoothLinearTemplate(Template):
                 ],
             },
             {
+                "params": [{"bind": "scales", "name": "grid", "select": "interval"}],
                 "mark": {"type": "line", "opacity": 0.2},
                 "encoding": {
                     "x": {
@@ -633,6 +636,7 @@ class SimpleLinearTemplate(Template):
             "type": "line",
             "tooltip": {"content": "data"},
         },
+        "params": [{"bind": "scales", "name": "grid", "select": "interval"}],
         "encoding": {
             "x": {
                 "field": Template.anchor("x"),
