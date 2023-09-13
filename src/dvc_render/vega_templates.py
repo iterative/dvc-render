@@ -159,10 +159,8 @@ class BarHorizontalSortedTemplate(Template):
                 "sort": "-x",
             },
             "yOffset": {"field": "rev"},
-            "color": {
-                "field": "rev",
-                "type": "nominal",
-            },
+            "color": Template.anchor("color"),
+            "row": Template.anchor("row"),
         },
     }
 
@@ -190,10 +188,8 @@ class BarHorizontalTemplate(Template):
                 "title": Template.anchor("y_label"),
             },
             "yOffset": {"field": "rev"},
-            "color": {
-                "field": "rev",
-                "type": "nominal",
-            },
+            "color": Template.anchor("color"),
+            "row": Template.anchor("row"),
         },
     }
 
@@ -443,10 +439,8 @@ class ScatterTemplate(Template):
                 "type": "quantitative",
                 "title": Template.anchor("y_label"),
             },
-            "color": {
-                "field": "rev",
-                "type": "nominal",
-            },
+            "color": Template.anchor("color"),
+            "shape": Template.anchor("shape"),
         },
     }
 
@@ -474,10 +468,8 @@ class ScatterJitterTemplate(Template):
                 "field": Template.anchor("y"),
                 "title": Template.anchor("y_label"),
             },
-            "color": {
-                "field": "rev",
-                "type": "nominal",
-            },
+            "color": Template.anchor("color"),
+            "shape": Template.anchor("shape"),
             "xOffset": {"field": "randomX", "type": "quantitative"},
             "yOffset": {"field": "randomY", "type": "quantitative"},
         },
@@ -504,15 +496,26 @@ class SmoothLinearTemplate(Template):
                 },
             },
         ],
+        "encoding": {
+            "x": {
+                "field": Template.anchor("x"),
+                "type": "quantitative",
+                "title": Template.anchor("x_label"),
+            },
+            "color": Template.anchor("color"),
+            "strokeDash": Template.anchor("stroke_dash"),
+            "shape": Template.anchor("shape"),
+        },
         "layer": [
             {
-                "mark": "line",
-                "encoding": {
-                    "x": {
-                        "field": Template.anchor("x"),
-                        "type": "quantitative",
-                        "title": Template.anchor("x_label"),
+                "layer": [
+                    {"mark": "line"},
+                    {
+                        "transform": [{"filter": {"param": "hover", "empty": False}}],
+                        "mark": "point",
                     },
+                ],
+                "encoding": {
                     "y": {
                         "field": Template.anchor("y"),
                         "type": "quantitative",
@@ -523,18 +526,6 @@ class SmoothLinearTemplate(Template):
                         "field": "rev",
                         "type": "nominal",
                     },
-                    "tooltip": [
-                        {
-                            "field": Template.anchor("x"),
-                            "title": Template.anchor("x_label"),
-                            "type": "quantitative",
-                        },
-                        {
-                            "field": Template.anchor("y"),
-                            "title": Template.anchor("y_label"),
-                            "type": "quantitative",
-                        },
-                    ],
                 },
                 "transform": [
                     {
@@ -560,26 +551,10 @@ class SmoothLinearTemplate(Template):
                         "scale": {"zero": False},
                     },
                     "color": {"field": "rev", "type": "nominal"},
-                    "tooltip": [
-                        {
-                            "field": Template.anchor("x"),
-                            "title": Template.anchor("x_label"),
-                            "type": "quantitative",
-                        },
-                        {
-                            "field": Template.anchor("y"),
-                            "title": Template.anchor("y_label"),
-                            "type": "quantitative",
-                        },
-                    ],
                 },
             },
             {
-                "mark": {
-                    "type": "circle",
-                    "size": 10,
-                    "tooltip": {"content": "encoding"},
-                },
+                "mark": {"type": "circle", "size": 10},
                 "encoding": {
                     "x": {
                         "aggregate": "max",
@@ -596,6 +571,38 @@ class SmoothLinearTemplate(Template):
                     },
                     "color": {"field": "rev", "type": "nominal"},
                 },
+            },
+            {
+                "transform": [
+                    {
+                        "pivot": Template.anchor("group_by"),
+                        "value": Template.anchor("y"),
+                        "groupby": [Template.anchor("x")],
+                    }
+                ],
+                "mark": {
+                    "type": "rule",
+                    "tooltip": {"content": "data"},
+                    "stroke": "grey",
+                },
+                "encoding": {
+                    "opacity": {
+                        "condition": {"value": 0.3, "param": "hover", "empty": False},
+                        "value": 0,
+                    }
+                },
+                "params": [
+                    {
+                        "name": "hover",
+                        "select": {
+                            "type": "point",
+                            "fields": [Template.anchor("x")],
+                            "nearest": True,
+                            "on": "mouseover",
+                            "clear": "mouseout",
+                        },
+                    }
+                ],
             },
         ],
     }
@@ -630,10 +637,9 @@ class SimpleLinearTemplate(Template):
                 "title": Template.anchor("y_label"),
                 "scale": {"zero": False},
             },
-            "color": {
-                "field": "rev",
-                "type": "nominal",
-            },
+            "color": Template.anchor("color"),
+            "strokeDash": Template.anchor("stroke_dash"),
+            "shape": Template.anchor("shape"),
         },
     }
 

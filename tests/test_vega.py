@@ -44,15 +44,11 @@ def test_default_template_mark():
 
     plot_content = VegaRenderer(datapoints, "foo").get_filled_template(as_string=False)
 
-    assert plot_content["layer"][0]["mark"] == "line"
+    assert plot_content["layer"][0]["layer"][0]["mark"] == "line"
 
     assert plot_content["layer"][1]["mark"] == {"type": "line", "opacity": 0.2}
 
-    assert plot_content["layer"][2]["mark"] == {
-        "type": "circle",
-        "size": 10,
-        "tooltip": {"content": "encoding"},
-    }
+    assert plot_content["layer"][2]["mark"] == {"type": "circle", "size": 10}
 
 
 def test_choose_axes():
@@ -78,7 +74,7 @@ def test_choose_axes():
             "second_val": 300,
         },
     ]
-    assert plot_content["layer"][0]["encoding"]["x"]["field"] == "first_val"
+    assert plot_content["encoding"]["x"]["field"] == "first_val"
     assert plot_content["layer"][0]["encoding"]["y"]["field"] == "second_val"
 
 
