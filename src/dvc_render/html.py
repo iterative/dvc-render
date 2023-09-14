@@ -1,5 +1,8 @@
+import os
 from pathlib import Path
 from typing import TYPE_CHECKING, List, Optional
+
+from dvc_render.image import ImageRenderer
 
 from .exceptions import DvcRenderException
 
@@ -76,6 +79,25 @@ class HTML:
         return self.template
 
 
+def _order_image_per_step(renderer: "Renderer") -> tuple:
+    is_image_renderer = isinstance(renderer, ImageRenderer)
+
+    if not is_image_renderer:
+        return (is_image_renderer, None, None, None)
+
+    path = renderer.name
+    basename = os.path.basename(path)
+    filename = os.path.splitext(basename)[0]
+    image_number = int(filename) if filename.isdigit() else None
+
+    return (
+        is_image_renderer,
+        os.path.dirname(path),
+        image_number,
+        basename,
+    )
+
+
 def render_html(
     renderers: List["Renderer"],
     output_file: "StrPath",
@@ -94,7 +116,12 @@ def render_html(
 
     document = HTML(page_html, refresh_seconds=refresh_seconds)
 
-    for renderer in renderers:
+    sorted_renderers = sorted(
+        renderers,
+        key=_order_image_per_step,
+    )
+
+    for renderer in sorted_renderers:
         document.with_scripts(renderer.SCRIPTS)
         document.with_element(renderer.generate_html(html_path=output_path))
 
