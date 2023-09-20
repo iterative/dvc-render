@@ -1,8 +1,9 @@
 import base64
 import io
 import json
+from collections import defaultdict
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Union
+from typing import Any, Dict, List, Optional, Tuple, Union
 from warnings import warn
 
 from .base import Renderer
@@ -38,6 +39,29 @@ class VegaRenderer(Renderer):
             self.properties.get("template", None),
             self.properties.get("template_dir", None),
         )
+        self._optional_anchor_ranges: Dict[
+            str,
+            Union[
+                List[str],
+                List[List[int]],
+            ],
+        ] = {
+            "stroke_dash": [[1, 0], [8, 8], [8, 4], [4, 4], [4, 2], [2, 1], [1, 1]],
+            "color": [
+                "#945dd6",
+                "#13adc7",
+                "#f46837",
+                "#48bb78",
+                "#4299e1",
+                "#ed8936",
+                "#f56565",
+            ],
+            "shape": ["square", "circle", "triangle", "diamond"],
+        }
+        self._optional_anchor_values: Dict[
+            str,
+            Dict[str, Dict[str, str]],
+        ] = defaultdict()
 
     def get_filled_template(
         self,
@@ -84,6 +108,8 @@ class VegaRenderer(Renderer):
             elif name in {"x", "y"}:
                 value = self.template.escape_special_characters(value)
             self.template.fill_anchor(name, value)
+
+        self._fill_optional_anchors(skip_anchors)
 
         if as_string:
             return json.dumps(self.template.content)
@@ -137,3 +163,152 @@ class VegaRenderer(Renderer):
                 return f"\n![{self.name}]({src})"
 
         return ""
+
+    def _fill_optional_anchors(self, skip_anchors: List[str]):
+        optional_anchors = [
+            anchor
+            for anchor in [
+                "row",
+                "group_by",
+                "pivot_field",
+                "color",
+                "stroke_dash",
+                "shape",
+            ]
+            if anchor not in skip_anchors and self.template.has_anchor(anchor)
+        ]
+        if not optional_anchors:
+            return
+
+        self._fill_color(optional_anchors)
+
+        if not optional_anchors:
+            return
+
+        y_defn = self.properties.get("anchors_y_defn", [])
+
+        if len(y_defn) <= 1:
+            self._fill_optional_anchor(optional_anchors, "group_by", ["rev"])
+            self._fill_optional_anchor(optional_anchors, "pivot_field", "rev")
+            for anchor in optional_anchors:
+                self.template.fill_anchor(anchor, {})
+            self._update_datapoints(to_remove=["filename", "file"])
+            return
+
+        keys, variations = self._collect_variations(y_defn)
+        grouped_keys = ["rev", *keys]
+        self._fill_optional_anchor(optional_anchors, "group_by", grouped_keys)
+        self._fill_optional_anchor(
+            optional_anchors, "pivot_field", "::".join(grouped_keys)
+        )
+        # concatenate grouped_keys together
+        self._fill_optional_anchor(optional_anchors, "row", {"field": "::".join(keys)})
+
+        if not optional_anchors:
+            return
+
+        if len(keys) == 2:
+            self._update_datapoints(
+                to_remove=["filename", "file"], to_concatenate=[["filename", "file"]]
+            )
+            domain = ["::".join([d.get("filename"), d.get("file")]) for d in y_defn]
+        else:
+            filenameOrField = keys[0]
+            to_remove = ["filename", "file"]
+            to_remove.remove(filenameOrField)
+            self._update_datapoints(to_remove=to_remove)
+
+            domain = list(variations[filenameOrField])
+
+        stroke_dash_scale = self._set_optional_anchor_scale(
+            optional_anchors, "stroke_dash", domain
+        )
+        self._fill_optional_anchor(optional_anchors, "stroke_dash", stroke_dash_scale)
+
+        shape_scale = self._set_optional_anchor_scale(optional_anchors, "shape", domain)
+        self._fill_optional_anchor(optional_anchors, "shape", shape_scale)
+
+    def _fill_color(self, optional_anchors: List[str]):
+        all_revs = self.properties.get("anchor_revs", [])
+        self._fill_optional_anchor(
+            optional_anchors,
+            "color",
+            {
+                "scale": {
+                    "domain": list(all_revs),
+                    "range": self._optional_anchor_ranges.get("color", [])[
+                        : len(all_revs)
+                    ],
+                }
+            },
+        )
+
+    def _collect_variations(
+        self, y_defn: List[Dict[str, str]]
+    ) -> Tuple[List[str], Dict[str, set]]:
+        variations = defaultdict(set)
+        for defn in y_defn:
+            for key in ["filename", "field"]:
+                variations[key].add(defn.get(key, None))
+
+        valuesMatchVariations = []
+        lessValuesThanVariations = []
+
+        for filenameOrField, valueSet in variations.items():
+            num_values = len(valueSet)
+            if num_values == 1:
+                continue
+            if num_values == len(y_defn):
+                valuesMatchVariations.append(filenameOrField)
+                continue
+            lessValuesThanVariations.append(filenameOrField)
+
+        if valuesMatchVariations:
+            valuesMatchVariations.extend(lessValuesThanVariations)
+            valuesMatchVariations.sort(reverse=True)
+            return valuesMatchVariations, variations
+
+        lessValuesThanVariations.sort(reverse=True)
+        return lessValuesThanVariations, variations
+
+    def _fill_optional_anchor(self, optional_anchors: List[str], name: str, value: Any):
+        if name not in optional_anchors:
+            return
+
+        optional_anchors.remove(name)
+        self.template.fill_anchor(name, value)
+
+    def _set_optional_anchor_scale(
+        self, optional_anchors: List[str], name: str, domain: List[str]
+    ):
+        if name not in optional_anchors:
+            return {"scale": {"domain": [], "range": []}}
+
+        full_range_values: List[Any] = self._optional_anchor_ranges.get(name, [])
+        anchor_range_values = full_range_values.copy()
+        anchor_range = []
+
+        for domain_value in domain:
+            if not anchor_range_values:
+                anchor_range_values = full_range_values.copy()
+            range_value = anchor_range_values.pop()
+            self._optional_anchor_values[name][domain_value] = range_value
+            anchor_range.append(range_value)
+
+        return {"scale": {"domain": domain, "range": anchor_range}}
+
+    def _update_datapoints(
+        self,
+        to_remove: Optional[List[str]] = None,
+        to_concatenate: Optional[List[List[str]]] = None,
+    ):
+        if to_concatenate:
+            for datapoint in self.datapoints:
+                for keys in to_concatenate:
+                    concat_key = "::".join(keys)
+                    datapoint[concat_key] = "::".join([datapoint.get(k) for k in keys])
+
+        if to_remove:
+            for datapoint in self.datapoints:
+                for concat_key in to_remove:
+                    datapoint.pop(concat_key, None)

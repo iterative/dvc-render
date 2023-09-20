@@ -531,7 +531,7 @@ class SmoothLinearTemplate(Template):
                     {
                         "loess": Template.anchor("y"),
                         "on": Template.anchor("x"),
-                        "groupby": ["rev", "filename", "field", "filename::field"],
+                        "groupby": Template.anchor("group_by"),
                         "bandwidth": {"signal": "smooth"},
                     },
                 ],
@@ -574,11 +574,12 @@ class SmoothLinearTemplate(Template):
             },
             {
                 "transform": [
+                    {"calculate": Template.anchor("pivot_field"), "as": "pivot_field"},
                     {
-                        "pivot": Template.anchor("group_by"),
+                        "pivot": "pivot_field",
                         "value": Template.anchor("y"),
                         "groupby": [Template.anchor("x")],
-                    }
+                    },
                 ],
                 "mark": {
                     "type": "rule",
