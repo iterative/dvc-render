@@ -61,7 +61,7 @@ class VegaRenderer(Renderer):
         self._optional_anchor_values: Dict[
             str,
             Dict[str, Dict[str, str]],
-        ] = defaultdict()
+        ] = defaultdict(dict)
 
     def get_filled_template(
         self,
@@ -91,6 +91,8 @@ class VegaRenderer(Renderer):
         self.properties.setdefault("y_label", self.properties.get("y"))
         self.properties.setdefault("data", self.datapoints)
 
+        self._fill_optional_anchors(skip_anchors)
+
         names = ["title", "x", "y", "x_label", "y_label", "data"]
         for name in names:
             if name in skip_anchors:
@@ -108,8 +110,6 @@ class VegaRenderer(Renderer):
             elif name in {"x", "y"}:
                 value = self.template.escape_special_characters(value)
             self.template.fill_anchor(name, value)
-
-        self._fill_optional_anchors(skip_anchors)
 
         if as_string:
             return json.dumps(self.template.content)
@@ -192,40 +192,45 @@ class VegaRenderer(Renderer):
             self._fill_optional_anchor(optional_anchors, "pivot_field", "rev")
             for anchor in optional_anchors:
                 self.template.fill_anchor(anchor, {})
-            self._update_datapoints(to_remove=["filename", "file"])
+            self._update_datapoints(to_remove=["filename", "field"])
             return
 
         keys, variations = self._collect_variations(y_defn)
         grouped_keys = ["rev", *keys]
+        concat_field = "::".join(keys)
         self._fill_optional_anchor(optional_anchors, "group_by", grouped_keys)
         self._fill_optional_anchor(
-            optional_anchors, "pivot_field", "::".join(grouped_keys)
+            optional_anchors,
+            "pivot_field",
+            "+ '::'".join([f"datum.{key}" for key in grouped_keys]),
         )
         # concatenate grouped_keys together
-        self._fill_optional_anchor(optional_anchors, "row", {"field": "::".join(keys)})
+        self._fill_optional_anchor(optional_anchors, "row", {"field": concat_field})
 
         if not optional_anchors:
             return
 
         if len(keys) == 2:
             self._update_datapoints(
-                to_remove=["filename", "file"], to_concatenate=[["filename", "file"]]
+                to_remove=["filename", "field"], to_concatenate=[["filename", "field"]]
             )
-            domain = ["::".join([d.get("filename"), d.get("file")]) for d in y_defn]
+            domain = ["::".join([d.get("filename"), d.get("field")]) for d in y_defn]
         else:
             filenameOrField = keys[0]
-            to_remove = ["filename", "file"]
+            to_remove = ["filename", "field"]
             to_remove.remove(filenameOrField)
             self._update_datapoints(to_remove=to_remove)
 
             domain = list(variations[filenameOrField])
 
         stroke_dash_scale = self._set_optional_anchor_scale(
-            optional_anchors, "stroke_dash", domain
+            optional_anchors, concat_field, "stroke_dash", domain
         )
         self._fill_optional_anchor(optional_anchors, "stroke_dash", stroke_dash_scale)
 
-        shape_scale = self._set_optional_anchor_scale(optional_anchors, "shape", domain)
+        shape_scale = self._set_optional_anchor_scale(
+            optional_anchors, concat_field, "shape", domain
+        )
         self._fill_optional_anchor(optional_anchors, "shape", shape_scale)
 
     def _fill_color(self, optional_anchors: List[str]):
@@ -234,12 +239,13 @@ class VegaRenderer(Renderer):
             optional_anchors,
             "color",
             {
+                "field": "rev",
                 "scale": {
                     "domain": list(all_revs),
                     "range": self._optional_anchor_ranges.get("color", [])[
                         : len(all_revs)
                     ],
-                }
+                },
             },
         )
 
@@ -279,10 +285,10 @@ class VegaRenderer(Renderer):
         self.template.fill_anchor(name, value)
 
     def _set_optional_anchor_scale(
-        self, optional_anchors: List[str], name: str, domain: List[str]
+        self, optional_anchors: List[str], field: str, name: str, domain: List[str]
     ):
         if name not in optional_anchors:
-            return {"scale": {"domain": [], "range": []}}
+            return {"field": field, "scale": {"domain": [], "range": []}}
 
         full_range_values: List[Any] = self._optional_anchor_ranges.get(name, [])
         anchor_range_values = full_range_values.copy()
@@ -291,24 +297,25 @@ class VegaRenderer(Renderer):
         for domain_value in domain:
             if not anchor_range_values:
                 anchor_range_values = full_range_values.copy()
-            range_value = anchor_range_values.pop()
+            range_value = anchor_range_values.pop(0)
             self._optional_anchor_values[name][domain_value] = range_value
             anchor_range.append(range_value)
 
-        return {"scale": {"domain": domain, "range": anchor_range}}
+        return {"field": field, "scale": {"domain": domain, "range": anchor_range}}
 
     def _update_datapoints(
         self,
-        to_remove: Optional[List[str]] = None,
         to_concatenate: Optional[List[List[str]]] = None,
+        to_remove: Optional[List[str]] = None,
     ):
-        if to_concatenate:
-            for datapoint in self.datapoints:
-                for keys in to_concatenate:
-                    concat_key = "::".join(keys)
-                    datapoint[concat_key] = "::".join([datapoint.get(k) for k in keys])
+        if to_concatenate is None:
+            to_concatenate = []
+        if to_remove is None:
+            to_remove = []
 
-        if to_remove:
-            for datapoint in self.datapoints:
-                for concat_key in to_remove:
-                    datapoint.pop(concat_key, None)
+        for datapoint in self.datapoints:
+            for keys in to_concatenate:
+                concat_key = "::".join(keys)
+                datapoint[concat_key] = "::".join([datapoint.get(k) for k in keys])
+            for key in to_remove:
+                datapoint.pop(key, None)

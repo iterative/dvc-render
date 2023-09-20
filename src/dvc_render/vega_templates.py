@@ -504,7 +504,6 @@ class SmoothLinearTemplate(Template):
             },
             "color": Template.anchor("color"),
             "strokeDash": Template.anchor("stroke_dash"),
-            "shape": Template.anchor("shape"),
         },
         "layer": [
             {
@@ -640,7 +639,6 @@ class SimpleLinearTemplate(Template):
             },
             "color": Template.anchor("color"),
             "strokeDash": Template.anchor("stroke_dash"),
-            "shape": Template.anchor("shape"),
         },
     }
 
