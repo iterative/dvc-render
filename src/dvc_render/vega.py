@@ -89,7 +89,8 @@ class VegaRenderer(Renderer):
         self.properties.setdefault("y_label", self.properties.get("y"))
         self.properties.setdefault("data", self.datapoints)
 
-        self._process_optional_anchors(split_anchors)
+        varied_keys = self._process_optional_anchors(split_anchors)
+        self._update_datapoints(varied_keys)
 
         names = ["title", "x", "y", "x_label", "y_label", "data"]
         for name in names:
@@ -188,16 +189,16 @@ class VegaRenderer(Renderer):
             if self.template.has_anchor(anchor)
         ]
         if not optional_anchors:
-            return
+            return None
 
         y_defn = self.properties.get("anchors_y_defn", [])
         is_single_source = len(y_defn) <= 1
 
         if is_single_source:
             self._process_single_source_plot(split_anchors, optional_anchors)
-            return
+            return []
 
-        self._process_multi_source_plot(split_anchors, optional_anchors, y_defn)
+        return self._process_multi_source_plot(split_anchors, optional_anchors, y_defn)
 
     def _process_single_source_plot(
         self, split_anchors: List[str], optional_anchors: List[str]
@@ -209,8 +210,6 @@ class VegaRenderer(Renderer):
         )
         for anchor in optional_anchors:
             self.template.fill_anchor(anchor, {})
-
-        self._update_datapoints([])
 
     def _process_multi_source_plot(
         self,
@@ -224,7 +223,7 @@ class VegaRenderer(Renderer):
         self._fill_optional_multi_source_anchors(
             split_anchors, optional_anchors, varied_keys, domain
         )
-        self._update_datapoints(varied_keys)
+        return varied_keys
 
     def _fill_optional_multi_source_anchors(
         self,
@@ -384,7 +383,10 @@ class VegaRenderer(Renderer):
             "legend": {"symbolFillColor": "transparent", "symbolStrokeColor": "grey"},
         }
 
-    def _update_datapoints(self, varied_keys: List[str]):
+    def _update_datapoints(self, varied_keys: Optional[List[str]] = None):
+        if varied_keys is None:
+            return
+
         if len(varied_keys) == 2:
             to_concatenate = varied_keys
             to_remove = varied_keys
