@@ -631,7 +631,11 @@ def test_partial_filled_template(
     }
 
     expected_split = {
-        Template.anchor("data"): _get_expected_datapoints(datapoints, expected_dp_keys)
+        Template.anchor("data"): _get_expected_datapoints(datapoints, expected_dp_keys),
+        Template.anchor("color"): {
+            "field": "rev",
+            "scale": {"domain": ["B"], "range": ["#945dd6"]},
+        },
     }
 
     split_anchors = [
@@ -647,7 +651,7 @@ def test_partial_filled_template(
 
     for anchor in split_anchors:
         assert anchor in content
-    assert split == expected_split
+    assert split["anchor_definitions"] == expected_split
 
 
 def _get_expected_datapoints(

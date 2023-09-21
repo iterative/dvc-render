@@ -125,7 +125,7 @@ class VegaRenderer(Renderer):
         content = self.get_filled_template(
             split_anchors=["data", "color", "stroke_dash", "shape"], strict=True
         )
-        return content, self._split_content
+        return content, {"anchor_definitions": self._split_content}
 
     def partial_html(self, **kwargs) -> str:
         return self.get_filled_template()  # type: ignore
@@ -191,6 +191,8 @@ class VegaRenderer(Renderer):
         if not optional_anchors:
             return None
 
+        self._fill_color(split_anchors, optional_anchors)
+
         y_defn = self.properties.get("anchors_y_defn", [])
         is_single_source = len(y_defn) <= 1
 
@@ -203,7 +205,6 @@ class VegaRenderer(Renderer):
     def _process_single_source_plot(
         self, split_anchors: List[str], optional_anchors: List[str]
     ):
-        self._fill_color(split_anchors, optional_anchors)
         self._fill_optional_anchor(split_anchors, optional_anchors, "group_by", ["rev"])
         self._fill_optional_anchor(
             split_anchors, optional_anchors, "pivot_field", "datum.rev"
@@ -232,8 +233,6 @@ class VegaRenderer(Renderer):
         varied_keys: List[str],
         domain: List[str],
     ):
-        self._fill_color(split_anchors, optional_anchors)
-
         if not optional_anchors:
             return
 
@@ -263,19 +262,12 @@ class VegaRenderer(Renderer):
 
     def _fill_color(self, split_anchors: List[str], optional_anchors: List[str]):
         all_revs = self.properties.get("anchor_revs", [])
-        self._fill_optional_anchor(
+        self._fill_optional_anchor_mapping(
             split_anchors,
             optional_anchors,
+            "rev",
             "color",
-            {
-                "field": "rev",
-                "scale": {
-                    "domain": list(all_revs),
-                    "range": self._optional_anchor_ranges.get("color", [])[
-                        : len(all_revs)
-                    ],
-                },
-            },
+            all_revs,
         )
 
     def _collect_variations(
@@ -377,10 +369,16 @@ class VegaRenderer(Renderer):
             range_value = anchor_range_values.pop(0)
             anchor_range.append(range_value)
 
+        legend = (
+            {"legend": {"symbolFillColor": "transparent", "symbolStrokeColor": "grey"}}
+            if name != "color"
+            else {}
+        )
+
         return {
             "field": field,
             "scale": {"domain": domain, "range": anchor_range},
-            "legend": {"symbolFillColor": "transparent", "symbolStrokeColor": "grey"},
+            **legend,
         }
 
     def _update_datapoints(self, varied_keys: Optional[List[str]] = None):
