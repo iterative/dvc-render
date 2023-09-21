@@ -263,3 +263,261 @@ def test_fill_anchor_in_string(tmp_dir):
     assert filled["transform"][1]["calculate"] == "pow(datum.lab - datum.SR,2)"
     assert filled["encoding"]["x"]["field"] == x
     assert filled["encoding"]["y"]["field"] == y
+    
+@pytest.mark.parametrize(
+    ",".join(
+        [
+            "datapoints",
+            "y",
+            "anchors_y_defn",
+            "expected_dp_keys",
+            "color_encoding",
+            "stroke_dash_encoding",
+            "pivot_field",
+            "group_by",
+        ]
+    ),
+    (
+        (
+            [
+                {
+                    "rev": "B",
+                    "acc": "0.05",
+                    "filename": "test",
+                    "field": "acc",
+                    "step": 1,
+                },
+                {
+                    "rev": "B",
+                    "acc": "0.1",
+                    "filename": "test",
+                    "field": "acc",
+                    "step": 2,
+                },
+            ],
+            "acc",
+            [{"filename": "test", "field": "acc"}],
+            ["rev", "acc", "step"],
+            {
+                "field": "rev",
+                "scale": {"domain": ["B"], "range": ["#945dd6"]},
+            },
+            {},
+            "datum.rev",
+            ["rev"],
+        ),
+        (
+            [
+                {
+                    "rev": "B",
+                    "acc": "0.05",
+                    "filename": "test",
+                    "field": "acc",
+                    "step": 1,
+                },
+                {
+                    "rev": "B",
+                    "acc": "0.1",
+                    "filename": "test",
+                    "field": "acc",
+                    "step": 2,
+                },
+                {
+                    "rev": "B",
+                    "acc": "0.04",
+                    "filename": "train",
+                    "field": "acc",
+                    "step": 1,
+                },
+                {
+                    "rev": "B",
+                    "acc": "0.09",
+                    "filename": "train",
+                    "field": "acc",
+                    "step": 2,
+                },
+            ],
+            "acc",
+            [
+                {"filename": "test", "field": "acc"},
+                {"filename": "train", "field": "acc"},
+            ],
+            ["rev", "acc", "step", "filename"],
+            {
+                "field": "rev",
+                "scale": {"domain": ["B"], "range": ["#945dd6"]},
+            },
+            {
+                "field": "filename",
+                "scale": {"domain": ["test", "train"], "range": [[1, 0], [8, 8]]},
+                "legend": {
+                    "symbolFillColor": "transparent",
+                    "symbolStrokeColor": "grey",
+                },
+            },
+            "datum.rev + '::' + datum.filename",
+            ["rev", "filename"],
+        ),
+        (
+            [
+                {
+                    "rev": "B",
+                    "dvc_inferred_y_value": "0.05",
+                    "filename": "test",
+                    "field": "acc",
+                    "step": 1,
+                },
+                {
+                    "rev": "B",
+                    "dvc_inferred_y_value": "0.1",
+                    "filename": "test",
+                    "field": "acc",
+                    "step": 2,
+                },
+                {
+                    "rev": "B",
+                    "dvc_inferred_y_value": "0.04",
+                    "filename": "train",
+                    "field": "acc_norm",
+                    "step": 1,
+                },
+                {
+                    "rev": "B",
+                    "dvc_inferred_y_value": "0.09",
+                    "filename": "test",
+                    "field": "acc_norm",
+                    "step": 2,
+                },
+            ],
+            "dvc_inferred_y_value",
+            [
+                {"filename": "test", "field": "acc"},
+                {"filename": "test", "field": "acc_norm"},
+            ],
+            ["rev", "dvc_inferred_y_value", "step", "field"],
+            {
+                "field": "rev",
+                "scale": {"domain": ["B"], "range": ["#945dd6"]},
+            },
+            {
+                "field": "field",
+                "scale": {"domain": ["acc", "acc_norm"], "range": [[1, 0], [8, 8]]},
+                "legend": {
+                    "symbolFillColor": "transparent",
+                    "symbolStrokeColor": "grey",
+                },
+            },
+            "datum.rev + '::' + datum.field",
+            ["rev", "field"],
+        ),
+        (
+            [
+                {
+                    "rev": "B",
+                    "dvc_inferred_y_value": "0.05",
+                    "filename": "test",
+                    "field": "acc",
+                    "step": 1,
+                },
+                {
+                    "rev": "B",
+                    "dvc_inferred_y_value": "0.1",
+                    "filename": "test",
+                    "field": "acc",
+                    "step": 2,
+                },
+                {
+                    "rev": "B",
+                    "dvc_inferred_y_value": "0.04",
+                    "filename": "train",
+                    "field": "acc",
+                    "step": 1,
+                },
+                {
+                    "rev": "B",
+                    "dvc_inferred_y_value": "0.09",
+                    "filename": "train",
+                    "field": "acc",
+                    "step": 2,
+                },
+                {
+                    "rev": "B",
+                    "dvc_inferred_y_value": "0.02",
+                    "filename": "test",
+                    "field": "acc_norm",
+                    "step": 1,
+                },
+                {
+                    "rev": "B",
+                    "dvc_inferred_y_value": "0.07",
+                    "filename": "test",
+                    "field": "acc_norm",
+                    "step": 2,
+                },
+            ],
+            "dvc_inferred_y_value",
+            [
+                {"filename": "test", "field": "acc_norm"},
+                {"filename": "test", "field": "acc"},
+                {"filename": "train", "field": "acc"},
+            ],
+            ["rev", "dvc_inferred_y_value", "step", "filename::field"],
+            {
+                "field": "rev",
+                "scale": {"domain": ["B"], "range": ["#945dd6"]},
+            },
+            {
+                "field": "filename::field",
+                "scale": {
+                    "domain": ["test::acc", "test::acc_norm", "train::acc"],
+                    "range": [[1, 0], [8, 8], [8, 4]],
+                },
+                "legend": {
+                    "symbolFillColor": "transparent",
+                    "symbolStrokeColor": "grey",
+                },
+            },
+            "datum.rev + '::' + datum.filename + '::' + datum.field",
+            ["rev", "filename", "field"],
+        ),
+    ),
+)
+def test_optional_anchors_linear(
+    datapoints,
+    y,
+    anchors_y_defn,
+    expected_dp_keys,
+    color_encoding,
+    stroke_dash_encoding,
+    pivot_field,
+    group_by,
+):  # pylint: disable=too-many-arguments
+    props = {
+        "template": "linear",
+        "x": "step",
+        "y": y,
+        "anchor_revs": ["B"],
+        "anchors_y_defn": anchors_y_defn,
+    }
+
+    expected_datapoints = []
+    for datapoint in datapoints:
+        expected_datapoint = {}
+        for key in expected_dp_keys:
+            if key == "filename::field":
+                expected_datapoint[
+                    key
+                ] = f"{datapoint['filename']}::{datapoint['field']}"
+            else:
+                expected_datapoint[key] = datapoint.get(key)
+        expected_datapoints.append(expected_datapoint)
+
+    plot_content = VegaRenderer(datapoints, "foo", **props).get_filled_template(
+        as_string=False
+    )
+
+    assert plot_content["data"]["values"] == expected_datapoints
+    assert plot_content["encoding"]["color"] == color_encoding
+    assert plot_content["encoding"]["strokeDash"] == stroke_dash_encoding
+    assert plot_content["layer"][3]["transform"][0]["calculate"] == pivot_field
+    assert plot_content["layer"][0]["transform"][0]["groupby"] == group_by

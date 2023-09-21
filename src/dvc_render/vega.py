@@ -198,7 +198,7 @@ class VegaRenderer(Renderer):
                 skip_anchors, optional_anchors, "group_by", ["rev"]
             )
             self._fill_optional_anchor(
-                skip_anchors, optional_anchors, "pivot_field", "rev"
+                skip_anchors, optional_anchors, "pivot_field", "datum.rev"
             )
             for anchor in optional_anchors:
                 self.template.fill_anchor(anchor, {})
@@ -229,6 +229,8 @@ class VegaRenderer(Renderer):
         else:
             filenameOrField = varied_keys[0]
             domain = list(variations[filenameOrField])
+
+        domain.sort()
 
         stroke_dash_scale = self._set_optional_anchor_scale(
             optional_anchors, concat_field, "stroke_dash", domain
@@ -269,25 +271,25 @@ class VegaRenderer(Renderer):
             for key in ["filename", "field"]:
                 variations[key].add(defn.get(key, None))
 
-        valuesMatchVariations = []
-        lessValuesThanVariations = []
+        values_match_variations = []
+        less_values_than_variations = []
 
         for filenameOrField, valueSet in variations.items():
             num_values = len(valueSet)
             if num_values == 1:
                 continue
             if num_values == len(y_defn):
-                valuesMatchVariations.append(filenameOrField)
+                values_match_variations.append(filenameOrField)
                 continue
-            lessValuesThanVariations.append(filenameOrField)
+            less_values_than_variations.append(filenameOrField)
 
-        if valuesMatchVariations:
-            valuesMatchVariations.extend(lessValuesThanVariations)
-            valuesMatchVariations.sort(reverse=True)
-            return valuesMatchVariations, variations
+        if values_match_variations:
+            values_match_variations.extend(less_values_than_variations)
+            values_match_variations.sort(reverse=True)
+            return values_match_variations, variations
 
-        lessValuesThanVariations.sort(reverse=True)
-        return lessValuesThanVariations, variations
+        less_values_than_variations.sort(reverse=True)
+        return less_values_than_variations, variations
 
     def _fill_optional_anchor(
         self,
