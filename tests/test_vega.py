@@ -1,4 +1,5 @@
 import json
+from typing import Any, Dict, List
 
 import pytest
 
@@ -500,7 +501,159 @@ def test_optional_anchors_linear(
         "anchors_y_defn": anchors_y_defn,
     }
 
-    expected_datapoints = []
+    expected_datapoints = _get_expected_datapoints(datapoints, expected_dp_keys)
+
+    renderer = VegaRenderer(datapoints, "foo", **props)
+    plot_content = renderer.get_filled_template(as_string=False)
+
+    assert plot_content["data"]["values"] == expected_datapoints
+    assert plot_content["encoding"]["color"] == color_encoding
+    assert plot_content["encoding"]["strokeDash"] == stroke_dash_encoding
+    assert plot_content["layer"][3]["transform"][0]["calculate"] == pivot_field
+    assert plot_content["layer"][0]["transform"][0]["groupby"] == group_by
+
+
+@pytest.mark.parametrize(
+    "datapoints,y,anchors_y_defn,expected_dp_keys,stroke_dash_encoding",
+    (
+        (
+            [
+                {
+                    "rev": "B",
+                    "acc": "0.05",
+                    "filename": "test",
+                    "field": "acc",
+                    "step": 1,
+                },
+                {
+                    "rev": "B",
+                    "acc": "0.1",
+                    "filename": "test",
+                    "field": "acc",
+                    "step": 2,
+                },
+            ],
+            "acc",
+            [{"filename": "test", "field": "acc"}],
+            ["rev", "acc", "step"],
+            {},
+        ),
+        (
+            [
+                {
+                    "rev": "B",
+                    "dvc_inferred_y_value": "0.05",
+                    "filename": "test",
+                    "field": "acc",
+                    "step": 1,
+                },
+                {
+                    "rev": "B",
+                    "dvc_inferred_y_value": "0.04",
+                    "filename": "train",
+                    "field": "acc_norm",
+                    "step": 1,
+                },
+            ],
+            "dvc_inferred_y_value",
+            [
+                {"filename": "test", "field": "acc"},
+                {"filename": "test", "field": "acc_norm"},
+            ],
+            ["rev", "dvc_inferred_y_value", "step", "field"],
+            {
+                "field": "field",
+                "scale": {"domain": ["acc", "acc_norm"], "range": [[1, 0], [8, 8]]},
+                "legend": {
+                    "symbolFillColor": "transparent",
+                    "symbolStrokeColor": "grey",
+                },
+            },
+        ),
+        (
+            [
+                {
+                    "rev": "B",
+                    "dvc_inferred_y_value": "0.05",
+                    "filename": "test",
+                    "field": "acc",
+                    "step": 1,
+                },
+                {
+                    "rev": "B",
+                    "dvc_inferred_y_value": "0.04",
+                    "filename": "train",
+                    "field": "acc",
+                    "step": 1,
+                },
+                {
+                    "rev": "B",
+                    "dvc_inferred_y_value": "0.02",
+                    "filename": "test",
+                    "field": "acc_norm",
+                    "step": 1,
+                },
+            ],
+            "dvc_inferred_y_value",
+            [
+                {"filename": "test", "field": "acc_norm"},
+                {"filename": "test", "field": "acc"},
+                {"filename": "train", "field": "acc"},
+            ],
+            ["rev", "dvc_inferred_y_value", "step", "filename::field"],
+            {
+                "field": "filename::field",
+                "scale": {
+                    "domain": ["test::acc", "test::acc_norm", "train::acc"],
+                    "range": [[1, 0], [8, 8], [8, 4]],
+                },
+                "legend": {
+                    "symbolFillColor": "transparent",
+                    "symbolStrokeColor": "grey",
+                },
+            },
+        ),
+    ),
+)
+def test_partial_filled_template(
+    datapoints,
+    y,
+    anchors_y_defn,
+    expected_dp_keys,
+    stroke_dash_encoding,
+):
+    props = {
+        "template": "linear",
+        "x": "step",
+        "y": y,
+        "anchor_revs": ["B"],
+        "anchors_y_defn": anchors_y_defn,
+    }
+
+    expected_split = {
+        Template.anchor("data"): _get_expected_datapoints(datapoints, expected_dp_keys)
+    }
+
+    split_anchors = [
+        Template.anchor("color"),
+        Template.anchor("data"),
+    ]
+    if len(anchors_y_defn) > 1:
+        split_anchors.append(Template.anchor("stroke_dash"))
+        expected_split[Template.anchor("stroke_dash")] = stroke_dash_encoding
+
+    renderer = VegaRenderer(datapoints, "foo", **props)
+    content, split = renderer.get_partial_filled_template()
+
+    for anchor in split_anchors:
+        assert anchor in content
+    assert split == expected_split
+
+
+def _get_expected_datapoints(
+    datapoints: List[Dict[str, Any]], expected_dp_keys: List[str]
+):
+    expected_datapoints: List[Dict[str, Any]] = []
     for datapoint in datapoints:
         expected_datapoint = {}
         for key in expected_dp_keys:
@@ -509,15 +662,10 @@ def test_optional_anchors_linear(
                     key
                 ] = f"{datapoint['filename']}::{datapoint['field']}"
             else:
-                expected_datapoint[key] = datapoint.get(key)
+                value = datapoint.get(key)
+                if value is None:
+                    continue
+                expected_datapoint[key] = value
         expected_datapoints.append(expected_datapoint)
 
-    plot_content = VegaRenderer(datapoints, "foo", **props).get_filled_template(
-        as_string=False
-    )
-
-    assert plot_content["data"]["values"] == expected_datapoints
-    assert plot_content["encoding"]["color"] == color_encoding
-    assert plot_content["encoding"]["strokeDash"] == stroke_dash_encoding
-    assert plot_content["layer"][3]["transform"][0]["calculate"] == pivot_field
-    assert plot_content["layer"][0]["transform"][0]["groupby"] == group_by
+    return datapoints
