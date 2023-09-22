@@ -14,6 +14,7 @@ FIELD_SEPARATOR = "::"
 FILENAME = "filename"
 FIELD = "field"
 FILENAME_FIELD = [FILENAME, FIELD]
+CONCAT_FIELDS = FIELD_SEPARATOR.join(FILENAME_FIELD)
 
 
 class VegaRenderer(Renderer):
@@ -216,6 +217,16 @@ class VegaRenderer(Renderer):
             split_anchors, optional_anchors, y_definitions
         )
 
+    def _fill_color(self, split_anchors: List[str], optional_anchors: List[str]):
+        all_revs = self.get_revs()
+        self._fill_optional_anchor_mapping(
+            split_anchors,
+            optional_anchors,
+            "rev",
+            "color",
+            all_revs,
+        )
+
     def _process_single_source_plot(
         self, split_anchors: List[str], optional_anchors: List[str]
     ):
@@ -233,12 +244,44 @@ class VegaRenderer(Renderer):
         y_definitions: List[Dict[str, str]],
     ):
         varied_keys, varied_values = self._collect_variations(y_definitions)
-        domain = self._get_domain(varied_keys, varied_values, y_definitions)
+        domain = self._get_domain(varied_keys, varied_values)
 
         self._fill_optional_multi_source_anchors(
             split_anchors, optional_anchors, varied_keys, domain
         )
         return varied_keys
+
+    def _collect_variations(
+        self, y_definitions: List[Dict[str, str]]
+    ) -> Tuple[List[str], Dict[str, set]]:
+        varied_values = defaultdict(set)
+        for defn in y_definitions:
+            for key in FILENAME_FIELD:
+                varied_values[key].add(defn.get(key, None))
+            varied_values[CONCAT_FIELDS].add(
+                FIELD_SEPARATOR.join([defn.get(FILENAME, ""), defn.get(FIELD, "")])
+            )
+
+        values_match_variations = []
+        less_values_than_variations = []
+
+        for filename_or_field in FILENAME_FIELD:
+            value_set = varied_values[filename_or_field]
+            num_values = len(value_set)
+            if num_values == 1:
+                continue
+            if num_values == len(y_definitions):
+                values_match_variations.append(filename_or_field)
+                continue
+            less_values_than_variations.append(filename_or_field)
+
+        if values_match_variations:
+            values_match_variations.extend(less_values_than_variations)
+            values_match_variations.sort(reverse=True)
+            return values_match_variations, varied_values
+
+        less_values_than_variations.sort(reverse=True)
+        return less_values_than_variations, varied_values
 
     def _fill_optional_multi_source_anchors(
         self,
@@ -274,44 +317,6 @@ class VegaRenderer(Renderer):
                 split_anchors, optional_anchors, concat_field, anchor, domain
             )
 
-    def _fill_color(self, split_anchors: List[str], optional_anchors: List[str]):
-        all_revs = self.properties.get("anchor_revs", [])
-        self._fill_optional_anchor_mapping(
-            split_anchors,
-            optional_anchors,
-            "rev",
-            "color",
-            all_revs,
-        )
-
-    def _collect_variations(
-        self, y_definitions: List[Dict[str, str]]
-    ) -> Tuple[List[str], Dict[str, set]]:
-        varied_values = defaultdict(set)
-        for defn in y_definitions:
-            for key in FILENAME_FIELD:
-                varied_values[key].add(defn.get(key, None))
-
-        values_match_variations = []
-        less_values_than_variations = []
-
-        for filename_or_field, value_set in varied_values.items():
-            num_values = len(value_set)
-            if num_values == 1:
-                continue
-            if num_values == len(y_definitions):
-                values_match_variations.append(filename_or_field)
-                continue
-            less_values_than_variations.append(filename_or_field)
-
-        if values_match_variations:
-            values_match_variations.extend(less_values_than_variations)
-            values_match_variations.sort(reverse=True)
-            return values_match_variations, varied_values
-
-        less_values_than_variations.sort(reverse=True)
-        return less_values_than_variations, varied_values
-
     def _fill_optional_anchor(
         self,
         split_anchors: List[str],
@@ -329,17 +334,9 @@ class VegaRenderer(Renderer):
 
         self.template.fill_anchor(name, value)
 
-    def _get_domain(
-        self,
-        varied_keys: List[str],
-        varied_values: Dict[str, set],
-        y_definitions: List[Dict[str, str]],
-    ):
+    def _get_domain(self, varied_keys: List[str], varied_values: Dict[str, set]):
         if len(varied_keys) == 2:
-            domain = [
-                FIELD_SEPARATOR.join([d.get(FILENAME, ""), d.get(FIELD, "")])
-                for d in y_definitions
-            ]
+            domain = list(varied_values[CONCAT_FIELDS])
         else:
             filename_or_field = varied_keys[0]
             domain = list(varied_values[filename_or_field])
