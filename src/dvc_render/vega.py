@@ -243,8 +243,7 @@ class VegaRenderer(Renderer):
         optional_anchors: List[str],
         y_definitions: List[Dict[str, str]],
     ):
-        varied_keys, varied_values = self._collect_variations(y_definitions)
-        domain = self._get_domain(varied_keys, varied_values)
+        varied_keys, domain = self._collect_variations(y_definitions)
 
         self._fill_optional_multi_source_anchors(
             split_anchors, optional_anchors, varied_keys, domain
@@ -253,7 +252,7 @@ class VegaRenderer(Renderer):
 
     def _collect_variations(
         self, y_definitions: List[Dict[str, str]]
-    ) -> Tuple[List[str], Dict[str, set]]:
+    ) -> Tuple[List[str], List[str]]:
         varied_values = defaultdict(set)
         for defn in y_definitions:
             for key in FILENAME_FIELD:
@@ -262,26 +261,18 @@ class VegaRenderer(Renderer):
                 FIELD_SEPARATOR.join([defn.get(FILENAME, ""), defn.get(FIELD, "")])
             )
 
-        values_match_variations = []
-        less_values_than_variations = []
+        varied_keys = []
 
         for filename_or_field in FILENAME_FIELD:
             value_set = varied_values[filename_or_field]
             num_values = len(value_set)
             if num_values == 1:
                 continue
-            if num_values == len(y_definitions):
-                values_match_variations.append(filename_or_field)
-                continue
-            less_values_than_variations.append(filename_or_field)
+            varied_keys.append(filename_or_field)
 
-        if values_match_variations:
-            values_match_variations.extend(less_values_than_variations)
-            values_match_variations.sort(reverse=True)
-            return values_match_variations, varied_values
+        domain = self._get_domain(varied_keys, varied_values)
 
-        less_values_than_variations.sort(reverse=True)
-        return less_values_than_variations, varied_values
+        return varied_keys, domain
 
     def _fill_optional_multi_source_anchors(
         self,
