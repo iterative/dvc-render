@@ -270,7 +270,7 @@ def test_fill_anchor_in_string(tmp_dir):
         [
             "datapoints",
             "y",
-            "anchors_y_defn",
+            "anchors_y_definitions",
             "expected_dp_keys",
             "color_encoding",
             "stroke_dash_encoding",
@@ -486,7 +486,7 @@ def test_fill_anchor_in_string(tmp_dir):
 def test_optional_anchors_linear(
     datapoints,
     y,
-    anchors_y_defn,
+    anchors_y_definitions,
     expected_dp_keys,
     color_encoding,
     stroke_dash_encoding,
@@ -498,7 +498,7 @@ def test_optional_anchors_linear(
         "x": "step",
         "y": y,
         "anchor_revs": ["B"],
-        "anchors_y_defn": anchors_y_defn,
+        "anchors_y_definitions": anchors_y_definitions,
     }
 
     expected_datapoints = _get_expected_datapoints(datapoints, expected_dp_keys)
@@ -514,7 +514,7 @@ def test_optional_anchors_linear(
 
 
 @pytest.mark.parametrize(
-    "datapoints,y,anchors_y_defn,expected_dp_keys,stroke_dash_encoding",
+    "datapoints,y,anchors_y_definitions,expected_dp_keys,stroke_dash_encoding",
     (
         (
             [
@@ -618,7 +618,7 @@ def test_optional_anchors_linear(
 def test_partial_filled_template(
     datapoints,
     y,
-    anchors_y_defn,
+    anchors_y_definitions,
     expected_dp_keys,
     stroke_dash_encoding,
 ):
@@ -627,7 +627,7 @@ def test_partial_filled_template(
         "x": "step",
         "y": y,
         "anchor_revs": ["B"],
-        "anchors_y_defn": anchors_y_defn,
+        "anchors_y_definitions": anchors_y_definitions,
     }
 
     expected_split = {
@@ -642,7 +642,7 @@ def test_partial_filled_template(
         Template.anchor("color"),
         Template.anchor("data"),
     ]
-    if len(anchors_y_defn) > 1:
+    if len(anchors_y_definitions) > 1:
         split_anchors.append(Template.anchor("stroke_dash"))
         expected_split[Template.anchor("stroke_dash")] = stroke_dash_encoding
 
