@@ -65,7 +65,7 @@ class VegaRenderer(Renderer):
             "shape": ["square", "circle", "triangle", "diamond"],
         }
 
-        self._split_content: Dict[str, Any] = {}
+        self._split_content: Dict[str, str] = {}
 
     def get_filled_template(
         self,
@@ -129,7 +129,12 @@ class VegaRenderer(Renderer):
         Returns a partially filled template along with the split out anchor content
         """
         content = self.get_filled_template(
-            split_anchors=["data", "color", "stroke_dash", "shape"], strict=True
+            split_anchors=[
+                "data",
+                "color",
+                "stroke_dash",
+                "shape",
+            ]  # add y_label, x_label so we can truncate, strict=True
         )
         return content, {"anchor_definitions": self._split_content}
 
@@ -405,4 +410,4 @@ class VegaRenderer(Renderer):
                 datapoint.pop(key, None)
 
     def _set_split_content(self, name: str, value: Any):
-        self._split_content[Template.anchor(name)] = value
+        self._split_content[Template.anchor(name)] = json.dumps(value)

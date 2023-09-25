@@ -651,7 +651,8 @@ def test_partial_filled_template(
 
     for anchor in split_anchors:
         assert anchor in content
-    assert split["anchor_definitions"] == expected_split
+    for key, value in split["anchor_definitions"].items():
+        assert json.loads(value) == expected_split[key]
 
 
 def _get_expected_datapoints(
