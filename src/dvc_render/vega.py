@@ -134,6 +134,8 @@ class VegaRenderer(Renderer):
                 "color",
                 "stroke_dash",
                 "shape",
+                "x_label",
+                "y_label",
             ]  # add y_label, x_label so we can truncate, strict=True
         )
         return content, {"anchor_definitions": self._split_content}

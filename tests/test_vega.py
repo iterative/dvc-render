@@ -636,6 +636,8 @@ def test_partial_filled_template(
             "field": "rev",
             "scale": {"domain": ["B"], "range": ["#945dd6"]},
         },
+        Template.anchor("x_label"): "step",
+        Template.anchor("y_label"): y,
     }
 
     split_anchors = [
