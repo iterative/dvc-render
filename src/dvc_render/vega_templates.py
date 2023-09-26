@@ -200,7 +200,7 @@ class ConfusionTemplate(Template):
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
         "data": {"values": Template.anchor("data")},
         "title": Template.anchor("title"),
-        "facet": {"field": "rev", "type": "nominal"},
+        "facet": {"column": {"field": "rev"}, "row": {"field": Template.anchor("row")}},
         "spec": {
             "transform": [
                 {
@@ -209,13 +209,13 @@ class ConfusionTemplate(Template):
                 },
                 {
                     "impute": "xy_count",
-                    "groupby": ["rev", Template.anchor("y")],
+                    "groupby": Template.anchor("group_by_y"),
                     "key": Template.anchor("x"),
                     "value": 0,
                 },
                 {
                     "impute": "xy_count",
-                    "groupby": ["rev", Template.anchor("x")],
+                    "groupby": Template.anchor("group_by_x"),
                     "key": Template.anchor("y"),
                     "value": 0,
                 },
@@ -310,7 +310,7 @@ class NormalizedConfusionTemplate(Template):
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
         "data": {"values": Template.anchor("data")},
         "title": Template.anchor("title"),
-        "facet": {"field": "rev", "type": "nominal"},
+        "facet": {"column": {"field": "rev"}, "row": {"field": Template.anchor("row")}},
         "spec": {
             "transform": [
                 {
@@ -325,7 +325,7 @@ class NormalizedConfusionTemplate(Template):
                 },
                 {
                     "impute": "xy_count",
-                    "groupby": ["rev", Template.anchor("x")],
+                    "groupby": Template.anchor("group_by_x"),
                     "key": Template.anchor("y"),
                     "value": 0,
                 },

@@ -199,6 +199,8 @@ class VegaRenderer(Renderer):
             for anchor in [
                 "row",
                 "group_by",
+                "group_by_x",
+                "group_by_y",
                 "pivot_field",
                 "color",
                 "stroke_dash",
@@ -235,7 +237,7 @@ class VegaRenderer(Renderer):
     def _process_single_source_plot(
         self, split_anchors: List[str], optional_anchors: List[str]
     ):
-        self._fill_optional_anchor(split_anchors, optional_anchors, "group_by", ["rev"])
+        self._fill_group_by(split_anchors, optional_anchors, ["rev"])
         self._fill_optional_anchor(
             split_anchors, optional_anchors, "pivot_field", "datum.rev"
         )
@@ -290,9 +292,8 @@ class VegaRenderer(Renderer):
             return
 
         grouped_keys = ["rev", *varied_keys]
-        self._fill_optional_anchor(
-            split_anchors, optional_anchors, "group_by", grouped_keys
-        )
+        self._fill_group_by(split_anchors, optional_anchors, grouped_keys)
+
         self._fill_optional_anchor(
             split_anchors,
             optional_anchors,
@@ -312,6 +313,28 @@ class VegaRenderer(Renderer):
             self._fill_optional_anchor_mapping(
                 split_anchors, optional_anchors, concat_field, anchor, domain
             )
+
+    def _fill_group_by(
+        self,
+        split_anchors: List[str],
+        optional_anchors: List[str],
+        grouped_keys: List[str],
+    ):
+        self._fill_optional_anchor(
+            split_anchors, optional_anchors, "group_by", grouped_keys
+        )
+        self._fill_optional_anchor(
+            split_anchors,
+            optional_anchors,
+            "group_by_x",
+            [*grouped_keys, self.properties.get("x")],
+        )
+        self._fill_optional_anchor(
+            split_anchors,
+            optional_anchors,
+            "group_by_y",
+            [*grouped_keys, self.properties.get("y")],
+        )
 
     def _fill_optional_anchor(
         self,
