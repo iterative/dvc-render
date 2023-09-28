@@ -436,4 +436,6 @@ class VegaRenderer(Renderer):
                 datapoint.pop(key, None)
 
     def _set_split_content(self, name: str, value: Any):
-        self._split_content[Template.anchor(name)] = json.dumps(value)
+        self._split_content[Template.anchor(name)] = (
+            value if isinstance(value, str) else json.dumps(value)
+        )
