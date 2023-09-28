@@ -130,10 +130,11 @@ class VegaRenderer(Renderer):
         """
         content = self.get_filled_template(
             split_anchors=[
-                "data",
                 "color",
-                "stroke_dash",
+                "data",
                 "shape",
+                "stroke_dash",
+                "title",
                 "x_label",
                 "y_label",
             ],

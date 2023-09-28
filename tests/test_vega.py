@@ -622,12 +622,14 @@ def test_partial_filled_template(
     expected_dp_keys,
     stroke_dash_encoding,
 ):
+    title = f"{y} by step"
     props = {
         "template": "linear",
         "x": "step",
         "y": y,
         "anchor_revs": ["B"],
         "anchors_y_definitions": anchors_y_definitions,
+        "title": title,
     }
 
     expected_split = {
@@ -638,6 +640,7 @@ def test_partial_filled_template(
         },
         Template.anchor("x_label"): "step",
         Template.anchor("y_label"): y,
+        Template.anchor("title"): title,
     }
 
     split_anchors = [
@@ -654,7 +657,11 @@ def test_partial_filled_template(
     for anchor in split_anchors:
         assert anchor in content
     for key, value in split["anchor_definitions"].items():
-        if key in [Template.anchor("x_label"), Template.anchor("y_label")]:
+        if key in [
+            Template.anchor("x_label"),
+            Template.anchor("y_label"),
+            Template.anchor("title"),
+        ]:
             assert value == expected_split[key]
             continue
         assert json.loads(value) == expected_split[key]
