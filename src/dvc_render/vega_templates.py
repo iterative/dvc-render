@@ -145,6 +145,7 @@ class BarHorizontalSortedTemplate(Template):
         "width": 300,
         "height": 300,
         "mark": {"type": "bar"},
+        "params": [Template.anchor("zoom_and_pan")],
         "encoding": {
             "x": {
                 "field": Template.anchor("x"),
@@ -175,6 +176,7 @@ class BarHorizontalTemplate(Template):
         "width": 300,
         "height": 300,
         "mark": {"type": "bar"},
+        "params": [Template.anchor("zoom_and_pan")],
         "encoding": {
             "x": {
                 "field": Template.anchor("x"),
