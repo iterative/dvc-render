@@ -633,14 +633,19 @@ def test_partial_filled_template(
     }
 
     expected_split = {
-        Template.anchor("data"): _get_expected_datapoints(datapoints, expected_dp_keys),
         Template.anchor("color"): {
             "field": "rev",
             "scale": {"domain": ["B"], "range": ["#945dd6"]},
         },
+        Template.anchor("data"): _get_expected_datapoints(datapoints, expected_dp_keys),
+        Template.anchor("title"): title,
         Template.anchor("x_label"): "step",
         Template.anchor("y_label"): y,
-        Template.anchor("title"): title,
+        Template.anchor("zoom_and_pan"): {
+            "name": "grid",
+            "select": "interval",
+            "bind": "scales",
+        },
     }
 
     split_anchors = [

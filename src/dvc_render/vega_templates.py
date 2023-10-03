@@ -428,6 +428,7 @@ class ScatterTemplate(Template):
         "width": 300,
         "height": 300,
         "mark": {"type": "point", "tooltip": {"content": "data"}},
+        "params": [Template.anchor("zoom_and_pan")],
         "encoding": {
             "x": {
                 "field": Template.anchor("x"),
@@ -508,7 +509,7 @@ class SmoothLinearTemplate(Template):
         "layer": [
             {
                 "layer": [
-                    {"mark": "line"},
+                    {"params": [Template.anchor("zoom_and_pan")], "mark": "line"},
                     {
                         "transform": [{"filter": {"param": "hover", "empty": False}}],
                         "mark": "point",
@@ -619,6 +620,7 @@ class SimpleLinearTemplate(Template):
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
         "data": {"values": Template.anchor("data")},
         "title": Template.anchor("title"),
+        "params": [Template.anchor("zoom_and_pan")],
         "width": 300,
         "height": 300,
         "mark": {
