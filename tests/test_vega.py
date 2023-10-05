@@ -497,7 +497,7 @@ def test_optional_anchors_linear(
         "template": "linear",
         "x": "step",
         "y": y,
-        "anchor_revs": ["B"],
+        "revs_with_datapoints": ["B"],
         "anchors_y_definitions": anchors_y_definitions,
     }
 
@@ -627,7 +627,7 @@ def test_partial_filled_template(
         "template": "linear",
         "x": "step",
         "y": y,
-        "anchor_revs": ["B"],
+        "revs_with_datapoints": ["B"],
         "anchors_y_definitions": anchors_y_definitions,
         "title": title,
     }

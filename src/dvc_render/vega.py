@@ -197,7 +197,7 @@ class VegaRenderer(Renderer):
         Returns all revisions that were collected.
         Potentially will include revisions that have no datapoints
         """
-        return self.properties.get("anchor_revs", [])
+        return self.properties.get("revs_with_datapoints", [])
 
     def _process_optional_anchors(self, split_anchors: List[str]):
         optional_anchors = [
