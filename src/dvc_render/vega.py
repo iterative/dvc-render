@@ -117,22 +117,23 @@ class VegaRenderer(Renderer):
             data[x] = list(map(float, data[x]))
             data[y] = list(map(float, data[y]))
 
-            plt.title(self.properties.get("title", Path(self.name).stem))
-            plt.xlabel(self.properties.get("x_label", x))
-            plt.ylabel(self.properties.get("y_label", y))
-            plt.plot(x, y, data=data)
-            plt.tight_layout()
-            plt.savefig(output_file)
-            plt.close()
+            if x is not None and y is not None:
+                plt.title(self.properties.get("title", Path(self.name).stem))
+                plt.xlabel(self.properties.get("x_label", x))
+                plt.ylabel(self.properties.get("y_label", y))
+                plt.plot(x, y, data=data)
+                plt.tight_layout()
+                plt.savefig(output_file)
+                plt.close()
 
-            if report_path:
-                return f"\n![{self.name}]({output_file.relative_to(report_folder)})"
+                if report_path:
+                    return f"\n![{self.name}]({output_file.relative_to(report_folder)})"
 
-            base64_str = base64.b64encode(
-                output_file.getvalue()  # type: ignore
-            ).decode()
-            src = f"data:image/png;base64,{base64_str}"
+                base64_str = base64.b64encode(
+                    output_file.getvalue()  # type: ignore
+                ).decode()
+                src = f"data:image/png;base64,{base64_str}"
 
-            return f"\n![{self.name}]({src})"
+                return f"\n![{self.name}]({src})"
 
         return ""
