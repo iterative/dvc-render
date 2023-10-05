@@ -229,3 +229,41 @@ def test_escape_special_characters():
     assert filled["encoding"]["x"]["title"] == "foo.bar[0]"
     assert filled["encoding"]["y"]["field"] == "foo\\.bar\\[1\\]"
     assert filled["encoding"]["y"]["title"] == "foo.bar[1]"
+
+
+def test_fill_anchor_in_string(tmp_dir):
+    y = "lab"
+    x = "SR"
+    tmp_dir.gen(
+        "custom.json",
+        json.dumps(
+            {
+                "data": {"values": Template.anchor("data")},
+                "transform": [
+                    {"joinaggregate": [{"op": "mean", "field": "lab", "as": "mean_y"}]},
+                    {
+                        "calculate": "pow("
+                        + "datum.<DVC_METRIC_Y> - datum.<DVC_METRIC_X>,2"
+                        + ")",
+                        "as": "SR",
+                    },
+                    {"joinaggregate": [{"op": "sum", "field": "SR", "as": "SSR"}]},
+                ],
+                "encoding": {
+                    "x": {"field": Template.anchor("x")},
+                    "y": {"field": Template.anchor("y")},
+                },
+            },
+        ),
+    )
+    datapoints = [
+        {x: "B", y: "A"},
+        {x: "A", y: "A"},
+    ]
+    props = {"template": "custom.json", "x": x, "y": y}
+
+    renderer = VegaRenderer(datapoints, "foo", **props)
+    filled = renderer.get_filled_template(as_string=False)
+    assert filled["transform"][1]["calculate"] == "pow(datum.lab - datum.SR,2)"
+    assert filled["encoding"]["x"]["field"] == x
+    assert filled["encoding"]["y"]["field"] == y

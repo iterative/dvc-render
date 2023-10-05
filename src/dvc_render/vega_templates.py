@@ -43,6 +43,8 @@ def dict_replace_value(d: dict, name: str, value: Any) -> dict:
             if v == name:
                 x[k] = value
                 continue
+            if name in v and isinstance(value, str):
+                v = v.replace(name, value)
         x[k] = v
     return x
 
