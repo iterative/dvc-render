@@ -444,6 +444,7 @@ class ScatterTemplate(Template):
             },
             "color": Template.anchor("color"),
             "shape": Template.anchor("shape"),
+            "tooltip": Template.anchor("tooltip"),
         },
     }
 
@@ -473,6 +474,7 @@ class ScatterJitterTemplate(Template):
             },
             "color": Template.anchor("color"),
             "shape": Template.anchor("shape"),
+            "tooltip": Template.anchor("tooltip"),
             "xOffset": {"field": "randomX", "type": "quantitative"},
             "yOffset": {"field": "randomY", "type": "quantitative"},
         },
@@ -643,6 +645,7 @@ class SimpleLinearTemplate(Template):
             },
             "color": Template.anchor("color"),
             "strokeDash": Template.anchor("stroke_dash"),
+            "tooltip": Template.anchor("tooltip"),
         },
     }
 

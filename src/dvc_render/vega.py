@@ -134,6 +134,7 @@ class VegaRenderer(Renderer):
                 "data",
                 "shape",
                 "stroke_dash",
+                "tooltip",
                 "title",
                 "x_label",
                 "y_label",
@@ -210,6 +211,7 @@ class VegaRenderer(Renderer):
                 "row",
                 "shape",
                 "stroke_dash",
+                "tooltip",
                 "zoom_and_pan",
             ]
             if self.template.has_anchor(anchor)
@@ -262,6 +264,7 @@ class VegaRenderer(Renderer):
         self._fill_optional_anchor(
             split_anchors, optional_anchors, "pivot_field", "datum.rev"
         )
+        self._fill_tooltip(split_anchors, optional_anchors)
         for anchor in optional_anchors:
             self.template.fill_anchor(anchor, {})
 
@@ -327,8 +330,7 @@ class VegaRenderer(Renderer):
             split_anchors, optional_anchors, "row", {"field": concat_field}
         )
 
-        if not optional_anchors:
-            return
+        self._fill_tooltip(split_anchors, optional_anchors, [concat_field])
 
         for anchor in ["stroke_dash", "shape"]:
             self._fill_optional_anchor_mapping(
@@ -355,6 +357,26 @@ class VegaRenderer(Renderer):
             optional_anchors,
             "group_by_y",
             [*grouped_keys, self.properties.get("y")],
+        )
+
+    def _fill_tooltip(
+        self,
+        split_anchors: List[str],
+        optional_anchors: List[str],
+        additional_fields: Optional[List[str]] = None,
+    ):
+        if not additional_fields:
+            additional_fields = []
+        self._fill_optional_anchor(
+            split_anchors,
+            optional_anchors,
+            "tooltip",
+            [
+                {"field": "rev"},
+                {"field": self.properties.get("x")},
+                {"field": self.properties.get("y")},
+                *[{"field": field} for field in additional_fields],
+            ],
         )
 
     def _fill_optional_anchor(
