@@ -202,7 +202,10 @@ class ConfusionTemplate(Template):
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
         "data": {"values": Template.anchor("data")},
         "title": Template.anchor("title"),
-        "facet": {"column": {"field": "rev"}, "row": Template.anchor("row")},
+        "facet": {
+            "column": {"field": "rev", "sort": []},
+            "row": Template.anchor("row"),
+        },
         "spec": {
             "transform": [
                 {
@@ -312,7 +315,10 @@ class NormalizedConfusionTemplate(Template):
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
         "data": {"values": Template.anchor("data")},
         "title": Template.anchor("title"),
-        "facet": {"column": {"field": "rev"}, "row": Template.anchor("row")},
+        "facet": {
+            "column": {"field": "rev", "sort": []},
+            "row": Template.anchor("row"),
+        },
         "spec": {
             "transform": [
                 {
