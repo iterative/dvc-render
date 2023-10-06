@@ -142,8 +142,8 @@ class BarHorizontalSortedTemplate(Template):
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
         "data": {"values": Template.anchor("data")},
         "title": Template.anchor("title"),
-        "width": 300,
-        "height": 300,
+        "width": Template.anchor("plot_width"),
+        "height": Template.anchor("plot_height"),
         "mark": {"type": "bar"},
         "params": [Template.anchor("zoom_and_pan")],
         "encoding": {
@@ -173,8 +173,8 @@ class BarHorizontalTemplate(Template):
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
         "data": {"values": Template.anchor("data")},
         "title": Template.anchor("title"),
-        "width": 300,
-        "height": 300,
+        "width": Template.anchor("plot_width"),
+        "height": Template.anchor("plot_height"),
         "mark": {"type": "bar"},
         "params": [Template.anchor("zoom_and_pan")],
         "encoding": {
@@ -252,8 +252,8 @@ class ConfusionTemplate(Template):
             "layer": [
                 {
                     "mark": "rect",
-                    "width": 300,
-                    "height": 300,
+                    "width": Template.anchor("column_width"),
+                    "height": Template.anchor("row_height"),
                     "encoding": {
                         "color": {
                             "field": "xy_count",
@@ -365,8 +365,8 @@ class NormalizedConfusionTemplate(Template):
             "layer": [
                 {
                     "mark": "rect",
-                    "width": 300,
-                    "height": 300,
+                    "width": Template.anchor("column_width"),
+                    "height": Template.anchor("row_height"),
                     "encoding": {
                         "color": {
                             "field": "percent_of_y",
@@ -433,8 +433,8 @@ class ScatterTemplate(Template):
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
         "data": {"values": Template.anchor("data")},
         "title": Template.anchor("title"),
-        "width": 300,
-        "height": 300,
+        "width": Template.anchor("plot_width"),
+        "height": Template.anchor("plot_height"),
         "mark": {"type": "point", "tooltip": {"content": "data"}},
         "params": [Template.anchor("zoom_and_pan")],
         "encoding": {
@@ -462,8 +462,8 @@ class ScatterJitterTemplate(Template):
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
         "data": {"values": Template.anchor("data")},
         "title": Template.anchor("title"),
-        "width": 300,
-        "height": 300,
+        "width": Template.anchor("plot_width"),
+        "height": Template.anchor("plot_height"),
         "transform": [
             {"calculate": "random()", "as": "randomX"},
             {"calculate": "random()", "as": "randomY"},
@@ -493,8 +493,8 @@ class SmoothLinearTemplate(Template):
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
         "data": {"values": Template.anchor("data")},
         "title": Template.anchor("title"),
-        "width": 300,
-        "height": 300,
+        "width": Template.anchor("plot_width"),
+        "height": Template.anchor("plot_height"),
         "params": [
             {
                 "name": "smooth",
@@ -631,8 +631,8 @@ class SimpleLinearTemplate(Template):
         "data": {"values": Template.anchor("data")},
         "title": Template.anchor("title"),
         "params": [Template.anchor("zoom_and_pan")],
-        "width": 300,
-        "height": 300,
+        "width": Template.anchor("plot_width"),
+        "height": Template.anchor("plot_height"),
         "mark": {
             "type": "line",
             "tooltip": {"content": "data"},

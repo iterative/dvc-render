@@ -131,11 +131,15 @@ class VegaRenderer(Renderer):
         content = self.get_filled_template(
             split_anchors=[
                 "color",
+                "column_width",
                 "data",
+                "plot_height",
+                "plot_width",
+                "row_height",
                 "shape",
                 "stroke_dash",
-                "tooltip",
                 "title",
+                "tooltip",
                 "x_label",
                 "y_label",
                 "zoom_and_pan",
@@ -204,10 +208,14 @@ class VegaRenderer(Renderer):
             anchor
             for anchor in [
                 "color",
+                "column_width",
                 "group_by_x",
                 "group_by_y",
                 "group_by",
                 "pivot_field",
+                "plot_height",
+                "plot_width",
+                "row_height",
                 "row",
                 "shape",
                 "stroke_dash",
@@ -220,7 +228,7 @@ class VegaRenderer(Renderer):
             return None
 
         self._fill_color(split_anchors, optional_anchors)
-        self._fill_zoom_and_pan(split_anchors, optional_anchors)
+        self._fill_set_encoding(split_anchors, optional_anchors)
 
         y_definitions = self.properties.get("anchors_y_definitions", [])
         is_single_source = len(y_definitions) <= 1
@@ -243,19 +251,15 @@ class VegaRenderer(Renderer):
             all_revs,
         )
 
-    def _fill_zoom_and_pan(self, split_anchors: List[str], optional_anchors: List[str]):
-        name = "zoom_and_pan"
-        encoding = {"name": "grid", "select": "interval", "bind": "scales"}
-        if "zoom_and_pan" not in optional_anchors:
-            return
-
-        optional_anchors.remove("zoom_and_pan")
-
-        if name in split_anchors:
-            self._set_split_content(name, encoding)
-            return
-
-        self.template.fill_anchor(name, encoding)
+    def _fill_set_encoding(self, split_anchors: List[str], optional_anchors: List[str]):
+        for name, encoding in [
+            ("zoom_and_pan", {"name": "grid", "select": "interval", "bind": "scales"}),
+            ("column_width", 300),
+            ("plot_height", 300),
+            ("plot_width", 300),
+            ("row_height", 300),
+        ]:
+            self._fill_optional_anchor(split_anchors, optional_anchors, name, encoding)
 
     def _process_single_source_plot(
         self, split_anchors: List[str], optional_anchors: List[str]
@@ -327,7 +331,7 @@ class VegaRenderer(Renderer):
 
         concat_field = FIELD_SEPARATOR.join(varied_keys)
         self._fill_optional_anchor(
-            split_anchors, optional_anchors, "row", {"field": concat_field}
+            split_anchors, optional_anchors, "row", {"field": concat_field, "sort": []}
         )
 
         self._fill_tooltip(split_anchors, optional_anchors, [concat_field])
@@ -392,6 +396,7 @@ class VegaRenderer(Renderer):
         optional_anchors.remove(name)
 
         if name in split_anchors:
+            self._set_split_content(name, value)
             return
 
         self.template.fill_anchor(name, value)

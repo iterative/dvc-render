@@ -638,6 +638,8 @@ def test_partial_filled_template(
             "scale": {"domain": ["B"], "range": ["#945dd6"]},
         },
         Template.anchor("data"): _get_expected_datapoints(datapoints, expected_dp_keys),
+        Template.anchor("plot_height"): 300,
+        Template.anchor("plot_width"): 300,
         Template.anchor("title"): title,
         Template.anchor("x_label"): "step",
         Template.anchor("y_label"): y,
