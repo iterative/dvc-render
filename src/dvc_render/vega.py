@@ -148,6 +148,12 @@ class VegaRenderer(Renderer):
         )
         return content, {"anchor_definitions": self._split_content}
 
+    def get_template_as_string(self):
+        """
+        Returns unfilled template as a string (for Studio)
+        """
+        return json.dumps(self.template.content)
+
     def partial_html(self, **kwargs) -> str:
         return self.get_filled_template()  # type: ignore
 
