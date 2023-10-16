@@ -207,7 +207,7 @@ class ConfusionTemplate(Template):
         "facet": {"field": "rev", "type": "nominal"},
         "params": [
             {
-                "name": "toggleText",
+                "name": "showValues",
                 "bind": {"input": "checkbox"},
             },
         ],
@@ -302,7 +302,7 @@ class ConfusionTemplate(Template):
                     "encoding": {
                         "text": {
                             "condition": {
-                                "param": "toggleText",
+                                "param": "showValues",
                                 "field": "xy_count",
                                 "type": "quantitative",
                             },
