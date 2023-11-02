@@ -264,7 +264,8 @@ def test_fill_anchor_in_string(tmp_dir):
     assert filled["transform"][1]["calculate"] == "pow(datum.lab - datum.SR,2)"
     assert filled["encoding"]["x"]["field"] == x
     assert filled["encoding"]["y"]["field"] == y
-    
+
+
 @pytest.mark.parametrize(
     ",".join(
         [
