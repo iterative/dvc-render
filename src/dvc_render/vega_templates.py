@@ -205,6 +205,12 @@ class ConfusionTemplate(Template):
         "data": {"values": Template.anchor("data")},
         "title": Template.anchor("title"),
         "facet": {"field": "rev", "type": "nominal"},
+        "params": [
+            {
+                "name": "showValues",
+                "bind": {"input": "checkbox"},
+            },
+        ],
         "spec": {
             "transform": [
                 {
@@ -294,6 +300,13 @@ class ConfusionTemplate(Template):
                 {
                     "mark": "text",
                     "encoding": {
+                        "text": {
+                            "condition": {
+                                "param": "showValues",
+                                "field": "xy_count",
+                                "type": "quantitative",
+                            },
+                        },
                         "color": {
                             "condition": {
                                 "test": "datum.percent_of_max > 0.5",
