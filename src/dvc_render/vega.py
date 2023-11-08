@@ -71,8 +71,7 @@ class VegaRenderer(Renderer):
         self,
         split_anchors: Optional[List[str]] = None,
         strict: bool = True,
-        as_string: bool = True,
-    ) -> Union[str, Dict[str, Any]]:
+    ) -> Dict[str, Any]:
         """Returns a functional vega specification"""
         self.template.reset()
         if not self.datapoints:
@@ -119,9 +118,6 @@ class VegaRenderer(Renderer):
                 value = self.template.escape_special_characters(value)
             self.template.fill_anchor(name, value)
 
-        if as_string:
-            return json.dumps(self.template.content)
-
         return self.template.content
 
     def get_partial_filled_template(self):
@@ -148,14 +144,15 @@ class VegaRenderer(Renderer):
         )
         return content, {"anchor_definitions": self._split_content}
 
-    def get_template_as_string(self):
+    def get_template(self):
         """
-        Returns unfilled template as a string (for Studio)
+        Returns unfilled template (for Studio)
         """
-        return json.dumps(self.template.content)
+        return self.template.content
 
     def partial_html(self, **kwargs) -> str:
-        return self.get_filled_template()  # type: ignore
+        content = self.get_filled_template()
+        return json.dumps(content)
 
     def generate_markdown(self, report_path=None) -> str:
         if not isinstance(self.template, LinearTemplate):
@@ -204,8 +201,7 @@ class VegaRenderer(Renderer):
 
     def get_revs(self):
         """
-        Returns all revisions that were collected.
-        Potentially will include revisions that have no datapoints
+        Returns all revisions that were collected that have datapoints.
         """
         return self.properties.get("revs_with_datapoints", [])
 
@@ -487,6 +483,4 @@ class VegaRenderer(Renderer):
                 datapoint.pop(key, None)
 
     def _set_split_content(self, name: str, value: Any):
-        self._split_content[Template.anchor(name)] = (
-            value if isinstance(value, str) else json.dumps(value)
-        )
+        self._split_content[Template.anchor(name)] = value

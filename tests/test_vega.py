@@ -43,7 +43,7 @@ def test_default_template_mark():
         {"first_val": 200, "second_val": 300, "val": 3},
     ]
 
-    plot_content = VegaRenderer(datapoints, "foo").get_filled_template(as_string=False)
+    plot_content = VegaRenderer(datapoints, "foo").get_filled_template()
 
     assert plot_content["layer"][0]["layer"][0]["mark"] == "line"
 
@@ -59,9 +59,7 @@ def test_choose_axes():
         {"first_val": 200, "second_val": 300, "val": 3},
     ]
 
-    plot_content = VegaRenderer(datapoints, "foo", **props).get_filled_template(
-        as_string=False
-    )
+    plot_content = VegaRenderer(datapoints, "foo", **props).get_filled_template()
 
     assert plot_content["data"]["values"] == [
         {
@@ -86,9 +84,7 @@ def test_confusion():
     ]
     props = {"template": "confusion", "x": "predicted", "y": "actual"}
 
-    plot_content = VegaRenderer(datapoints, "foo", **props).get_filled_template(
-        as_string=False
-    )
+    plot_content = VegaRenderer(datapoints, "foo", **props).get_filled_template()
 
     assert plot_content["data"]["values"] == [
         {"predicted": "B", "actual": "A"},
@@ -218,7 +214,7 @@ def test_escape_special_characters():
     ]
     props = {"template": "simple", "x": "foo.bar[0]", "y": "foo.bar[1]"}
     renderer = VegaRenderer(datapoints, "foo", **props)
-    filled = renderer.get_filled_template(as_string=False)
+    filled = renderer.get_filled_template()
     # data is not escaped
     assert filled["data"]["values"][0] == datapoints[0]
     # field and title yes
@@ -260,7 +256,7 @@ def test_fill_anchor_in_string(tmp_dir):
     props = {"template": "custom.json", "x": x, "y": y}
 
     renderer = VegaRenderer(datapoints, "foo", **props)
-    filled = renderer.get_filled_template(as_string=False)
+    filled = renderer.get_filled_template()
     assert filled["transform"][1]["calculate"] == "pow(datum.lab - datum.SR,2)"
     assert filled["encoding"]["x"]["field"] == x
     assert filled["encoding"]["y"]["field"] == y
@@ -505,7 +501,7 @@ def test_optional_anchors_linear(
     expected_datapoints = _get_expected_datapoints(datapoints, expected_dp_keys)
 
     renderer = VegaRenderer(datapoints, "foo", **props)
-    plot_content = renderer.get_filled_template(as_string=False)
+    plot_content = renderer.get_filled_template()
 
     assert plot_content["data"]["values"] == expected_datapoints
     assert plot_content["encoding"]["color"] == color_encoding
@@ -659,20 +655,16 @@ def test_partial_filled_template(
         split_anchors.append(Template.anchor("stroke_dash"))
         expected_split[Template.anchor("stroke_dash")] = stroke_dash_encoding
 
-    renderer = VegaRenderer(datapoints, "foo", **props)
-    content, split = renderer.get_partial_filled_template()
+    content, split = VegaRenderer(
+        datapoints, "foo", **props
+    ).get_partial_filled_template()
+
+    content_str = json.dumps(content)
 
     for anchor in split_anchors:
-        assert anchor in content
+        assert anchor in content_str
     for key, value in split["anchor_definitions"].items():
-        if key in [
-            Template.anchor("x_label"),
-            Template.anchor("y_label"),
-            Template.anchor("title"),
-        ]:
-            assert value == expected_split[key]
-            continue
-        assert json.loads(value) == expected_split[key]
+        assert value == expected_split[key]
 
 
 def _get_expected_datapoints(
@@ -694,3 +686,13 @@ def _get_expected_datapoints(
         expected_datapoints.append(expected_datapoint)
 
     return datapoints
+
+
+def test_partial_html():
+    props = {"x": "x", "y": "y"}
+    datapoints = [
+        {"x": 100, "y": 100, "val": 2},
+        {"x": 200, "y": 300, "val": 3},
+    ]
+
+    assert isinstance(VegaRenderer(datapoints, "foo", **props).partial_html(), str)
