@@ -62,7 +62,7 @@ class VegaRenderer(Renderer):
                 "#ed8936",
                 "#f56565",
             ],
-            "shape": ["square", "circle", "triangle", "diamond"],
+            "shape": ["circle", "square", "triangle", "diamond"],
         }
 
         self._split_content: Dict[str, str] = {}
