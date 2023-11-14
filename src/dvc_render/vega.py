@@ -210,6 +210,7 @@ class VegaRenderer(Renderer):
             anchor
             for anchor in [
                 "color",
+                "column",
                 "column_width",
                 "group_by_x",
                 "group_by_y",
@@ -334,6 +335,9 @@ class VegaRenderer(Renderer):
         concat_field = FIELD_SEPARATOR.join(varied_keys)
         self._fill_optional_anchor(
             split_anchors, optional_anchors, "row", {"field": concat_field, "sort": []}
+        )
+        self._fill_optional_anchor(
+            split_anchors, optional_anchors, "column", {"field": concat_field, "sort": []}
         )
 
         self._fill_tooltip(split_anchors, optional_anchors, [concat_field])

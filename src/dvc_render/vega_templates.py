@@ -161,7 +161,7 @@ class BarHorizontalSortedTemplate(Template):
             },
             "yOffset": {"field": "rev", "sort": []},
             "color": Template.anchor("color"),
-            "row": Template.anchor("row"),
+            "column": Template.anchor("column"),
         },
     }
 
@@ -191,7 +191,7 @@ class BarHorizontalTemplate(Template):
             },
             "yOffset": {"field": "rev", "sort": []},
             "color": Template.anchor("color"),
-            "row": Template.anchor("row"),
+            "column": Template.anchor("column"),
         },
     }
 
@@ -365,8 +365,8 @@ class NormalizedConfusionTemplate(Template):
             "layer": [
                 {
                     "mark": "rect",
-                    "width": Template.anchor("column_width"),
-                    "height": Template.anchor("row_height"),
+                    "width": Template.anchor("plot_width"),
+                    "height": Template.anchor("plot_height"),
                     "encoding": {
                         "color": {
                             "field": "percent_of_y",
