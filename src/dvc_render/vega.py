@@ -127,11 +127,9 @@ class VegaRenderer(Renderer):
         content = self.get_filled_template(
             split_anchors=[
                 "color",
-                "column_width",
                 "data",
                 "plot_height",
                 "plot_width",
-                "row_height",
                 "shape",
                 "stroke_dash",
                 "title",
@@ -211,14 +209,12 @@ class VegaRenderer(Renderer):
             for anchor in [
                 "color",
                 "column",
-                "column_width",
                 "group_by_x",
                 "group_by_y",
                 "group_by",
                 "pivot_field",
                 "plot_height",
                 "plot_width",
-                "row_height",
                 "row",
                 "shape",
                 "stroke_dash",
@@ -257,10 +253,8 @@ class VegaRenderer(Renderer):
     def _fill_set_encoding(self, split_anchors: List[str], optional_anchors: List[str]):
         for name, encoding in [
             ("zoom_and_pan", {"name": "grid", "select": "interval", "bind": "scales"}),
-            ("column_width", 300),
             ("plot_height", 300),
             ("plot_width", 300),
-            ("row_height", 300),
         ]:
             self._fill_optional_anchor(split_anchors, optional_anchors, name, encoding)
 
@@ -337,7 +331,10 @@ class VegaRenderer(Renderer):
             split_anchors, optional_anchors, "row", {"field": concat_field, "sort": []}
         )
         self._fill_optional_anchor(
-            split_anchors, optional_anchors, "column", {"field": concat_field, "sort": []}
+            split_anchors,
+            optional_anchors,
+            "column",
+            {"field": concat_field, "sort": []},
         )
 
         self._fill_tooltip(split_anchors, optional_anchors, [concat_field])
