@@ -476,7 +476,7 @@ def test_fill_anchor_in_string(tmp_dir):
                 },
             },
             "datum.rev + '::' + datum.filename + '::' + datum.field",
-            ["rev", "filename", "field"],
+            ["rev", "filename::field"],
         ),
     ),
 )

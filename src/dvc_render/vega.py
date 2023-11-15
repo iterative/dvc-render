@@ -11,6 +11,7 @@ from .utils import list_dict_to_dict_list
 from .vega_templates import BadTemplateError, LinearTemplate, Template, get_template
 
 FIELD_SEPARATOR = "::"
+REV = "rev"
 FILENAME = "filename"
 FIELD = "field"
 FILENAME_FIELD = [FILENAME, FIELD]
@@ -245,7 +246,7 @@ class VegaRenderer(Renderer):
         self._fill_optional_anchor_mapping(
             split_anchors,
             optional_anchors,
-            "rev",
+            REV,
             "color",
             all_revs,
         )
@@ -261,7 +262,7 @@ class VegaRenderer(Renderer):
     def _process_single_source_plot(
         self, split_anchors: List[str], optional_anchors: List[str]
     ):
-        self._fill_group_by(split_anchors, optional_anchors, ["rev"])
+        self._fill_group_by(split_anchors, optional_anchors, [REV])
         self._fill_optional_anchor(
             split_anchors, optional_anchors, "pivot_field", "datum.rev"
         )
@@ -316,17 +317,18 @@ class VegaRenderer(Renderer):
         if not optional_anchors:
             return
 
-        grouped_keys = ["rev", *varied_keys]
-        self._fill_group_by(split_anchors, optional_anchors, grouped_keys)
+        concat_field = FIELD_SEPARATOR.join(varied_keys)
+        self._fill_group_by(split_anchors, optional_anchors, [REV, concat_field])
 
         self._fill_optional_anchor(
             split_anchors,
             optional_anchors,
             "pivot_field",
-            f" + '{FIELD_SEPARATOR}' + ".join([f"datum.{key}" for key in grouped_keys]),
+            f" + '{FIELD_SEPARATOR}' + ".join(
+                [f"datum.{key}" for key in [REV, *varied_keys]]
+            ),
         )
 
-        concat_field = FIELD_SEPARATOR.join(varied_keys)
         self._fill_optional_anchor(
             split_anchors, optional_anchors, "row", {"field": concat_field, "sort": []}
         )
@@ -348,22 +350,22 @@ class VegaRenderer(Renderer):
         self,
         split_anchors: List[str],
         optional_anchors: List[str],
-        grouped_keys: List[str],
+        group_by: List[str],
     ):
         self._fill_optional_anchor(
-            split_anchors, optional_anchors, "group_by", grouped_keys
+            split_anchors, optional_anchors, "group_by", group_by
         )
         self._fill_optional_anchor(
             split_anchors,
             optional_anchors,
             "group_by_x",
-            [*grouped_keys, self.properties.get("x")],
+            [*group_by, self.properties.get("x")],
         )
         self._fill_optional_anchor(
             split_anchors,
             optional_anchors,
             "group_by_y",
-            [*grouped_keys, self.properties.get("y")],
+            [*group_by, self.properties.get("y")],
         )
 
     def _fill_tooltip(
@@ -379,7 +381,7 @@ class VegaRenderer(Renderer):
             optional_anchors,
             "tooltip",
             [
-                {"field": "rev"},
+                {"field": REV},
                 {"field": self.properties.get("x")},
                 {"field": self.properties.get("y")},
                 *[{"field": field} for field in additional_fields],
