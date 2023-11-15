@@ -206,6 +206,12 @@ class ConfusionTemplate(Template):
             "column": {"field": "rev", "sort": []},
             "row": Template.anchor("row"),
         },
+        "params": [
+            {
+                "name": "showValues",
+                "bind": {"input": "checkbox"},
+            },
+        ],
         "spec": {
             "transform": [
                 {
@@ -295,6 +301,13 @@ class ConfusionTemplate(Template):
                 {
                     "mark": "text",
                     "encoding": {
+                        "text": {
+                            "condition": {
+                                "param": "showValues",
+                                "field": "xy_count",
+                                "type": "quantitative",
+                            },
+                        },
                         "color": {
                             "condition": {
                                 "test": "datum.percent_of_max > 0.5",
