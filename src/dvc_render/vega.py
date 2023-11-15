@@ -323,7 +323,7 @@ class VegaRenderer(Renderer):
             split_anchors,
             optional_anchors,
             "pivot_field",
-            " + '::' + ".join([f"datum.{key}" for key in grouped_keys]),
+            f" + '{FIELD_SEPARATOR}' + ".join([f"datum.{key}" for key in grouped_keys]),
         )
 
         concat_field = FIELD_SEPARATOR.join(varied_keys)
