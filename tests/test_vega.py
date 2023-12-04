@@ -3,7 +3,7 @@ from typing import Any, Dict, List
 
 import pytest
 
-from dvc_render.vega import BadTemplateError, VegaRenderer
+from dvc_render.vega import OPTIONAL_ANCHOR_RANGES, BadTemplateError, VegaRenderer
 from dvc_render.vega_templates import NoFieldInDataError, Template
 
 # pylint: disable=missing-function-docstring, C1803, C0302
@@ -339,7 +339,10 @@ def test_fill_anchor_in_string(tmp_dir):
             ["rev", "acc", "step", "filename"],
             {
                 "field": "filename",
-                "scale": {"domain": ["test", "train"], "range": [[1, 0], [8, 8]]},
+                "scale": {
+                    "domain": ["test", "train"],
+                    "range": OPTIONAL_ANCHOR_RANGES["stroke_dash"][0:2],
+                },
                 "legend": {
                     "symbolFillColor": "transparent",
                     "symbolStrokeColor": "grey",
@@ -388,7 +391,10 @@ def test_fill_anchor_in_string(tmp_dir):
             ["rev", "dvc_inferred_y_value", "step", "field"],
             {
                 "field": "field",
-                "scale": {"domain": ["acc", "acc_norm"], "range": [[1, 0], [8, 8]]},
+                "scale": {
+                    "domain": ["acc", "acc_norm"],
+                    "range": OPTIONAL_ANCHOR_RANGES["stroke_dash"][0:2],
+                },
                 "legend": {
                     "symbolFillColor": "transparent",
                     "symbolStrokeColor": "grey",
@@ -454,7 +460,7 @@ def test_fill_anchor_in_string(tmp_dir):
                 "field": "filename::field",
                 "scale": {
                     "domain": ["test::acc", "test::acc_norm", "train::acc"],
-                    "range": [[1, 0], [8, 8], [8, 4]],
+                    "range": OPTIONAL_ANCHOR_RANGES["stroke_dash"][0:3],
                 },
                 "legend": {
                     "symbolFillColor": "transparent",
@@ -492,7 +498,7 @@ def test_optional_anchors_linear(
     assert plot_content["data"]["values"] == expected_datapoints
     assert plot_content["encoding"]["color"] == {
         "field": "rev",
-        "scale": {"domain": ["B"], "range": ["#945dd6"]},
+        "scale": {"domain": ["B"], "range": OPTIONAL_ANCHOR_RANGES["color"][0:1]},
     }
     assert plot_content["encoding"]["strokeDash"] == stroke_dash_encoding
     assert plot_content["layer"][3]["transform"][0]["calculate"] == pivot_field
@@ -763,7 +769,7 @@ def test_optional_anchors_confusion(
                 },
                 "scale": {
                     "domain": ["test", "train"],
-                    "range": ["circle", "square"],
+                    "range": OPTIONAL_ANCHOR_RANGES["shape"][0:2],
                 },
             },
             [
@@ -831,7 +837,7 @@ def test_optional_anchors_confusion(
                 },
                 "scale": {
                     "domain": ["test_acc", "train_acc"],
-                    "range": ["circle", "square"],
+                    "range": OPTIONAL_ANCHOR_RANGES["shape"][0:2],
                 },
             },
             [
@@ -895,7 +901,7 @@ def test_optional_anchors_confusion(
                 },
                 "scale": {
                     "domain": ["test::test_acc", "train::train_acc"],
-                    "range": ["circle", "square"],
+                    "range": OPTIONAL_ANCHOR_RANGES["shape"][0:2],
                 },
             },
             [
@@ -932,7 +938,7 @@ def test_optional_anchors_scatter(
     assert plot_content["data"]["values"] == expected_datapoints
     assert plot_content["encoding"]["color"] == {
         "field": "rev",
-        "scale": {"domain": ["B", "C"], "range": ["#945dd6", "#13adc7"]},
+        "scale": {"domain": ["B", "C"], "range": OPTIONAL_ANCHOR_RANGES["color"][0:2]},
     }
     assert plot_content["encoding"]["shape"] == shape_encoding
     assert plot_content["encoding"]["tooltip"] == tooltip_encoding
@@ -996,7 +1002,10 @@ def test_optional_anchors_scatter(
             ["rev", "acc", "step", "field"],
             {
                 "field": "filename",
-                "scale": {"domain": ["test", "train"], "range": [[1, 0], [8, 8]]},
+                "scale": {
+                    "domain": ["test", "train"],
+                    "range": OPTIONAL_ANCHOR_RANGES["stroke_dash"][0:2],
+                },
                 "legend": {
                     "symbolFillColor": "transparent",
                     "symbolStrokeColor": "grey",
@@ -1029,7 +1038,10 @@ def test_optional_anchors_scatter(
             ["rev", "dvc_inferred_y_value", "step", "field"],
             {
                 "field": "field",
-                "scale": {"domain": ["acc", "acc_norm"], "range": [[1, 0], [8, 8]]},
+                "scale": {
+                    "domain": ["acc", "acc_norm"],
+                    "range": OPTIONAL_ANCHOR_RANGES["stroke_dash"][0:2],
+                },
                 "legend": {
                     "symbolFillColor": "transparent",
                     "symbolStrokeColor": "grey",
@@ -1072,7 +1084,7 @@ def test_optional_anchors_scatter(
                 "field": "filename::field",
                 "scale": {
                     "domain": ["test::acc", "test::acc_norm", "train::acc"],
-                    "range": [[1, 0], [8, 8], [8, 4]],
+                    "range": OPTIONAL_ANCHOR_RANGES["stroke_dash"][0:3],
                 },
                 "legend": {
                     "symbolFillColor": "transparent",
@@ -1103,7 +1115,7 @@ def test_partial_filled_template(
     expected_split = {
         Template.anchor("color"): {
             "field": "rev",
-            "scale": {"domain": ["B"], "range": ["#945dd6"]},
+            "scale": {"domain": ["B"], "range": OPTIONAL_ANCHOR_RANGES["color"][0:1]},
         },
         Template.anchor("data"): _get_expected_datapoints(datapoints, expected_dp_keys),
         Template.anchor("plot_height"): 300,

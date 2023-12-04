@@ -17,6 +17,48 @@ FIELD = "field"
 FILENAME_FIELD = [FILENAME, FIELD]
 CONCAT_FIELDS = FIELD_SEPARATOR.join(FILENAME_FIELD)
 
+SPLIT_ANCHORS = [
+    "color",
+    "data",
+    "plot_height",
+    "plot_width",
+    "shape",
+    "stroke_dash",
+    "title",
+    "tooltip",
+    "x_label",
+    "y_label",
+    "zoom_and_pan",
+]
+OPTIONAL_ANCHORS = [
+    "color",
+    "column",
+    "group_by_x",
+    "group_by_y",
+    "group_by",
+    "pivot_field",
+    "plot_height",
+    "plot_width",
+    "row",
+    "shape",
+    "stroke_dash",
+    "tooltip",
+    "zoom_and_pan",
+]
+OPTIONAL_ANCHOR_RANGES: Dict[str, Union[List[str], List[List[int]]]] = {
+    "stroke_dash": [[1, 0], [8, 8], [8, 4], [4, 4], [4, 2], [2, 1], [1, 1]],
+    "color": [
+        "#945dd6",
+        "#13adc7",
+        "#f46837",
+        "#48bb78",
+        "#4299e1",
+        "#ed8936",
+        "#f56565",
+    ],
+    "shape": ["circle", "square", "triangle", "diamond"],
+}
+
 
 class VegaRenderer(Renderer):
     """Renderer for vega plots."""
@@ -46,25 +88,6 @@ class VegaRenderer(Renderer):
             self.properties.get("template", None),
             self.properties.get("template_dir", None),
         )
-        self._optional_anchor_ranges: Dict[
-            str,
-            Union[
-                List[str],
-                List[List[int]],
-            ],
-        ] = {
-            "stroke_dash": [[1, 0], [8, 8], [8, 4], [4, 4], [4, 2], [2, 1], [1, 1]],
-            "color": [
-                "#945dd6",
-                "#13adc7",
-                "#f46837",
-                "#48bb78",
-                "#4299e1",
-                "#ed8936",
-                "#f56565",
-            ],
-            "shape": ["circle", "square", "triangle", "diamond"],
-        }
 
         self._split_content: Dict[str, str] = {}
 
@@ -126,19 +149,7 @@ class VegaRenderer(Renderer):
         Returns a partially filled template along with the split out anchor content
         """
         content = self.get_filled_template(
-            split_anchors=[
-                "color",
-                "data",
-                "plot_height",
-                "plot_width",
-                "shape",
-                "stroke_dash",
-                "title",
-                "tooltip",
-                "x_label",
-                "y_label",
-                "zoom_and_pan",
-            ],
+            split_anchors=SPLIT_ANCHORS,
             strict=True,
         )
         return content, {"anchor_definitions": self._split_content}
@@ -206,23 +217,7 @@ class VegaRenderer(Renderer):
 
     def _process_optional_anchors(self, split_anchors: List[str]):
         optional_anchors = [
-            anchor
-            for anchor in [
-                "color",
-                "column",
-                "group_by_x",
-                "group_by_y",
-                "group_by",
-                "pivot_field",
-                "plot_height",
-                "plot_width",
-                "row",
-                "shape",
-                "stroke_dash",
-                "tooltip",
-                "zoom_and_pan",
-            ]
-            if self.template.has_anchor(anchor)
+            anchor for anchor in OPTIONAL_ANCHORS if self.template.has_anchor(anchor)
         ]
         if not optional_anchors:
             return None
@@ -443,7 +438,7 @@ class VegaRenderer(Renderer):
         name: str,
         domain: List[str],
     ):
-        full_range_values: List[Any] = self._optional_anchor_ranges.get(name, [])
+        full_range_values: List[Any] = OPTIONAL_ANCHOR_RANGES.get(name, [])
         anchor_range_values = full_range_values.copy()
 
         anchor_range = []
@@ -454,6 +449,7 @@ class VegaRenderer(Renderer):
             anchor_range.append(range_value)
 
         legend = (
+            # fix stroke dash and shape legend entry appearance (use empty shapes)
             {"legend": {"symbolFillColor": "transparent", "symbolStrokeColor": "grey"}}
             if name != "color"
             else {}
