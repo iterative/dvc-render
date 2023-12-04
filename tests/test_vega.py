@@ -729,13 +729,6 @@ def test_optional_anchors_confusion(
                     "field": "acc",
                     "loss": 0.1,
                 },
-                {
-                    "rev": "C",
-                    "acc": "0.1",
-                    "filename": "test",
-                    "field": "acc",
-                    "loss": 2,
-                },
             ],
             "acc",
             ["rev", "acc", "loss"],
@@ -762,20 +755,6 @@ def test_optional_anchors_confusion(
                     "filename": "test",
                     "field": "acc",
                     "loss": "200121",
-                },
-                {
-                    "rev": "C",
-                    "acc": "0.1",
-                    "filename": "train",
-                    "field": "acc",
-                    "loss": "10",
-                },
-                {
-                    "rev": "C",
-                    "acc": "0.1",
-                    "filename": "test",
-                    "field": "acc",
-                    "loss": "100",
                 },
             ],
             "acc",
@@ -823,24 +802,6 @@ def test_optional_anchors_confusion(
                     "field": "train_acc",
                     "loss": 0.1,
                 },
-                {
-                    "rev": "C",
-                    "dvc_inferred_y_value": "0.1",
-                    "train_acc": "0.1",
-                    "test_acc": "0.2",
-                    "filename": "data",
-                    "field": "acc",
-                    "loss": 2,
-                },
-                {
-                    "rev": "C",
-                    "dvc_inferred_y_value": "0.2",
-                    "train_acc": "0.1",
-                    "test_acc": "0.2",
-                    "filename": "data",
-                    "field": "acc",
-                    "loss": 2,
-                },
             ],
             "dvc_inferred_y_value",
             ["rev", "dvc_inferred_y_value", "train_acc", "test_acc", "loss"],
@@ -885,22 +846,6 @@ def test_optional_anchors_confusion(
                     "field": "train_acc",
                     "loss": 0.1,
                 },
-                {
-                    "rev": "C",
-                    "dvc_inferred_y_value": "0.2",
-                    "test_acc": "0.2",
-                    "filename": "test_acc",
-                    "field": "acc",
-                    "loss": 2,
-                },
-                {
-                    "rev": "C",
-                    "dvc_inferred_y_value": "0.2",
-                    "train_acc": "0.1",
-                    "filename": "train_acc",
-                    "field": "acc",
-                    "loss": 2,
-                },
             ],
             "dvc_inferred_y_value",
             ["rev", "dvc_inferred_y_value", "train_acc", "test_acc", "loss"],
@@ -935,7 +880,7 @@ def test_optional_anchors_scatter(
 ):  # pylint: disable=too-many-arguments
     props = {
         "anchors_y_definitions": anchors_y_definitions,
-        "revs_with_datapoints": ["B", "C"],
+        "revs_with_datapoints": ["B"],
         "template": "scatter",
         "x": "loss",
         "y": y,
@@ -949,7 +894,7 @@ def test_optional_anchors_scatter(
     assert plot_content["data"]["values"] == expected_datapoints
     assert plot_content["encoding"]["color"] == {
         "field": "rev",
-        "scale": {"domain": ["B", "C"], "range": OPTIONAL_ANCHOR_RANGES["color"][0:2]},
+        "scale": {"domain": ["B"], "range": OPTIONAL_ANCHOR_RANGES["color"][0:1]},
     }
     assert plot_content["encoding"]["shape"] == shape_encoding
     assert plot_content["encoding"]["tooltip"] == tooltip_encoding
@@ -960,6 +905,165 @@ def test_optional_anchors_scatter(
             "bind": "scales",
         }
     ]
+
+
+@pytest.mark.parametrize(
+    ",".join(
+        [
+            "revs",
+            "datapoints",
+        ]
+    ),
+    (
+        pytest.param(
+            ["B"],
+            [
+                {
+                    "rev": "B",
+                    "acc": "0.05",
+                    "step": "1",
+                    "filename": "acc",
+                    "field": "acc",
+                },
+            ],
+            id="rev_count_1",
+        ),
+        pytest.param(
+            ["B", "C", "D", "E", "F"],
+            [
+                {
+                    "rev": "B",
+                    "acc": "0.05",
+                    "step": "1",
+                    "filename": "acc",
+                    "field": "acc",
+                },
+                {
+                    "rev": "C",
+                    "acc": "0.1",
+                    "step": "1",
+                    "filename": "acc",
+                    "field": "acc",
+                },
+                {
+                    "rev": "D",
+                    "acc": "0.06",
+                    "step": "1",
+                    "filename": "acc",
+                    "field": "acc",
+                },
+                {
+                    "rev": "E",
+                    "acc": "0.6",
+                    "step": "1",
+                    "filename": "acc",
+                    "field": "acc",
+                },
+                {
+                    "rev": "F",
+                    "acc": "1.0",
+                    "step": "1",
+                    "filename": "acc",
+                    "field": "acc",
+                },
+            ],
+            id="rev_count_5",
+        ),
+        pytest.param(
+            ["B", "C", "D", "E", "F", "G", "H", "I", "J"],
+            [
+                {
+                    "rev": "B",
+                    "acc": "0.05",
+                    "step": "1",
+                    "filename": "acc",
+                    "field": "acc",
+                },
+                {
+                    "rev": "C",
+                    "acc": "0.1",
+                    "step": "1",
+                    "filename": "acc",
+                    "field": "acc",
+                },
+                {
+                    "rev": "D",
+                    "acc": "0.06",
+                    "step": "1",
+                    "filename": "acc",
+                    "field": "acc",
+                },
+                {
+                    "rev": "E",
+                    "acc": "0.6",
+                    "step": "1",
+                    "filename": "acc",
+                    "field": "acc",
+                },
+                {
+                    "rev": "F",
+                    "acc": "1.0",
+                    "step": "1",
+                    "filename": "acc",
+                    "field": "acc",
+                },
+                {
+                    "rev": "G",
+                    "acc": "0.006",
+                    "step": "1",
+                    "filename": "acc",
+                    "field": "acc",
+                },
+                {
+                    "rev": "H",
+                    "acc": "0.00001",
+                    "step": "1",
+                    "filename": "acc",
+                    "field": "acc",
+                },
+                {
+                    "rev": "I",
+                    "acc": "0.8",
+                    "step": "1",
+                    "filename": "acc",
+                    "field": "acc",
+                },
+                {
+                    "rev": "J",
+                    "acc": "0.001",
+                    "step": "1",
+                    "filename": "acc",
+                    "field": "acc",
+                },
+            ],
+            id="rev_count_9",
+        ),
+    ),
+)
+def test_color_anchor(revs, datapoints):
+    props = {
+        "anchors_y_definitions": [{"filename": "acc", "field": "acc"}],
+        "revs_with_datapoints": revs,
+        "template": "linear",
+        "x": "step",
+        "y": "acc",
+    }
+
+    renderer = VegaRenderer(datapoints, "foo", **props)
+    plot_content = renderer.get_filled_template()
+
+    colors = OPTIONAL_ANCHOR_RANGES["color"]
+    color_range = colors[0 : len(revs)]
+    if len(revs) > len(colors):
+        color_range.extend(colors[0 : len(revs) - len(colors)])
+
+    assert plot_content["encoding"]["color"] == {
+        "field": "rev",
+        "scale": {
+            "domain": revs,
+            "range": color_range,
+        },
+    }
 
 
 @pytest.mark.parametrize(
