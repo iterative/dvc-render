@@ -361,6 +361,8 @@ def test_fill_anchor_in_string(tmp_dir):
                 {
                     "rev": "B",
                     "dvc_inferred_y_value": "0.05",
+                    "acc": "0.05",
+                    "acc_norm": "0.04",
                     "filename": "test",
                     "field": "acc",
                     "step": 1,
@@ -368,6 +370,8 @@ def test_fill_anchor_in_string(tmp_dir):
                 {
                     "rev": "B",
                     "dvc_inferred_y_value": "0.1",
+                    "acc": "0.1",
+                    "acc_norm": "0.09",
                     "filename": "test",
                     "field": "acc",
                     "step": 2,
@@ -375,6 +379,8 @@ def test_fill_anchor_in_string(tmp_dir):
                 {
                     "rev": "B",
                     "dvc_inferred_y_value": "0.04",
+                    "acc": "0.05",
+                    "acc_norm": "0.04",
                     "filename": "test",
                     "field": "acc_norm",
                     "step": 1,
@@ -382,13 +388,15 @@ def test_fill_anchor_in_string(tmp_dir):
                 {
                     "rev": "B",
                     "dvc_inferred_y_value": "0.09",
+                    "acc": "0.1",
+                    "acc_norm": "0.09",
                     "filename": "test",
                     "field": "acc_norm",
                     "step": 2,
                 },
             ],
             "dvc_inferred_y_value",
-            ["rev", "dvc_inferred_y_value", "step", "field"],
+            ["rev", "dvc_inferred_y_value", "acc", "acc_norm", "step", "field"],
             {
                 "field": "field",
                 "scale": {
@@ -414,6 +422,8 @@ def test_fill_anchor_in_string(tmp_dir):
                 {
                     "rev": "B",
                     "dvc_inferred_y_value": "0.05",
+                    "acc": "0.05",
+                    "acc_norm": "0.02",
                     "filename": "test",
                     "field": "acc",
                     "step": 1,
@@ -421,6 +431,8 @@ def test_fill_anchor_in_string(tmp_dir):
                 {
                     "rev": "B",
                     "dvc_inferred_y_value": "0.1",
+                    "acc": "0.01",
+                    "acc_norm": "0.07",
                     "filename": "test",
                     "field": "acc",
                     "step": 2,
@@ -428,6 +440,7 @@ def test_fill_anchor_in_string(tmp_dir):
                 {
                     "rev": "B",
                     "dvc_inferred_y_value": "0.04",
+                    "acc": "0.04",
                     "filename": "train",
                     "field": "acc",
                     "step": 1,
@@ -435,6 +448,7 @@ def test_fill_anchor_in_string(tmp_dir):
                 {
                     "rev": "B",
                     "dvc_inferred_y_value": "0.09",
+                    "acc": "0.09",
                     "filename": "train",
                     "field": "acc",
                     "step": 2,
@@ -442,6 +456,8 @@ def test_fill_anchor_in_string(tmp_dir):
                 {
                     "rev": "B",
                     "dvc_inferred_y_value": "0.02",
+                    "acc": "0.05",
+                    "acc_norm": "0.02",
                     "filename": "test",
                     "field": "acc_norm",
                     "step": 1,
@@ -449,13 +465,22 @@ def test_fill_anchor_in_string(tmp_dir):
                 {
                     "rev": "B",
                     "dvc_inferred_y_value": "0.07",
+                    "acc": "0.01",
+                    "acc_norm": "0.07",
                     "filename": "test",
                     "field": "acc_norm",
                     "step": 2,
                 },
             ],
             "dvc_inferred_y_value",
-            ["rev", "dvc_inferred_y_value", "step", "filename::field"],
+            [
+                "rev",
+                "dvc_inferred_y_value",
+                "acc",
+                "acc_norm",
+                "step",
+                "filename::field",
+            ],
             {
                 "field": "filename::field",
                 "scale": {
@@ -615,7 +640,7 @@ def test_optional_anchors_linear(
                     "predicted_test": "0.05",
                     "actual": "0.5",
                     "filename": "test",
-                    "field": "predicted",
+                    "field": "predicted_test",
                 },
                 {
                     "rev": "B",
@@ -623,7 +648,7 @@ def test_optional_anchors_linear(
                     "predicted_test": "0.9",
                     "actual": "0.9",
                     "filename": "test",
-                    "field": "predicted",
+                    "field": "predicted_test",
                 },
                 {
                     "rev": "B",
@@ -631,7 +656,7 @@ def test_optional_anchors_linear(
                     "predicted_train": "0.9",
                     "actual": "0.9",
                     "filename": "train",
-                    "field": "predicted",
+                    "field": "predicted_train",
                 },
                 {
                     "rev": "B",
@@ -639,7 +664,7 @@ def test_optional_anchors_linear(
                     "predicted_train": "0.9",
                     "actual": "0.9",
                     "filename": "train",
-                    "field": "predicted",
+                    "field": "predicted_train",
                 },
             ],
             "dvc_inferred_y_value",
@@ -700,7 +725,6 @@ def test_optional_anchors_confusion(
                 {
                     "rev": "B",
                     "acc": "0.05",
-                    "other": "field",
                     "filename": "test",
                     "field": "acc",
                     "loss": 0.1,
@@ -708,14 +732,13 @@ def test_optional_anchors_confusion(
                 {
                     "rev": "C",
                     "acc": "0.1",
-                    "other": "field",
                     "filename": "test",
                     "field": "acc",
                     "loss": 2,
                 },
             ],
             "acc",
-            ["rev", "acc", "other", "loss"],
+            ["rev", "acc", "loss"],
             {},
             [{"field": "rev"}, {"field": "loss"}, {"field": "acc"}],
             id="single_source",
@@ -729,7 +752,6 @@ def test_optional_anchors_confusion(
                 {
                     "rev": "B",
                     "acc": "0.05",
-                    "other": "field",
                     "filename": "train",
                     "field": "acc",
                     "loss": "0.0001",
@@ -737,7 +759,6 @@ def test_optional_anchors_confusion(
                 {
                     "rev": "B",
                     "acc": "0.06",
-                    "other": "field",
                     "filename": "test",
                     "field": "acc",
                     "loss": "200121",
@@ -745,7 +766,6 @@ def test_optional_anchors_confusion(
                 {
                     "rev": "C",
                     "acc": "0.1",
-                    "other": "field",
                     "filename": "train",
                     "field": "acc",
                     "loss": "10",
@@ -753,14 +773,13 @@ def test_optional_anchors_confusion(
                 {
                     "rev": "C",
                     "acc": "0.1",
-                    "other": "field",
                     "filename": "test",
                     "field": "acc",
                     "loss": "100",
                 },
             ],
             "acc",
-            ["rev", "acc", "filename", "loss", "other"],
+            ["rev", "acc", "filename", "loss"],
             {
                 "field": "filename",
                 "legend": {
@@ -791,7 +810,6 @@ def test_optional_anchors_confusion(
                     "dvc_inferred_y_value": "0.05",
                     "test_acc": "0.05",
                     "train_acc": "0.06",
-                    "other": "field",
                     "filename": "data",
                     "field": "test_acc",
                     "loss": 0.1,
@@ -801,7 +819,6 @@ def test_optional_anchors_confusion(
                     "dvc_inferred_y_value": "0.06",
                     "test_acc": "0.05",
                     "train_acc": "0.06",
-                    "other": "field",
                     "filename": "data",
                     "field": "train_acc",
                     "loss": 0.1,
@@ -811,7 +828,6 @@ def test_optional_anchors_confusion(
                     "dvc_inferred_y_value": "0.1",
                     "train_acc": "0.1",
                     "test_acc": "0.2",
-                    "other": "field",
                     "filename": "data",
                     "field": "acc",
                     "loss": 2,
@@ -821,14 +837,13 @@ def test_optional_anchors_confusion(
                     "dvc_inferred_y_value": "0.2",
                     "train_acc": "0.1",
                     "test_acc": "0.2",
-                    "other": "field",
                     "filename": "data",
                     "field": "acc",
                     "loss": 2,
                 },
             ],
             "dvc_inferred_y_value",
-            ["rev", "dvc_inferred_y_value", "train_acc", "test_acc", "other", "loss"],
+            ["rev", "dvc_inferred_y_value", "train_acc", "test_acc", "loss"],
             {
                 "field": "field",
                 "legend": {
@@ -858,7 +873,6 @@ def test_optional_anchors_confusion(
                     "rev": "B",
                     "dvc_inferred_y_value": "0.05",
                     "test_acc": "0.05",
-                    "other": "field",
                     "filename": "test",
                     "field": "test_acc",
                     "loss": 0.1,
@@ -867,7 +881,6 @@ def test_optional_anchors_confusion(
                     "rev": "B",
                     "dvc_inferred_y_value": "0.06",
                     "train_acc": "0.06",
-                    "other": "field",
                     "filename": "train",
                     "field": "train_acc",
                     "loss": 0.1,
@@ -876,7 +889,6 @@ def test_optional_anchors_confusion(
                     "rev": "C",
                     "dvc_inferred_y_value": "0.2",
                     "test_acc": "0.2",
-                    "other": "field",
                     "filename": "test_acc",
                     "field": "acc",
                     "loss": 2,
@@ -885,14 +897,13 @@ def test_optional_anchors_confusion(
                     "rev": "C",
                     "dvc_inferred_y_value": "0.2",
                     "train_acc": "0.1",
-                    "other": "field",
                     "filename": "train_acc",
                     "field": "acc",
                     "loss": 2,
                 },
             ],
             "dvc_inferred_y_value",
-            ["rev", "dvc_inferred_y_value", "train_acc", "test_acc", "other", "loss"],
+            ["rev", "dvc_inferred_y_value", "train_acc", "test_acc", "loss"],
             {
                 "field": "filename::field",
                 "legend": {
@@ -1030,6 +1041,8 @@ def test_optional_anchors_scatter(
                 {
                     "rev": "B",
                     "dvc_inferred_y_value": "0.05",
+                    "acc": "0.05",
+                    "acc_norm": "0.04",
                     "filename": "test",
                     "field": "acc",
                     "step": 1,
@@ -1037,13 +1050,15 @@ def test_optional_anchors_scatter(
                 {
                     "rev": "B",
                     "dvc_inferred_y_value": "0.04",
+                    "acc": "0.05",
+                    "acc_norm": "0.04",
                     "filename": "test",
                     "field": "acc_norm",
                     "step": 1,
                 },
             ],
             "dvc_inferred_y_value",
-            ["rev", "dvc_inferred_y_value", "step", "field"],
+            ["rev", "dvc_inferred_y_value", "acc", "acc_norm", "step", "field"],
             {
                 "field": "field",
                 "scale": {
@@ -1067,6 +1082,8 @@ def test_optional_anchors_scatter(
                 {
                     "rev": "B",
                     "dvc_inferred_y_value": "0.05",
+                    "acc": "0.05",
+                    "acc_norm": "0.02",
                     "filename": "test",
                     "field": "acc",
                     "step": 1,
@@ -1074,6 +1091,7 @@ def test_optional_anchors_scatter(
                 {
                     "rev": "B",
                     "dvc_inferred_y_value": "0.04",
+                    "acc": "0.04",
                     "filename": "train",
                     "field": "acc",
                     "step": 1,
@@ -1082,12 +1100,21 @@ def test_optional_anchors_scatter(
                     "rev": "B",
                     "dvc_inferred_y_value": "0.02",
                     "filename": "test",
+                    "acc": "0.05",
+                    "acc_norm": "0.02",
                     "field": "acc_norm",
                     "step": 1,
                 },
             ],
             "dvc_inferred_y_value",
-            ["rev", "dvc_inferred_y_value", "step", "filename::field"],
+            [
+                "rev",
+                "dvc_inferred_y_value",
+                "acc",
+                "acc_norm",
+                "step",
+                "filename::field",
+            ],
             {
                 "field": "filename::field",
                 "scale": {
