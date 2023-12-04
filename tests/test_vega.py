@@ -275,7 +275,7 @@ def test_fill_anchor_in_string(tmp_dir):
         ]
     ),
     (
-        (
+        pytest.param(
             [
                 {
                     "rev": "B",
@@ -298,8 +298,9 @@ def test_fill_anchor_in_string(tmp_dir):
             {},
             "datum.rev",
             ["rev"],
+            id="single_source",
         ),
-        (
+        pytest.param(
             [
                 {
                     "rev": "B",
@@ -346,8 +347,9 @@ def test_fill_anchor_in_string(tmp_dir):
             },
             "datum.rev + '::' + datum.filename",
             ["rev", "filename"],
+            id="multi_filename",
         ),
-        (
+        pytest.param(
             [
                 {
                     "rev": "B",
@@ -366,7 +368,7 @@ def test_fill_anchor_in_string(tmp_dir):
                 {
                     "rev": "B",
                     "dvc_inferred_y_value": "0.04",
-                    "filename": "train",
+                    "filename": "test",
                     "field": "acc_norm",
                     "step": 1,
                 },
@@ -394,8 +396,9 @@ def test_fill_anchor_in_string(tmp_dir):
             },
             "datum.rev + '::' + datum.field",
             ["rev", "field"],
+            id="multi_field",
         ),
-        (
+        pytest.param(
             [
                 {
                     "rev": "B",
@@ -460,6 +463,7 @@ def test_fill_anchor_in_string(tmp_dir):
             },
             "datum.rev + '::' + datum.filename + '::' + datum.field",
             ["rev", "filename::field"],
+            id="multi_filename_field",
         ),
     ),
 )
@@ -508,7 +512,7 @@ def test_optional_anchors_linear(
         ]
     ),
     (
-        (
+        pytest.param(
             [
                 {
                     "rev": "B",
@@ -531,8 +535,9 @@ def test_optional_anchors_linear(
             {},
             ["rev", "predicted"],
             ["rev", "actual"],
+            id="single_source",
         ),
-        (
+        pytest.param(
             [
                 {
                     "rev": "B",
@@ -558,8 +563,41 @@ def test_optional_anchors_linear(
             {"field": "filename", "sort": []},
             ["rev", "filename", "predicted"],
             ["rev", "filename", "actual"],
+            id="multi_filename",
         ),
-        (
+        pytest.param(
+            [
+                {
+                    "rev": "B",
+                    "dvc_inferred_y_value": "0.05",
+                    "predicted_train": "0.05",
+                    "predicted_test": "0.9",
+                    "actual": "0.5",
+                    "filename": "data",
+                    "field": "predicted_test",
+                },
+                {
+                    "rev": "B",
+                    "dvc_inferred_y_value": "0.9",
+                    "predicted_train": "0.05",
+                    "predicted_test": "0.9",
+                    "actual": "0.5",
+                    "filename": "data",
+                    "field": "predicted_train",
+                },
+            ],
+            "dvc_inferred_y_value",
+            [
+                {"filename": "data", "field": "predicted_test"},
+                {"filename": "data", "field": "predicted_train"},
+            ],
+            ["rev", "dvc_inferred_y_value", "actual"],
+            {"field": "field", "sort": []},
+            ["rev", "field", "dvc_inferred_y_value"],
+            ["rev", "field", "actual"],
+            id="multi_field",
+        ),
+        pytest.param(
             [
                 {
                     "rev": "B",
@@ -603,6 +641,7 @@ def test_optional_anchors_linear(
             {"field": "filename::field", "sort": []},
             ["rev", "filename::field", "dvc_inferred_y_value"],
             ["rev", "filename::field", "actual"],
+            id="multi_filename_field",
         ),
     ),
 )
@@ -649,7 +688,7 @@ def test_optional_anchors_confusion(
         ]
     ),
     (
-        (
+        pytest.param(
             [
                 {
                     "rev": "B",
@@ -673,8 +712,69 @@ def test_optional_anchors_confusion(
             ["rev", "acc", "other", "loss"],
             {},
             [{"field": "rev"}, {"field": "loss"}, {"field": "acc"}],
+            id="single_source",
         ),
-        (
+        pytest.param(
+            [
+                {
+                    "rev": "B",
+                    "acc": "0.05",
+                    "other": "field",
+                    "filename": "train",
+                    "field": "acc",
+                    "loss": "0.0001",
+                },
+                {
+                    "rev": "B",
+                    "acc": "0.06",
+                    "other": "field",
+                    "filename": "test",
+                    "field": "acc",
+                    "loss": "200121",
+                },
+                {
+                    "rev": "C",
+                    "acc": "0.1",
+                    "other": "field",
+                    "filename": "train",
+                    "field": "acc",
+                    "loss": "10",
+                },
+                {
+                    "rev": "C",
+                    "acc": "0.1",
+                    "other": "field",
+                    "filename": "test",
+                    "field": "acc",
+                    "loss": "100",
+                },
+            ],
+            "acc",
+            [
+                {"filename": "train", "field": "acc"},
+                {"filename": "test", "field": "acc"},
+            ],
+            ["rev", "acc", "filename", "loss", "other"],
+            {
+                "field": "filename",
+                "legend": {
+                    "symbolFillColor": "transparent",
+                    "symbolStrokeColor": "grey",
+                },
+                "scale": {
+                    "domain": ["test", "train"],
+                    "range": ["circle", "square"],
+                },
+            },
+            [
+                {"field": "rev"},
+                {"field": "loss"},
+                {"field": "acc"},
+                {"field": "filename"},
+            ],
+            id="multi_filename",
+        ),
+        pytest.param(
             [
                 {
                     "rev": "B",
@@ -702,7 +802,7 @@ def test_optional_anchors_confusion(
                     "train_acc": "0.1",
                     "test_acc": "0.2",
                     "other": "field",
-                    "filename": "train_acc",
+                    "filename": "data",
                     "field": "acc",
                     "loss": 2,
                 },
@@ -712,7 +812,7 @@ def test_optional_anchors_confusion(
                     "train_acc": "0.1",
                     "test_acc": "0.2",
                     "other": "field",
-                    "filename": "test_acc",
+                    "filename": "data",
                     "field": "acc",
                     "loss": 2,
                 },
@@ -740,8 +840,9 @@ def test_optional_anchors_confusion(
                 {"field": "dvc_inferred_y_value"},
                 {"field": "field"},
             ],
+            id="multi_field",
         ),
-        (
+        pytest.param(
             [
                 {
                     "rev": "B",
@@ -803,6 +904,7 @@ def test_optional_anchors_confusion(
                 {"field": "dvc_inferred_y_value"},
                 {"field": "filename::field"},
             ],
+            id="multi_filename_field",
         ),
     ),
 )
@@ -846,7 +948,7 @@ def test_optional_anchors_scatter(
 @pytest.mark.parametrize(
     "datapoints,y,anchors_y_definitions,expected_dp_keys,stroke_dash_encoding",
     (
-        (
+        pytest.param(
             [
                 {
                     "rev": "B",
@@ -867,8 +969,42 @@ def test_optional_anchors_scatter(
             [{"filename": "test", "field": "acc"}],
             ["rev", "acc", "step"],
             {},
+            id="single_source",
         ),
-        (
+        pytest.param(
+            [
+                {
+                    "rev": "B",
+                    "acc": "0.05",
+                    "filename": "test",
+                    "field": "acc",
+                    "step": 1,
+                },
+                {
+                    "rev": "B",
+                    "acc": "0.04",
+                    "filename": "train",
+                    "field": "acc",
+                    "step": 1,
+                },
+            ],
+            "acc",
+            [
+                {"filename": "test", "field": "acc"},
+                {"filename": "train", "field": "acc"},
+            ],
+            ["rev", "acc", "step", "field"],
+            {
+                "field": "filename",
+                "scale": {"domain": ["test", "train"], "range": [[1, 0], [8, 8]]},
+                "legend": {
+                    "symbolFillColor": "transparent",
+                    "symbolStrokeColor": "grey",
+                },
+            },
+            id="multi_filename",
+        ),
+        pytest.param(
             [
                 {
                     "rev": "B",
@@ -880,7 +1016,7 @@ def test_optional_anchors_scatter(
                 {
                     "rev": "B",
                     "dvc_inferred_y_value": "0.04",
-                    "filename": "train",
+                    "filename": "test",
                     "field": "acc_norm",
                     "step": 1,
                 },
@@ -899,8 +1035,9 @@ def test_optional_anchors_scatter(
                     "symbolStrokeColor": "grey",
                 },
             },
+            id="multi_field",
         ),
-        (
+        pytest.param(
             [
                 {
                     "rev": "B",
@@ -942,6 +1079,7 @@ def test_optional_anchors_scatter(
                     "symbolStrokeColor": "grey",
                 },
             },
+            id="multi_filename_field",
         ),
     ),
 )
