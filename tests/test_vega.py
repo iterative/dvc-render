@@ -265,9 +265,9 @@ def test_fill_anchor_in_string(tmp_dir):
 @pytest.mark.parametrize(
     ",".join(
         [
+            "anchors_y_definitions",
             "datapoints",
             "y",
-            "anchors_y_definitions",
             "expected_dp_keys",
             "stroke_dash_encoding",
             "pivot_field",
@@ -276,6 +276,7 @@ def test_fill_anchor_in_string(tmp_dir):
     ),
     (
         pytest.param(
+            [{"filename": "test", "field": "acc"}],
             [
                 {
                     "rev": "B",
@@ -293,7 +294,6 @@ def test_fill_anchor_in_string(tmp_dir):
                 },
             ],
             "acc",
-            [{"filename": "test", "field": "acc"}],
             ["rev", "acc", "step"],
             {},
             "datum.rev",
@@ -301,6 +301,10 @@ def test_fill_anchor_in_string(tmp_dir):
             id="single_source",
         ),
         pytest.param(
+            [
+                {"filename": "test", "field": "acc"},
+                {"filename": "train", "field": "acc"},
+            ],
             [
                 {
                     "rev": "B",
@@ -332,10 +336,6 @@ def test_fill_anchor_in_string(tmp_dir):
                 },
             ],
             "acc",
-            [
-                {"filename": "test", "field": "acc"},
-                {"filename": "train", "field": "acc"},
-            ],
             ["rev", "acc", "step", "filename"],
             {
                 "field": "filename",
@@ -353,6 +353,10 @@ def test_fill_anchor_in_string(tmp_dir):
             id="multi_filename",
         ),
         pytest.param(
+            [
+                {"filename": "test", "field": "acc"},
+                {"filename": "test", "field": "acc_norm"},
+            ],
             [
                 {
                     "rev": "B",
@@ -384,10 +388,6 @@ def test_fill_anchor_in_string(tmp_dir):
                 },
             ],
             "dvc_inferred_y_value",
-            [
-                {"filename": "test", "field": "acc"},
-                {"filename": "test", "field": "acc_norm"},
-            ],
             ["rev", "dvc_inferred_y_value", "step", "field"],
             {
                 "field": "field",
@@ -405,6 +405,11 @@ def test_fill_anchor_in_string(tmp_dir):
             id="multi_field",
         ),
         pytest.param(
+            [
+                {"filename": "test", "field": "acc_norm"},
+                {"filename": "test", "field": "acc"},
+                {"filename": "train", "field": "acc"},
+            ],
             [
                 {
                     "rev": "B",
@@ -450,11 +455,6 @@ def test_fill_anchor_in_string(tmp_dir):
                 },
             ],
             "dvc_inferred_y_value",
-            [
-                {"filename": "test", "field": "acc_norm"},
-                {"filename": "test", "field": "acc"},
-                {"filename": "train", "field": "acc"},
-            ],
             ["rev", "dvc_inferred_y_value", "step", "filename::field"],
             {
                 "field": "filename::field",
@@ -474,20 +474,20 @@ def test_fill_anchor_in_string(tmp_dir):
     ),
 )
 def test_optional_anchors_linear(
+    anchors_y_definitions,
     datapoints,
     y,
-    anchors_y_definitions,
     expected_dp_keys,
     stroke_dash_encoding,
     pivot_field,
     group_by,
 ):  # pylint: disable=too-many-arguments
     props = {
+        "anchors_y_definitions": anchors_y_definitions,
+        "revs_with_datapoints": ["B"],
         "template": "linear",
         "x": "step",
         "y": y,
-        "revs_with_datapoints": ["B"],
-        "anchors_y_definitions": anchors_y_definitions,
     }
 
     expected_datapoints = _get_expected_datapoints(datapoints, expected_dp_keys)
@@ -508,9 +508,9 @@ def test_optional_anchors_linear(
 @pytest.mark.parametrize(
     ",".join(
         [
+            "anchors_y_definitions",
             "datapoints",
             "y",
-            "anchors_y_definitions",
             "expected_dp_keys",
             "row_encoding",
             "group_by_y",
@@ -519,6 +519,7 @@ def test_optional_anchors_linear(
     ),
     (
         pytest.param(
+            [{"filename": "test", "field": "predicted"}],
             [
                 {
                     "rev": "B",
@@ -536,7 +537,6 @@ def test_optional_anchors_linear(
                 },
             ],
             "predicted",
-            [{"filename": "test", "field": "predicted"}],
             ["rev", "predicted", "actual"],
             {},
             ["rev", "predicted"],
@@ -544,6 +544,10 @@ def test_optional_anchors_linear(
             id="single_source",
         ),
         pytest.param(
+            [
+                {"filename": "test", "field": "predicted"},
+                {"filename": "train", "field": "predicted"},
+            ],
             [
                 {
                     "rev": "B",
@@ -561,10 +565,6 @@ def test_optional_anchors_linear(
                 },
             ],
             "predicted",
-            [
-                {"filename": "test", "field": "predicted"},
-                {"filename": "train", "field": "predicted"},
-            ],
             ["rev", "predicted", "actual"],
             {"field": "filename", "sort": []},
             ["rev", "filename", "predicted"],
@@ -572,6 +572,10 @@ def test_optional_anchors_linear(
             id="multi_filename",
         ),
         pytest.param(
+            [
+                {"filename": "data", "field": "predicted_test"},
+                {"filename": "data", "field": "predicted_train"},
+            ],
             [
                 {
                     "rev": "B",
@@ -593,10 +597,6 @@ def test_optional_anchors_linear(
                 },
             ],
             "dvc_inferred_y_value",
-            [
-                {"filename": "data", "field": "predicted_test"},
-                {"filename": "data", "field": "predicted_train"},
-            ],
             ["rev", "dvc_inferred_y_value", "actual"],
             {"field": "field", "sort": []},
             ["rev", "field", "dvc_inferred_y_value"],
@@ -604,6 +604,10 @@ def test_optional_anchors_linear(
             id="multi_field",
         ),
         pytest.param(
+            [
+                {"filename": "test", "field": "predicted_test"},
+                {"filename": "train", "field": "predicted_train"},
+            ],
             [
                 {
                     "rev": "B",
@@ -639,10 +643,6 @@ def test_optional_anchors_linear(
                 },
             ],
             "dvc_inferred_y_value",
-            [
-                {"filename": "test", "field": "predicted_test"},
-                {"filename": "train", "field": "predicted_train"},
-            ],
             ["rev", "predicted", "actual"],
             {"field": "filename::field", "sort": []},
             ["rev", "filename::field", "dvc_inferred_y_value"],
@@ -652,20 +652,20 @@ def test_optional_anchors_linear(
     ),
 )
 def test_optional_anchors_confusion(
+    anchors_y_definitions,
     datapoints,
     y,
-    anchors_y_definitions,
     expected_dp_keys,
     row_encoding,
     group_by_y,
     group_by_x,
 ):  # pylint: disable=too-many-arguments
     props = {
+        "anchors_y_definitions": anchors_y_definitions,
+        "revs_with_datapoints": ["B"],
         "template": "confusion",
         "x": "actual",
         "y": y,
-        "revs_with_datapoints": ["B"],
-        "anchors_y_definitions": anchors_y_definitions,
     }
 
     expected_datapoints = _get_expected_datapoints(datapoints, expected_dp_keys)
@@ -685,9 +685,9 @@ def test_optional_anchors_confusion(
 @pytest.mark.parametrize(
     ",".join(
         [
+            "anchors_y_definitions",
             "datapoints",
             "y",
-            "anchors_y_definitions",
             "expected_dp_keys",
             "shape_encoding",
             "tooltip_encoding",
@@ -695,6 +695,7 @@ def test_optional_anchors_confusion(
     ),
     (
         pytest.param(
+            [{"filename": "test", "field": "acc"}],
             [
                 {
                     "rev": "B",
@@ -714,13 +715,16 @@ def test_optional_anchors_confusion(
                 },
             ],
             "acc",
-            [{"filename": "test", "field": "acc"}],
             ["rev", "acc", "other", "loss"],
             {},
             [{"field": "rev"}, {"field": "loss"}, {"field": "acc"}],
             id="single_source",
         ),
         pytest.param(
+            [
+                {"filename": "train", "field": "acc"},
+                {"filename": "test", "field": "acc"},
+            ],
             [
                 {
                     "rev": "B",
@@ -756,10 +760,6 @@ def test_optional_anchors_confusion(
                 },
             ],
             "acc",
-            [
-                {"filename": "train", "field": "acc"},
-                {"filename": "test", "field": "acc"},
-            ],
             ["rev", "acc", "filename", "loss", "other"],
             {
                 "field": "filename",
@@ -781,6 +781,10 @@ def test_optional_anchors_confusion(
             id="multi_filename",
         ),
         pytest.param(
+            [
+                {"filename": "data", "field": "train_acc"},
+                {"filename": "data", "field": "test_acc"},
+            ],
             [
                 {
                     "rev": "B",
@@ -824,10 +828,6 @@ def test_optional_anchors_confusion(
                 },
             ],
             "dvc_inferred_y_value",
-            [
-                {"filename": "data", "field": "train_acc"},
-                {"filename": "data", "field": "test_acc"},
-            ],
             ["rev", "dvc_inferred_y_value", "train_acc", "test_acc", "other", "loss"],
             {
                 "field": "field",
@@ -849,6 +849,10 @@ def test_optional_anchors_confusion(
             id="multi_field",
         ),
         pytest.param(
+            [
+                {"filename": "train", "field": "train_acc"},
+                {"filename": "test", "field": "test_acc"},
+            ],
             [
                 {
                     "rev": "B",
@@ -888,10 +892,6 @@ def test_optional_anchors_confusion(
                 },
             ],
             "dvc_inferred_y_value",
-            [
-                {"filename": "train", "field": "train_acc"},
-                {"filename": "test", "field": "test_acc"},
-            ],
             ["rev", "dvc_inferred_y_value", "train_acc", "test_acc", "other", "loss"],
             {
                 "field": "filename::field",
@@ -915,19 +915,19 @@ def test_optional_anchors_confusion(
     ),
 )
 def test_optional_anchors_scatter(
+    anchors_y_definitions,
     datapoints,
     y,
-    anchors_y_definitions,
     expected_dp_keys,
     shape_encoding,
     tooltip_encoding,
 ):  # pylint: disable=too-many-arguments
     props = {
+        "anchors_y_definitions": anchors_y_definitions,
+        "revs_with_datapoints": ["B", "C"],
         "template": "scatter",
         "x": "loss",
         "y": y,
-        "revs_with_datapoints": ["B", "C"],
-        "anchors_y_definitions": anchors_y_definitions,
     }
 
     expected_datapoints = _get_expected_datapoints(datapoints, expected_dp_keys)
@@ -952,9 +952,18 @@ def test_optional_anchors_scatter(
 
 
 @pytest.mark.parametrize(
-    "datapoints,y,anchors_y_definitions,expected_dp_keys,stroke_dash_encoding",
+    ",".join(
+        [
+            "anchors_y_definitions",
+            "datapoints",
+            "y",
+            "expected_dp_keys",
+            "stroke_dash_encoding",
+        ]
+    ),
     (
         pytest.param(
+            [{"filename": "test", "field": "acc"}],
             [
                 {
                     "rev": "B",
@@ -972,12 +981,15 @@ def test_optional_anchors_scatter(
                 },
             ],
             "acc",
-            [{"filename": "test", "field": "acc"}],
             ["rev", "acc", "step"],
             {},
             id="single_source",
         ),
         pytest.param(
+            [
+                {"filename": "test", "field": "acc"},
+                {"filename": "train", "field": "acc"},
+            ],
             [
                 {
                     "rev": "B",
@@ -995,10 +1007,6 @@ def test_optional_anchors_scatter(
                 },
             ],
             "acc",
-            [
-                {"filename": "test", "field": "acc"},
-                {"filename": "train", "field": "acc"},
-            ],
             ["rev", "acc", "step", "field"],
             {
                 "field": "filename",
@@ -1014,6 +1022,10 @@ def test_optional_anchors_scatter(
             id="multi_filename",
         ),
         pytest.param(
+            [
+                {"filename": "test", "field": "acc"},
+                {"filename": "test", "field": "acc_norm"},
+            ],
             [
                 {
                     "rev": "B",
@@ -1031,10 +1043,6 @@ def test_optional_anchors_scatter(
                 },
             ],
             "dvc_inferred_y_value",
-            [
-                {"filename": "test", "field": "acc"},
-                {"filename": "test", "field": "acc_norm"},
-            ],
             ["rev", "dvc_inferred_y_value", "step", "field"],
             {
                 "field": "field",
@@ -1050,6 +1058,11 @@ def test_optional_anchors_scatter(
             id="multi_field",
         ),
         pytest.param(
+            [
+                {"filename": "test", "field": "acc_norm"},
+                {"filename": "test", "field": "acc"},
+                {"filename": "train", "field": "acc"},
+            ],
             [
                 {
                     "rev": "B",
@@ -1074,11 +1087,6 @@ def test_optional_anchors_scatter(
                 },
             ],
             "dvc_inferred_y_value",
-            [
-                {"filename": "test", "field": "acc_norm"},
-                {"filename": "test", "field": "acc"},
-                {"filename": "train", "field": "acc"},
-            ],
             ["rev", "dvc_inferred_y_value", "step", "filename::field"],
             {
                 "field": "filename::field",
@@ -1096,20 +1104,20 @@ def test_optional_anchors_scatter(
     ),
 )
 def test_partial_filled_template(
+    anchors_y_definitions,
     datapoints,
     y,
-    anchors_y_definitions,
     expected_dp_keys,
     stroke_dash_encoding,
 ):
     title = f"{y} by step"
     props = {
+        "anchors_y_definitions": anchors_y_definitions,
+        "revs_with_datapoints": ["B"],
         "template": "linear",
+        "title": title,
         "x": "step",
         "y": y,
-        "revs_with_datapoints": ["B"],
-        "anchors_y_definitions": anchors_y_definitions,
-        "title": title,
     }
 
     expected_split = {
