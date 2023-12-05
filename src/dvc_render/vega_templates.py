@@ -142,9 +142,10 @@ class BarHorizontalSortedTemplate(Template):
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
         "data": {"values": Template.anchor("data")},
         "title": Template.anchor("title"),
-        "width": 300,
-        "height": 300,
+        "width": Template.anchor("plot_width"),
+        "height": Template.anchor("plot_height"),
         "mark": {"type": "bar"},
+        "params": [Template.anchor("zoom_and_pan")],
         "encoding": {
             "x": {
                 "field": Template.anchor("x"),
@@ -158,11 +159,9 @@ class BarHorizontalSortedTemplate(Template):
                 "title": Template.anchor("y_label"),
                 "sort": "-x",
             },
-            "yOffset": {"field": "rev"},
-            "color": {
-                "field": "rev",
-                "type": "nominal",
-            },
+            "yOffset": {"field": "rev", "sort": []},
+            "color": Template.anchor("color"),
+            "column": Template.anchor("column"),
         },
     }
 
@@ -174,9 +173,10 @@ class BarHorizontalTemplate(Template):
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
         "data": {"values": Template.anchor("data")},
         "title": Template.anchor("title"),
-        "width": 300,
-        "height": 300,
+        "width": Template.anchor("plot_width"),
+        "height": Template.anchor("plot_height"),
         "mark": {"type": "bar"},
+        "params": [Template.anchor("zoom_and_pan")],
         "encoding": {
             "x": {
                 "field": Template.anchor("x"),
@@ -189,11 +189,9 @@ class BarHorizontalTemplate(Template):
                 "type": "nominal",
                 "title": Template.anchor("y_label"),
             },
-            "yOffset": {"field": "rev"},
-            "color": {
-                "field": "rev",
-                "type": "nominal",
-            },
+            "yOffset": {"field": "rev", "sort": []},
+            "color": Template.anchor("color"),
+            "column": Template.anchor("column"),
         },
     }
 
@@ -204,7 +202,10 @@ class ConfusionTemplate(Template):
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
         "data": {"values": Template.anchor("data")},
         "title": Template.anchor("title"),
-        "facet": {"field": "rev", "type": "nominal"},
+        "facet": {
+            "column": {"field": "rev", "sort": []},
+            "row": Template.anchor("row"),
+        },
         "params": [
             {
                 "name": "showValues",
@@ -219,13 +220,13 @@ class ConfusionTemplate(Template):
                 },
                 {
                     "impute": "xy_count",
-                    "groupby": ["rev", Template.anchor("y")],
+                    "groupby": Template.anchor("group_by_y"),
                     "key": Template.anchor("x"),
                     "value": 0,
                 },
                 {
                     "impute": "xy_count",
-                    "groupby": ["rev", Template.anchor("x")],
+                    "groupby": Template.anchor("group_by_x"),
                     "key": Template.anchor("y"),
                     "value": 0,
                 },
@@ -257,8 +258,8 @@ class ConfusionTemplate(Template):
             "layer": [
                 {
                     "mark": "rect",
-                    "width": 300,
-                    "height": 300,
+                    "width": Template.anchor("plot_width"),
+                    "height": Template.anchor("plot_height"),
                     "encoding": {
                         "color": {
                             "field": "xy_count",
@@ -327,7 +328,10 @@ class NormalizedConfusionTemplate(Template):
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
         "data": {"values": Template.anchor("data")},
         "title": Template.anchor("title"),
-        "facet": {"field": "rev", "type": "nominal"},
+        "facet": {
+            "column": {"field": "rev", "sort": []},
+            "row": Template.anchor("row"),
+        },
         "spec": {
             "transform": [
                 {
@@ -342,7 +346,7 @@ class NormalizedConfusionTemplate(Template):
                 },
                 {
                     "impute": "xy_count",
-                    "groupby": ["rev", Template.anchor("x")],
+                    "groupby": Template.anchor("group_by_x"),
                     "key": Template.anchor("y"),
                     "value": 0,
                 },
@@ -374,8 +378,8 @@ class NormalizedConfusionTemplate(Template):
             "layer": [
                 {
                     "mark": "rect",
-                    "width": 300,
-                    "height": 300,
+                    "width": Template.anchor("plot_width"),
+                    "height": Template.anchor("plot_height"),
                     "encoding": {
                         "color": {
                             "field": "percent_of_y",
@@ -442,9 +446,10 @@ class ScatterTemplate(Template):
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
         "data": {"values": Template.anchor("data")},
         "title": Template.anchor("title"),
-        "width": 300,
-        "height": 300,
+        "width": Template.anchor("plot_width"),
+        "height": Template.anchor("plot_height"),
         "mark": {"type": "point", "tooltip": {"content": "data"}},
+        "params": [Template.anchor("zoom_and_pan")],
         "encoding": {
             "x": {
                 "field": Template.anchor("x"),
@@ -456,10 +461,9 @@ class ScatterTemplate(Template):
                 "type": "quantitative",
                 "title": Template.anchor("y_label"),
             },
-            "color": {
-                "field": "rev",
-                "type": "nominal",
-            },
+            "color": Template.anchor("color"),
+            "shape": Template.anchor("shape"),
+            "tooltip": Template.anchor("tooltip"),
         },
     }
 
@@ -471,8 +475,8 @@ class ScatterJitterTemplate(Template):
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
         "data": {"values": Template.anchor("data")},
         "title": Template.anchor("title"),
-        "width": 300,
-        "height": 300,
+        "width": Template.anchor("plot_width"),
+        "height": Template.anchor("plot_height"),
         "transform": [
             {"calculate": "random()", "as": "randomX"},
             {"calculate": "random()", "as": "randomY"},
@@ -487,10 +491,9 @@ class ScatterJitterTemplate(Template):
                 "field": Template.anchor("y"),
                 "title": Template.anchor("y_label"),
             },
-            "color": {
-                "field": "rev",
-                "type": "nominal",
-            },
+            "color": Template.anchor("color"),
+            "shape": Template.anchor("shape"),
+            "tooltip": Template.anchor("tooltip"),
             "xOffset": {"field": "randomX", "type": "quantitative"},
             "yOffset": {"field": "randomY", "type": "quantitative"},
         },
@@ -503,8 +506,8 @@ class SmoothLinearTemplate(Template):
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
         "data": {"values": Template.anchor("data")},
         "title": Template.anchor("title"),
-        "width": 300,
-        "height": 300,
+        "width": Template.anchor("plot_width"),
+        "height": Template.anchor("plot_height"),
         "params": [
             {
                 "name": "smooth",
@@ -517,15 +520,25 @@ class SmoothLinearTemplate(Template):
                 },
             },
         ],
+        "encoding": {
+            "x": {
+                "field": Template.anchor("x"),
+                "type": "quantitative",
+                "title": Template.anchor("x_label"),
+            },
+            "color": Template.anchor("color"),
+            "strokeDash": Template.anchor("stroke_dash"),
+        },
         "layer": [
             {
-                "mark": "line",
-                "encoding": {
-                    "x": {
-                        "field": Template.anchor("x"),
-                        "type": "quantitative",
-                        "title": Template.anchor("x_label"),
+                "layer": [
+                    {"params": [Template.anchor("zoom_and_pan")], "mark": "line"},
+                    {
+                        "transform": [{"filter": {"param": "hover", "empty": False}}],
+                        "mark": "point",
                     },
+                ],
+                "encoding": {
                     "y": {
                         "field": Template.anchor("y"),
                         "type": "quantitative",
@@ -536,24 +549,12 @@ class SmoothLinearTemplate(Template):
                         "field": "rev",
                         "type": "nominal",
                     },
-                    "tooltip": [
-                        {
-                            "field": Template.anchor("x"),
-                            "title": Template.anchor("x_label"),
-                            "type": "quantitative",
-                        },
-                        {
-                            "field": Template.anchor("y"),
-                            "title": Template.anchor("y_label"),
-                            "type": "quantitative",
-                        },
-                    ],
                 },
                 "transform": [
                     {
                         "loess": Template.anchor("y"),
                         "on": Template.anchor("x"),
-                        "groupby": ["rev", "filename", "field", "filename::field"],
+                        "groupby": Template.anchor("group_by"),
                         "bandwidth": {"signal": "smooth"},
                     },
                 ],
@@ -573,26 +574,10 @@ class SmoothLinearTemplate(Template):
                         "scale": {"zero": False},
                     },
                     "color": {"field": "rev", "type": "nominal"},
-                    "tooltip": [
-                        {
-                            "field": Template.anchor("x"),
-                            "title": Template.anchor("x_label"),
-                            "type": "quantitative",
-                        },
-                        {
-                            "field": Template.anchor("y"),
-                            "title": Template.anchor("y_label"),
-                            "type": "quantitative",
-                        },
-                    ],
                 },
             },
             {
-                "mark": {
-                    "type": "circle",
-                    "size": 10,
-                    "tooltip": {"content": "encoding"},
-                },
+                "mark": {"type": "circle", "size": 10},
                 "encoding": {
                     "x": {
                         "aggregate": "max",
@@ -610,6 +595,39 @@ class SmoothLinearTemplate(Template):
                     "color": {"field": "rev", "type": "nominal"},
                 },
             },
+            {
+                "transform": [
+                    {"calculate": Template.anchor("pivot_field"), "as": "pivot_field"},
+                    {
+                        "pivot": "pivot_field",
+                        "value": Template.anchor("y"),
+                        "groupby": [Template.anchor("x")],
+                    },
+                ],
+                "mark": {
+                    "type": "rule",
+                    "tooltip": {"content": "data"},
+                    "stroke": "grey",
+                },
+                "encoding": {
+                    "opacity": {
+                        "condition": {"value": 0.3, "param": "hover", "empty": False},
+                        "value": 0,
+                    }
+                },
+                "params": [
+                    {
+                        "name": "hover",
+                        "select": {
+                            "type": "point",
+                            "fields": [Template.anchor("x")],
+                            "nearest": True,
+                            "on": "mouseover",
+                            "clear": "mouseout",
+                        },
+                    }
+                ],
+            },
         ],
     }
 
@@ -625,8 +643,9 @@ class SimpleLinearTemplate(Template):
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
         "data": {"values": Template.anchor("data")},
         "title": Template.anchor("title"),
-        "width": 300,
-        "height": 300,
+        "params": [Template.anchor("zoom_and_pan")],
+        "width": Template.anchor("plot_width"),
+        "height": Template.anchor("plot_height"),
         "mark": {
             "type": "line",
             "tooltip": {"content": "data"},
@@ -643,10 +662,9 @@ class SimpleLinearTemplate(Template):
                 "title": Template.anchor("y_label"),
                 "scale": {"zero": False},
             },
-            "color": {
-                "field": "rev",
-                "type": "nominal",
-            },
+            "color": Template.anchor("color"),
+            "strokeDash": Template.anchor("stroke_dash"),
+            "tooltip": Template.anchor("tooltip"),
         },
     }
 
