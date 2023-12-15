@@ -22,7 +22,7 @@ from dvc_render.image import ImageRenderer
 )
 def test_matches(extension, matches):
     filename = "file" + extension
-    assert ImageRenderer.matches(filename, {}) == matches
+    assert ImageRenderer.matches(filename) == matches
 
 
 @pytest.mark.parametrize("html_path", [None, "/output/dir/index.html"])

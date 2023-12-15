@@ -160,7 +160,7 @@ class VegaRenderer(Renderer):
         """
         return self.template.content
 
-    def partial_html(self) -> str:  # type: ignore[override]
+    def partial_html(self, **kwargs) -> str:  # noqa: ARG002
         content = self.get_filled_template()
         return json.dumps(content)
 

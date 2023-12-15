@@ -22,7 +22,7 @@ class ImageRenderer(Renderer):
 
     EXTENSIONS = {".jpg", ".jpeg", ".gif", ".png", ".svg"}
 
-    def partial_html(self, html_path=None) -> str:  # type: ignore[override]
+    def partial_html(self, html_path=None, **kwargs) -> str:  # noqa: ARG002
         div_content = []
         for datapoint in self.datapoints:
             src = datapoint[self.SRC_FIELD]

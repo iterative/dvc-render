@@ -23,7 +23,7 @@ from dvc_render.vega_templates import NoFieldInDataError, Template
     ),
 )
 def test_matches(extension, matches):
-    assert VegaRenderer.matches("file" + extension, {}) == matches
+    assert VegaRenderer.matches("file" + extension) == matches
 
 
 def test_init_empty():

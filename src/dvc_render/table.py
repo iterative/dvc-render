@@ -31,7 +31,7 @@ class TableRenderer(Renderer):
         data = list_dict_to_dict_list(datapoints)
         return tabulate(data, headers="keys", tablefmt=tablefmt)
 
-    def partial_html(self) -> str:  # type: ignore[override]
+    def partial_html(self, **kwargs) -> str:  # noqa: ARG002
         return self.to_tabulate(self.datapoints, tablefmt="html")
 
     def generate_markdown(self) -> str:  # type: ignore[override]

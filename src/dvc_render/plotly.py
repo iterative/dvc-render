@@ -42,7 +42,7 @@ class ParallelCoordinatesRenderer(Renderer):
         self.name = name
         self.fill_value = fill_value
 
-    def partial_html(self) -> str:  # type: ignore[override]
+    def partial_html(self, **kwargs) -> str:  # noqa: ARG002
         return json.dumps(self._get_plotly_data())
 
     def _get_plotly_data(self):
