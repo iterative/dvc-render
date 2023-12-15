@@ -1,4 +1,4 @@
-from flatten_dict import flatten
+from flatten_dict import flatten  # type: ignore[import]
 
 
 def list_dict_to_dict_list(list_dict):
