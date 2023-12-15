@@ -43,6 +43,8 @@ docs = [
     "mkdocstrings-python==1.6.3",
 ]
 tests = [
+    "dvc-render[table]",
+    "dvc-render[markdown]",
     "pytest==7.2.0",
     "pytest-sugar==0.9.5",
     "pytest-cov==3.0.0",
