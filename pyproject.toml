@@ -27,6 +27,14 @@ Issues = "https://github.com/iterative/dvc-render/issues"
 Source = "https://github.com/iterative/dvc-render"
 
 [project.optional-dependencies]
+table = [
+    "tabulate>=0.8.7",
+    "flatten_dict<1,>=0.4.1",
+]
+markdown = [
+    "dvc-render[table]",
+    "matplotlib",
+]
 docs = [
     "mkdocs==1.5.2",
     "mkdocs-gen-files==0.5.0",
@@ -39,9 +47,11 @@ tests = [
     "pytest-sugar==0.9.5",
     "pytest-cov==3.0.0",
     "pytest-mock==3.8.2",
-    "mypy==0.971",
+    "mypy==1.2.0",
 ]
 dev = [
+    "dvc-render[table]",
+    "dvc-render[markdown]",
     "dvc-render[tests]",
     "dvc-render[docs]",
 ]
@@ -106,8 +116,15 @@ ignore = [
     "SIM108", # if-else-block-instead-of-if-exp
     "D203", # one blank line before class
     "D213", # multi-line-summary-second-line
+    "RUF012", # mutable class attributes
+    "PT007", # value types in pytest.mark.parametrize
 ]
-select = ["ALL"]
+select = [
+    "F", "E", "W", "C90", "I", "N", "UP", "YTT", "ASYNC", "S", "BLE", "B", "A", "C4", "T10",
+    "EXE", "ISC", "ICN", "G", "INP", "PIE", "T20", "PYI", "PT", "Q", "RSE", "RET",
+    "SLOT", "SIM", "TID", "TCH", "ARG", "PGH", "PLC", "PLE", "PLR", "PLW", "TRY",
+    "FLY", "PERF101", "RUF",
+]
 show-source = true
 show-fixes = true
 

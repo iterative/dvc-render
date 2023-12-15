@@ -1,14 +1,13 @@
 import os
 
 import pytest
-
 from dvc_render.image import ImageRenderer
 
 # pylint: disable=missing-function-docstring
 
 
 @pytest.mark.parametrize(
-    "extension, matches",
+    ("extension", "matches"),
     (
         (".csv", False),
         (".json", False),
@@ -69,7 +68,7 @@ def test_invalid_generate_markdown():
 
 
 @pytest.mark.parametrize(
-    "html_path,img_path,expected_path",
+    ("html_path", "img_path", "expected_path"),
     [
         (
             os.path.join("output", "path", "index.html"),

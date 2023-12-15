@@ -2,13 +2,12 @@ import json
 import os
 
 import pytest
-
 from dvc_render.vega_templates import (
     TEMPLATES,
     LinearTemplate,
     ScatterTemplate,
     Template,
-    TemplateContentDoesNotMatch,
+    TemplateContentDoesNotMatchError,
     TemplateNotFoundError,
     dump_templates,
     find_value,
@@ -24,7 +23,7 @@ def test_raise_on_no_template():
 
 
 @pytest.mark.parametrize(
-    "template_path, target_name",
+    ("template_path", "target_name"),
     [
         (os.path.join(".dvc", "plots", "template.json"), "template"),
         (os.path.join(".dvc", "plots", "template.json"), "template.json"),
@@ -74,7 +73,7 @@ def test_get_default_template():
 
 
 @pytest.mark.parametrize(
-    "targets,expected_templates",
+    ("targets", "expected_templates"),
     (
         ([None, TEMPLATES]),
         (["linear", "scatter"], [ScatterTemplate, LinearTemplate]),
@@ -95,7 +94,7 @@ def test_raise_on_init_modified(tmp_dir):
     with open(tmp_dir / "linear.json", "a", encoding="utf-8") as fd:
         fd.write("modification")
 
-    with pytest.raises(TemplateContentDoesNotMatch):
+    with pytest.raises(TemplateContentDoesNotMatchError):
         dump_templates(output=".", targets=["linear"])
 
 
@@ -105,7 +104,7 @@ def test_escape_special_characters():
 
 
 @pytest.mark.parametrize(
-    "content_dict, value_name",
+    ("content_dict", "value_name"),
     [
         ({"key": "value"}, "value"),
         ({"key": {"subkey": "value"}}, "value"),

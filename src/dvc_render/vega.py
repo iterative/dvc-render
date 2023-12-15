@@ -91,7 +91,7 @@ class VegaRenderer(Renderer):
 
         self._split_content: Dict[str, str] = {}
 
-    def get_filled_template(
+    def get_filled_template(  # noqa: C901
         self,
         split_anchors: Optional[List[str]] = None,
         strict: bool = True,
@@ -134,7 +134,7 @@ class VegaRenderer(Renderer):
             if name == "data":
                 if not self.template.has_anchor(name):
                     anchor = self.template.anchor(name)
-                    raise BadTemplateError(
+                    raise BadTemplateError(  # noqa: TRY003
                         f"Template '{self.template.name}' "
                         f"is not using '{anchor}' anchor"
                     )
@@ -160,18 +160,18 @@ class VegaRenderer(Renderer):
         """
         return self.template.content
 
-    def partial_html(self, **kwargs) -> str:
+    def partial_html(self) -> str:  # type: ignore[override]
         content = self.get_filled_template()
         return json.dumps(content)
 
     def generate_markdown(self, report_path=None) -> str:
         if not isinstance(self.template, LinearTemplate):
-            warn("`generate_markdown` can only be used with `LinearTemplate`")
+            warn("`generate_markdown` can only be used with `LinearTemplate`")  # noqa: B028
             return ""
         try:
             from matplotlib import pyplot as plt
         except ImportError as e:
-            raise ImportError("matplotlib is required for `generate_markdown`") from e
+            raise ImportError("matplotlib is required for `generate_markdown`") from e  # noqa: TRY003
 
         data = list_dict_to_dict_list(self.datapoints)
         if data:
@@ -181,7 +181,7 @@ class VegaRenderer(Renderer):
                 output_file = output_file.with_suffix(".png")
                 output_file.parent.mkdir(exist_ok=True, parents=True)
             else:
-                output_file = io.BytesIO()  # type: ignore
+                output_file = io.BytesIO()  # type: ignore[assignment]
 
             x = self.properties.get("x")
             y = self.properties.get("y")
@@ -200,9 +200,7 @@ class VegaRenderer(Renderer):
                 if report_path:
                     return f"\n![{self.name}]({output_file.relative_to(report_folder)})"
 
-                base64_str = base64.b64encode(
-                    output_file.getvalue()  # type: ignore
-                ).decode()
+                base64_str = base64.b64encode(output_file.getvalue()).decode()  # type: ignore[attr-defined]
                 src = f"data:image/png;base64,{base64_str}"
 
                 return f"\n![{self.name}]({src})"
@@ -411,7 +409,7 @@ class VegaRenderer(Renderer):
         domain.sort()
         return domain
 
-    def _fill_optional_anchor_mapping(
+    def _fill_optional_anchor_mapping(  # noqa: PLR0913
         self,
         split_anchors: List[str],
         optional_anchors: List[str],

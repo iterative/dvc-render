@@ -27,13 +27,13 @@ class TableRenderer(Renderer):
     def to_tabulate(cls, datapoints, tablefmt):
         """Convert datapoints to tabulate format"""
         if tabulate is None:
-            raise ImportError(f"{cls.__name__} requires `tabulate`.")
+            raise ImportError(f"{cls.__name__} requires `tabulate`.")  # noqa: TRY003
         data = list_dict_to_dict_list(datapoints)
         return tabulate(data, headers="keys", tablefmt=tablefmt)
 
-    def partial_html(self, **kwargs) -> str:
+    def partial_html(self) -> str:  # type: ignore[override]
         return self.to_tabulate(self.datapoints, tablefmt="html")
 
-    def generate_markdown(self, report_path=None) -> str:
+    def generate_markdown(self) -> str:  # type: ignore[override]
         table = self.to_tabulate(self.datapoints, tablefmt="github")
         return f"\n{self.name}\n\n{table}"

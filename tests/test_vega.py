@@ -2,7 +2,6 @@ import json
 from typing import Any, Dict, List
 
 import pytest
-
 from dvc_render.vega import OPTIONAL_ANCHOR_RANGES, BadTemplateError, VegaRenderer
 from dvc_render.vega_templates import NoFieldInDataError, Template
 
@@ -10,7 +9,7 @@ from dvc_render.vega_templates import NoFieldInDataError, Template
 
 
 @pytest.mark.parametrize(
-    "extension, matches",
+    ("extension", "matches"),
     (
         (".csv", True),
         (".json", True),
@@ -104,7 +103,7 @@ def test_bad_template_on_init():
 
 
 @pytest.mark.parametrize(
-    "bad_content,good_content",
+    ("bad_content", "good_content"),
     (
         (
             {"data": {"values": "BAD_ANCHOR"}},
@@ -149,13 +148,13 @@ def test_raise_on_wrong_field():
 @pytest.mark.parametrize("to_file", [True, False])
 def test_generate_markdown(tmp_dir, mocker, name, to_file):
     # pylint: disable-msg=too-many-locals
-    import matplotlib.pyplot
+    import matplotlib.pyplot as plt
 
-    plot = mocker.spy(matplotlib.pyplot, "plot")
-    title = mocker.spy(matplotlib.pyplot, "title")
-    xlabel = mocker.spy(matplotlib.pyplot, "xlabel")
-    ylabel = mocker.spy(matplotlib.pyplot, "ylabel")
-    savefig = mocker.spy(matplotlib.pyplot, "savefig")
+    plot = mocker.spy(plt, "plot")
+    title = mocker.spy(plt, "title")
+    xlabel = mocker.spy(plt, "xlabel")
+    ylabel = mocker.spy(plt, "ylabel")
+    savefig = mocker.spy(plt, "savefig")
 
     props = {"x": "first_val", "y": "second_val", "title": "FOO"}
     datapoints = [
@@ -235,9 +234,8 @@ def test_fill_anchor_in_string(tmp_dir):
                 "transform": [
                     {"joinaggregate": [{"op": "mean", "field": "lab", "as": "mean_y"}]},
                     {
-                        "calculate": "pow("
-                        + "datum.<DVC_METRIC_Y> - datum.<DVC_METRIC_X>,2"
-                        + ")",
+                        "calculate": "pow(datum.<DVC_METRIC_Y> - "
+                        "datum.<DVC_METRIC_X>,2)",
                         "as": "SR",
                     },
                     {"joinaggregate": [{"op": "sum", "field": "SR", "as": "SSR"}]},
@@ -263,16 +261,14 @@ def test_fill_anchor_in_string(tmp_dir):
 
 
 @pytest.mark.parametrize(
-    ",".join(
-        [
-            "anchors_y_definitions",
-            "datapoints",
-            "y",
-            "expected_dp_keys",
-            "stroke_dash_encoding",
-            "pivot_field",
-            "group_by",
-        ]
+    (
+        "anchors_y_definitions",
+        "datapoints",
+        "y",
+        "expected_dp_keys",
+        "stroke_dash_encoding",
+        "pivot_field",
+        "group_by",
     ),
     (
         pytest.param(
@@ -498,7 +494,7 @@ def test_fill_anchor_in_string(tmp_dir):
         ),
     ),
 )
-def test_optional_anchors_linear(
+def test_optional_anchors_linear(  # noqa: PLR0913
     anchors_y_definitions,
     datapoints,
     y,
@@ -531,16 +527,14 @@ def test_optional_anchors_linear(
 
 
 @pytest.mark.parametrize(
-    ",".join(
-        [
-            "anchors_y_definitions",
-            "datapoints",
-            "y",
-            "expected_dp_keys",
-            "row_encoding",
-            "group_by_y",
-            "group_by_x",
-        ]
+    (
+        "anchors_y_definitions",
+        "datapoints",
+        "y",
+        "expected_dp_keys",
+        "row_encoding",
+        "group_by_y",
+        "group_by_x",
     ),
     (
         pytest.param(
@@ -676,7 +670,7 @@ def test_optional_anchors_linear(
         ),
     ),
 )
-def test_optional_anchors_confusion(
+def test_optional_anchors_confusion(  # noqa: PLR0913
     anchors_y_definitions,
     datapoints,
     y,
@@ -708,15 +702,13 @@ def test_optional_anchors_confusion(
 
 
 @pytest.mark.parametrize(
-    ",".join(
-        [
-            "anchors_y_definitions",
-            "datapoints",
-            "y",
-            "expected_dp_keys",
-            "shape_encoding",
-            "tooltip_encoding",
-        ]
+    (
+        "anchors_y_definitions",
+        "datapoints",
+        "y",
+        "expected_dp_keys",
+        "shape_encoding",
+        "tooltip_encoding",
     ),
     (
         pytest.param(
@@ -870,7 +862,7 @@ def test_optional_anchors_confusion(
         ),
     ),
 )
-def test_optional_anchors_scatter(
+def test_optional_anchors_scatter(  # noqa: PLR0913
     anchors_y_definitions,
     datapoints,
     y,
@@ -908,12 +900,7 @@ def test_optional_anchors_scatter(
 
 
 @pytest.mark.parametrize(
-    ",".join(
-        [
-            "revs",
-            "datapoints",
-        ]
-    ),
+    ("revs", "datapoints"),
     (
         pytest.param(
             ["B"],
@@ -1067,14 +1054,12 @@ def test_color_anchor(revs, datapoints):
 
 
 @pytest.mark.parametrize(
-    ",".join(
-        [
-            "anchors_y_definitions",
-            "datapoints",
-            "y",
-            "expected_dp_keys",
-            "stroke_dash_encoding",
-        ]
+    (
+        "anchors_y_definitions",
+        "datapoints",
+        "y",
+        "expected_dp_keys",
+        "stroke_dash_encoding",
     ),
     (
         pytest.param(

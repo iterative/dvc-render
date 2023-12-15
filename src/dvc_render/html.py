@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING, List, Optional
 
 from dvc_render.image import ImageRenderer
 
-from .exceptions import DvcRenderException
+from .exceptions import DvcRenderError
 
 if TYPE_CHECKING:
     from .base import Renderer, StrPath
@@ -28,7 +28,7 @@ PAGE_HTML = """<!DOCTYPE html>
 </html>"""
 
 
-class MissingPlaceholderError(DvcRenderException):
+class MissingPlaceholderError(DvcRenderError):
     def __init__(self, placeholder):
         super().__init__(f"HTML template has to contain '{placeholder}'.")
 

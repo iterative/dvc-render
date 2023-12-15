@@ -3,23 +3,23 @@ import json
 from pathlib import Path
 from typing import TYPE_CHECKING, Any, Dict, List, Optional, Union
 
-from .exceptions import DvcRenderException
+from .exceptions import DvcRenderError
 
 if TYPE_CHECKING:
     from .base import StrPath
 
 
-class TemplateNotFoundError(DvcRenderException):
+class TemplateNotFoundError(DvcRenderError):
     def __init__(self, path):
         super().__init__(f"Template '{path}' not found.")
 
 
-class NoFieldInDataError(DvcRenderException):
+class NoFieldInDataError(DvcRenderError):
     def __init__(self, field_name):
         super().__init__(f"Field '{field_name}' does not exist in provided data.")
 
 
-class TemplateContentDoesNotMatch(DvcRenderException):
+class TemplateContentDoesNotMatchError(DvcRenderError):
     def __init__(self, template_name: str, path: str):
         super().__init__(
             f"Template '{path}' already exists "
@@ -28,7 +28,7 @@ class TemplateContentDoesNotMatch(DvcRenderException):
         )
 
 
-class BadTemplateError(DvcRenderException):
+class BadTemplateError(DvcRenderError):
     pass
 
 
@@ -56,9 +56,8 @@ def list_replace_value(l: list, name: str, value: str) -> list:  # noqa: E741
             e = list_replace_value(e, name, value)
         elif isinstance(e, dict):
             e = dict_replace_value(e, name, value)
-        elif isinstance(e, str):
-            if e == name:
-                e = value
+        elif isinstance(e, str) and e == name:
+            e = value
         x.append(e)
     return x
 
@@ -66,18 +65,14 @@ def list_replace_value(l: list, name: str, value: str) -> list:  # noqa: E741
 def find_value(d: Union[dict, list, str], value: str) -> bool:
     if isinstance(d, dict):
         for v in d.values():
-            if isinstance(v, dict):
-                if find_value(v, value):
-                    return True
-            if isinstance(v, str):
-                if v == value:
-                    return True
-            if isinstance(v, list):
-                if any(find_value(e, value) for e in v):
-                    return True
-    elif isinstance(d, str):
-        if d == value:
-            return True
+            if isinstance(v, dict) and find_value(v, value):
+                return True
+            if isinstance(v, str) and v == value:
+                return True
+            if isinstance(v, list) and any(find_value(e, value) for e in v):
+                return True
+    elif isinstance(d, str) and d == value:
+        return True
     return False
 
 
@@ -97,7 +92,7 @@ class Template:
             or self.DEFAULT_CONTENT
             and not isinstance(self.DEFAULT_CONTENT, dict)
         ):
-            raise BadTemplateError()
+            raise BadTemplateError
         self._original_content = content or self.DEFAULT_CONTENT
         self.content: Dict[str, Any] = self._original_content
         self.name = name or self.DEFAULT_NAME
@@ -127,8 +122,7 @@ class Template:
 
     def has_anchor(self, name) -> bool:
         "Check if ANCHOR formatted with name is in content."
-        found = find_value(self.content, self.anchor(name))
-        return found
+        return find_value(self.content, self.anchor(name))
 
     def fill_anchor(self, name, value) -> None:
         "Replace anchor `name` with `value` in content."
@@ -731,7 +725,7 @@ def get_template(
         return Template(content, name=template)
 
     for template_cls in TEMPLATES:
-        if template_cls.DEFAULT_NAME == template:
+        if template == template_cls.DEFAULT_NAME:
             return template_cls()
 
     raise TemplateNotFoundError(template)
@@ -756,6 +750,6 @@ def dump_templates(output: "StrPath", targets: Optional[List] = None) -> None:
         if path.exists():
             content = path.read_text(encoding="utf-8")
             if content != template.content:
-                raise TemplateContentDoesNotMatch(template.DEFAULT_NAME, str(path))
+                raise TemplateContentDoesNotMatchError(template.DEFAULT_NAME, str(path))
         else:
             path.write_text(json.dumps(template.content), encoding="utf-8")

@@ -2,7 +2,6 @@
 import os
 
 import pytest
-
 from dvc_render.html import (
     HTML,
     PAGE_HTML,
@@ -46,7 +45,7 @@ CSS_PAGE_HTML = """<!DOCTYPE html>
 
 
 @pytest.mark.parametrize(
-    "template,page_elements,expected_page",
+    ("template", "page_elements", "expected_page"),
     [
         (
             None,

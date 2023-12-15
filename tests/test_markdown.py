@@ -1,5 +1,4 @@
 import pytest
-
 from dvc_render.markdown import (
     PAGE_MARKDOWN,
     Markdown,
@@ -17,7 +16,7 @@ CUSTOM_PAGE_MARKDOWN = """# CUSTOM REPORT
 
 
 @pytest.mark.parametrize(
-    "template,page_elements,expected_page",
+    ("template", "page_elements", "expected_page"),
     [
         (
             None,
