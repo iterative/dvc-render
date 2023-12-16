@@ -1,4 +1,5 @@
 import json
+import os
 from typing import Any, Dict, List
 
 import pytest
@@ -122,16 +123,18 @@ def test_bad_template_on_init():
         ),
     ),
 )
-def test_bad_template_on_missing_data(tmp_dir, bad_content, good_content):
-    tmp_dir.gen("bar.json", json.dumps(bad_content))
+def test_bad_template_on_missing_data(tmp_path, bad_content, good_content):
+    template_path = tmp_path / "bar.json"
+    os.makedirs(template_path.parent, exist_ok=True)
+    template_path.write_text(json.dumps(bad_content), encoding="utf-8")
     datapoints = [{"val": 2}, {"val": 3}]
-    renderer = VegaRenderer(datapoints, "foo", template="bar.json")
+    renderer = VegaRenderer(datapoints, "foo", template=template_path)
 
     with pytest.raises(BadTemplateError):
         renderer.get_filled_template()
 
-    tmp_dir.gen("bar.json", json.dumps(good_content))
-    renderer = VegaRenderer(datapoints, "foo", template="bar.json")
+    template_path.write_text(json.dumps(good_content), encoding="utf-8")
+    renderer = VegaRenderer(datapoints, "foo", template=template_path)
     assert renderer.get_filled_template()
 
 
@@ -146,7 +149,7 @@ def test_raise_on_wrong_field():
 
 @pytest.mark.parametrize("name", ["foo", "foo/bar", "foo/bar.tsv"])
 @pytest.mark.parametrize("to_file", [True, False])
-def test_generate_markdown(tmp_dir, mocker, name, to_file):
+def test_generate_markdown(tmp_path, mocker, name, to_file):
     # pylint: disable-msg=too-many-locals
     import matplotlib.pyplot as plt
 
@@ -164,10 +167,10 @@ def test_generate_markdown(tmp_dir, mocker, name, to_file):
     renderer = VegaRenderer(datapoints, name, **props)
 
     if to_file:
-        report_folder = tmp_dir / "output"
+        report_folder = tmp_path / "output"
         report_folder.mkdir()
-        md = renderer.generate_markdown(tmp_dir / "output" / "report.md")
-        output_file = (tmp_dir / "output" / renderer.name).with_suffix(".png")
+        md = renderer.generate_markdown(tmp_path / "output" / "report.md")
+        output_file = (tmp_path / "output" / renderer.name).with_suffix(".png")
         assert output_file.exists()
         savefig.assert_called_with(output_file)
         assert f"![{name}]({output_file.relative_to(report_folder)})" in md
@@ -223,35 +226,32 @@ def test_escape_special_characters():
     assert filled["encoding"]["y"]["title"] == "foo.bar[1]"
 
 
-def test_fill_anchor_in_string(tmp_dir):
+def test_fill_anchor_in_string(tmp_path):
     y = "lab"
     x = "SR"
-    tmp_dir.gen(
-        "custom.json",
-        json.dumps(
+    template_content = {
+        "data": {"values": Template.anchor("data")},
+        "transform": [
+            {"joinaggregate": [{"op": "mean", "field": "lab", "as": "mean_y"}]},
             {
-                "data": {"values": Template.anchor("data")},
-                "transform": [
-                    {"joinaggregate": [{"op": "mean", "field": "lab", "as": "mean_y"}]},
-                    {
-                        "calculate": "pow(datum.<DVC_METRIC_Y> - "
-                        "datum.<DVC_METRIC_X>,2)",
-                        "as": "SR",
-                    },
-                    {"joinaggregate": [{"op": "sum", "field": "SR", "as": "SSR"}]},
-                ],
-                "encoding": {
-                    "x": {"field": Template.anchor("x")},
-                    "y": {"field": Template.anchor("y")},
-                },
+                "calculate": "pow(datum.<DVC_METRIC_Y> - " "datum.<DVC_METRIC_X>,2)",
+                "as": "SR",
             },
-        ),
-    )
+            {"joinaggregate": [{"op": "sum", "field": "SR", "as": "SSR"}]},
+        ],
+        "encoding": {
+            "x": {"field": Template.anchor("x")},
+            "y": {"field": Template.anchor("y")},
+        },
+    }
+    template_path = tmp_path / "custom.json"
+    os.makedirs(template_path.parent, exist_ok=True)
+    template_path.write_text(json.dumps(template_content), encoding="utf-8")
     datapoints = [
         {x: "B", y: "A"},
         {x: "A", y: "A"},
     ]
-    props = {"template": "custom.json", "x": x, "y": y}
+    props = {"template": template_path, "x": x, "y": y}
 
     renderer = VegaRenderer(datapoints, "foo", **props)
     filled = renderer.get_filled_template()

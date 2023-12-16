@@ -46,8 +46,8 @@ def test_no_placeholder():
         Markdown(template)
 
 
-def test_render_markdown_to_file(tmp_dir):
-    output_file = tmp_dir / "report"
+def test_render_markdown_to_file(tmp_path):
+    output_file = tmp_path / "report"
     assert output_file == render_markdown([], output_file)
 
 

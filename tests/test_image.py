@@ -82,9 +82,9 @@ def test_invalid_generate_markdown():
         ),
     ],
 )
-def test_render_evaluate_path(tmp_dir, html_path, img_path, expected_path):
-    abs_html_path = tmp_dir / html_path
-    abs_img_path = tmp_dir / img_path
+def test_render_evaluate_path(tmp_path, html_path, img_path, expected_path):
+    abs_html_path = tmp_path / html_path
+    abs_img_path = tmp_path / img_path
 
     datapoints = [
         {
