@@ -1,5 +1,4 @@
 import pytest
-
 from dvc_render.markdown import (
     PAGE_MARKDOWN,
     Markdown,
@@ -17,7 +16,7 @@ CUSTOM_PAGE_MARKDOWN = """# CUSTOM REPORT
 
 
 @pytest.mark.parametrize(
-    "template,page_elements,expected_page",
+    ("template", "page_elements", "expected_page"),
     [
         (
             None,
@@ -47,8 +46,8 @@ def test_no_placeholder():
         Markdown(template)
 
 
-def test_render_markdown_to_file(tmp_dir):
-    output_file = tmp_dir / "report"
+def test_render_markdown_to_file(tmp_path):
+    output_file = tmp_path / "report"
     assert output_file == render_markdown([], output_file)
 
 

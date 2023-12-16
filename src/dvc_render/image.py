@@ -22,7 +22,7 @@ class ImageRenderer(Renderer):
 
     EXTENSIONS = {".jpg", ".jpeg", ".gif", ".png", ".svg"}
 
-    def partial_html(self, html_path=None, **kwargs) -> str:
+    def partial_html(self, html_path=None, **kwargs) -> str:  # noqa: ARG002
         div_content = []
         for datapoint in self.datapoints:
             src = datapoint[self.SRC_FIELD]
@@ -50,7 +50,7 @@ class ImageRenderer(Renderer):
             return "\n".join(div_content)
         return ""
 
-    def generate_markdown(self, report_path=None) -> str:
+    def generate_markdown(self) -> str:  # type: ignore[override]
         content = []
         for datapoint in self.datapoints:
             src = datapoint[self.SRC_FIELD]

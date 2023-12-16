@@ -128,14 +128,14 @@ def test_color_by_categorical():
     }
 
 
-def test_write_parallel_coordinates(tmp_dir):
+def test_write_parallel_coordinates(tmp_path):
     datapoints = [
         {"categorical": "foo", "scalar": "0.1"},
         {"categorical": "bar", "scalar": "2"},
     ]
 
     renderer = ParallelCoordinatesRenderer(datapoints)
-    html_path = render_html(renderers=[renderer], output_file=tmp_dir / "index.html")
+    html_path = render_html(renderers=[renderer], output_file=tmp_path / "index.html")
 
     html_text = html_path.read_text()
 

@@ -19,7 +19,12 @@ class Renderer(abc.ABC):
 
     EXTENSIONS: Iterable[str] = {}
 
-    def __init__(self, datapoints: List = None, name: str = None, **properties):
+    def __init__(
+        self,
+        datapoints: Optional[List] = None,
+        name: Optional[str] = None,
+        **properties,
+    ):
         self.datapoints = datapoints or []
         self.name = name or ""
         self.properties = properties
@@ -34,12 +39,12 @@ class Renderer(abc.ABC):
 
     @property
     @abc.abstractmethod
-    def TYPE(self):  # pylint: disable=missing-function-docstring
+    def TYPE(self):  # noqa: N802
         raise NotImplementedError
 
     @property
     @abc.abstractmethod
-    def SCRIPTS(self):  # pylint: disable=missing-function-docstring
+    def SCRIPTS(self):  # noqa: N802
         raise NotImplementedError
 
     @staticmethod
@@ -58,13 +63,11 @@ class Renderer(abc.ABC):
             return self.DIV.format(id=div_id, partial=partial)
         return ""
 
-    def generate_markdown(
-        self, report_path: Optional[StrPath] = None
-    ) -> str:  # pylint: disable=missing-function-docstring
+    def generate_markdown(self, report_path: Optional[StrPath] = None) -> str:  # pylint: disable=missing-function-docstring
         "Generate a markdown element"
         raise NotImplementedError
 
     @classmethod
-    def matches(cls, filename, properties) -> bool:  # pylint: disable=unused-argument
+    def matches(cls, filename) -> bool:  # pylint: disable=unused-argument
         "Check if the Renderer is suitable."
         return Path(filename).suffix in cls.EXTENSIONS

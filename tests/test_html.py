@@ -2,7 +2,6 @@
 import os
 
 import pytest
-
 from dvc_render.html import (
     HTML,
     PAGE_HTML,
@@ -46,7 +45,7 @@ CSS_PAGE_HTML = """<!DOCTYPE html>
 
 
 @pytest.mark.parametrize(
-    "template,page_elements,expected_page",
+    ("template", "page_elements", "expected_page"),
     [
         (
             None,
@@ -76,8 +75,8 @@ def test_html(template, page_elements, expected_page):
     assert result == expected_page
 
 
-def test_render_html_with_custom_template(mocker, tmp_dir):
-    output_file = tmp_dir / "output_file"
+def test_render_html_with_custom_template(mocker, tmp_path):
+    output_file = tmp_path / "output_file"
 
     render_html(mocker.MagicMock(), output_file)
     assert output_file.read_text() == PAGE_HTML.replace("{plot_divs}", "").replace(
@@ -87,7 +86,7 @@ def test_render_html_with_custom_template(mocker, tmp_dir):
     render_html(mocker.MagicMock(), output_file, CUSTOM_PAGE_HTML)
     assert output_file.read_text() == CUSTOM_PAGE_HTML.format(plot_divs="")
 
-    custom_template = tmp_dir / "custom_template"
+    custom_template = tmp_path / "custom_template"
     custom_template.write_text(CUSTOM_PAGE_HTML)
     render_html(mocker.MagicMock(), output_file, custom_template)
     assert output_file.read_text() == CUSTOM_PAGE_HTML.format(plot_divs="")

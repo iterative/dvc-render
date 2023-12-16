@@ -1,8 +1,8 @@
 import json
+import os
 from typing import Any, Dict, List
 
 import pytest
-
 from dvc_render.vega import OPTIONAL_ANCHOR_RANGES, BadTemplateError, VegaRenderer
 from dvc_render.vega_templates import NoFieldInDataError, Template
 
@@ -10,7 +10,7 @@ from dvc_render.vega_templates import NoFieldInDataError, Template
 
 
 @pytest.mark.parametrize(
-    "extension, matches",
+    ("extension", "matches"),
     (
         (".csv", True),
         (".json", True),
@@ -24,7 +24,7 @@ from dvc_render.vega_templates import NoFieldInDataError, Template
     ),
 )
 def test_matches(extension, matches):
-    assert VegaRenderer.matches("file" + extension, {}) == matches
+    assert VegaRenderer.matches("file" + extension) == matches
 
 
 def test_init_empty():
@@ -104,7 +104,7 @@ def test_bad_template_on_init():
 
 
 @pytest.mark.parametrize(
-    "bad_content,good_content",
+    ("bad_content", "good_content"),
     (
         (
             {"data": {"values": "BAD_ANCHOR"}},
@@ -123,16 +123,18 @@ def test_bad_template_on_init():
         ),
     ),
 )
-def test_bad_template_on_missing_data(tmp_dir, bad_content, good_content):
-    tmp_dir.gen("bar.json", json.dumps(bad_content))
+def test_bad_template_on_missing_data(tmp_path, bad_content, good_content):
+    template_path = tmp_path / "bar.json"
+    os.makedirs(template_path.parent, exist_ok=True)
+    template_path.write_text(json.dumps(bad_content), encoding="utf-8")
     datapoints = [{"val": 2}, {"val": 3}]
-    renderer = VegaRenderer(datapoints, "foo", template="bar.json")
+    renderer = VegaRenderer(datapoints, "foo", template=template_path)
 
     with pytest.raises(BadTemplateError):
         renderer.get_filled_template()
 
-    tmp_dir.gen("bar.json", json.dumps(good_content))
-    renderer = VegaRenderer(datapoints, "foo", template="bar.json")
+    template_path.write_text(json.dumps(good_content), encoding="utf-8")
+    renderer = VegaRenderer(datapoints, "foo", template=template_path)
     assert renderer.get_filled_template()
 
 
@@ -147,15 +149,15 @@ def test_raise_on_wrong_field():
 
 @pytest.mark.parametrize("name", ["foo", "foo/bar", "foo/bar.tsv"])
 @pytest.mark.parametrize("to_file", [True, False])
-def test_generate_markdown(tmp_dir, mocker, name, to_file):
+def test_generate_markdown(tmp_path, mocker, name, to_file):
     # pylint: disable-msg=too-many-locals
-    import matplotlib.pyplot
+    import matplotlib.pyplot as plt
 
-    plot = mocker.spy(matplotlib.pyplot, "plot")
-    title = mocker.spy(matplotlib.pyplot, "title")
-    xlabel = mocker.spy(matplotlib.pyplot, "xlabel")
-    ylabel = mocker.spy(matplotlib.pyplot, "ylabel")
-    savefig = mocker.spy(matplotlib.pyplot, "savefig")
+    plot = mocker.spy(plt, "plot")
+    title = mocker.spy(plt, "title")
+    xlabel = mocker.spy(plt, "xlabel")
+    ylabel = mocker.spy(plt, "ylabel")
+    savefig = mocker.spy(plt, "savefig")
 
     props = {"x": "first_val", "y": "second_val", "title": "FOO"}
     datapoints = [
@@ -165,10 +167,10 @@ def test_generate_markdown(tmp_dir, mocker, name, to_file):
     renderer = VegaRenderer(datapoints, name, **props)
 
     if to_file:
-        report_folder = tmp_dir / "output"
+        report_folder = tmp_path / "output"
         report_folder.mkdir()
-        md = renderer.generate_markdown(tmp_dir / "output" / "report.md")
-        output_file = (tmp_dir / "output" / renderer.name).with_suffix(".png")
+        md = renderer.generate_markdown(tmp_path / "output" / "report.md")
+        output_file = (tmp_path / "output" / renderer.name).with_suffix(".png")
         assert output_file.exists()
         savefig.assert_called_with(output_file)
         assert f"![{name}]({output_file.relative_to(report_folder)})" in md
@@ -224,36 +226,32 @@ def test_escape_special_characters():
     assert filled["encoding"]["y"]["title"] == "foo.bar[1]"
 
 
-def test_fill_anchor_in_string(tmp_dir):
+def test_fill_anchor_in_string(tmp_path):
     y = "lab"
     x = "SR"
-    tmp_dir.gen(
-        "custom.json",
-        json.dumps(
+    template_content = {
+        "data": {"values": Template.anchor("data")},
+        "transform": [
+            {"joinaggregate": [{"op": "mean", "field": "lab", "as": "mean_y"}]},
             {
-                "data": {"values": Template.anchor("data")},
-                "transform": [
-                    {"joinaggregate": [{"op": "mean", "field": "lab", "as": "mean_y"}]},
-                    {
-                        "calculate": "pow("
-                        + "datum.<DVC_METRIC_Y> - datum.<DVC_METRIC_X>,2"
-                        + ")",
-                        "as": "SR",
-                    },
-                    {"joinaggregate": [{"op": "sum", "field": "SR", "as": "SSR"}]},
-                ],
-                "encoding": {
-                    "x": {"field": Template.anchor("x")},
-                    "y": {"field": Template.anchor("y")},
-                },
+                "calculate": "pow(datum.<DVC_METRIC_Y> - " "datum.<DVC_METRIC_X>,2)",
+                "as": "SR",
             },
-        ),
-    )
+            {"joinaggregate": [{"op": "sum", "field": "SR", "as": "SSR"}]},
+        ],
+        "encoding": {
+            "x": {"field": Template.anchor("x")},
+            "y": {"field": Template.anchor("y")},
+        },
+    }
+    template_path = tmp_path / "custom.json"
+    os.makedirs(template_path.parent, exist_ok=True)
+    template_path.write_text(json.dumps(template_content), encoding="utf-8")
     datapoints = [
         {x: "B", y: "A"},
         {x: "A", y: "A"},
     ]
-    props = {"template": "custom.json", "x": x, "y": y}
+    props = {"template": template_path, "x": x, "y": y}
 
     renderer = VegaRenderer(datapoints, "foo", **props)
     filled = renderer.get_filled_template()
@@ -263,16 +261,14 @@ def test_fill_anchor_in_string(tmp_dir):
 
 
 @pytest.mark.parametrize(
-    ",".join(
-        [
-            "anchors_y_definitions",
-            "datapoints",
-            "y",
-            "expected_dp_keys",
-            "stroke_dash_encoding",
-            "pivot_field",
-            "group_by",
-        ]
+    (
+        "anchors_y_definitions",
+        "datapoints",
+        "y",
+        "expected_dp_keys",
+        "stroke_dash_encoding",
+        "pivot_field",
+        "group_by",
     ),
     (
         pytest.param(
@@ -498,7 +494,7 @@ def test_fill_anchor_in_string(tmp_dir):
         ),
     ),
 )
-def test_optional_anchors_linear(
+def test_optional_anchors_linear(  # noqa: PLR0913
     anchors_y_definitions,
     datapoints,
     y,
@@ -531,16 +527,14 @@ def test_optional_anchors_linear(
 
 
 @pytest.mark.parametrize(
-    ",".join(
-        [
-            "anchors_y_definitions",
-            "datapoints",
-            "y",
-            "expected_dp_keys",
-            "row_encoding",
-            "group_by_y",
-            "group_by_x",
-        ]
+    (
+        "anchors_y_definitions",
+        "datapoints",
+        "y",
+        "expected_dp_keys",
+        "row_encoding",
+        "group_by_y",
+        "group_by_x",
     ),
     (
         pytest.param(
@@ -676,7 +670,7 @@ def test_optional_anchors_linear(
         ),
     ),
 )
-def test_optional_anchors_confusion(
+def test_optional_anchors_confusion(  # noqa: PLR0913
     anchors_y_definitions,
     datapoints,
     y,
@@ -708,15 +702,13 @@ def test_optional_anchors_confusion(
 
 
 @pytest.mark.parametrize(
-    ",".join(
-        [
-            "anchors_y_definitions",
-            "datapoints",
-            "y",
-            "expected_dp_keys",
-            "shape_encoding",
-            "tooltip_encoding",
-        ]
+    (
+        "anchors_y_definitions",
+        "datapoints",
+        "y",
+        "expected_dp_keys",
+        "shape_encoding",
+        "tooltip_encoding",
     ),
     (
         pytest.param(
@@ -870,7 +862,7 @@ def test_optional_anchors_confusion(
         ),
     ),
 )
-def test_optional_anchors_scatter(
+def test_optional_anchors_scatter(  # noqa: PLR0913
     anchors_y_definitions,
     datapoints,
     y,
@@ -908,12 +900,7 @@ def test_optional_anchors_scatter(
 
 
 @pytest.mark.parametrize(
-    ",".join(
-        [
-            "revs",
-            "datapoints",
-        ]
-    ),
+    ("revs", "datapoints"),
     (
         pytest.param(
             ["B"],
@@ -1067,14 +1054,12 @@ def test_color_anchor(revs, datapoints):
 
 
 @pytest.mark.parametrize(
-    ",".join(
-        [
-            "anchors_y_definitions",
-            "datapoints",
-            "y",
-            "expected_dp_keys",
-            "stroke_dash_encoding",
-        ]
+    (
+        "anchors_y_definitions",
+        "datapoints",
+        "y",
+        "expected_dp_keys",
+        "stroke_dash_encoding",
     ),
     (
         pytest.param(

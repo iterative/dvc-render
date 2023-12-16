@@ -1,14 +1,13 @@
 import os
 
 import pytest
-
 from dvc_render.image import ImageRenderer
 
 # pylint: disable=missing-function-docstring
 
 
 @pytest.mark.parametrize(
-    "extension, matches",
+    ("extension", "matches"),
     (
         (".csv", False),
         (".json", False),
@@ -23,7 +22,7 @@ from dvc_render.image import ImageRenderer
 )
 def test_matches(extension, matches):
     filename = "file" + extension
-    assert ImageRenderer.matches(filename, {}) == matches
+    assert ImageRenderer.matches(filename) == matches
 
 
 @pytest.mark.parametrize("html_path", [None, "/output/dir/index.html"])
@@ -69,7 +68,7 @@ def test_invalid_generate_markdown():
 
 
 @pytest.mark.parametrize(
-    "html_path,img_path,expected_path",
+    ("html_path", "img_path", "expected_path"),
     [
         (
             os.path.join("output", "path", "index.html"),
@@ -83,9 +82,9 @@ def test_invalid_generate_markdown():
         ),
     ],
 )
-def test_render_evaluate_path(tmp_dir, html_path, img_path, expected_path):
-    abs_html_path = tmp_dir / html_path
-    abs_img_path = tmp_dir / img_path
+def test_render_evaluate_path(tmp_path, html_path, img_path, expected_path):
+    abs_html_path = tmp_path / html_path
+    abs_img_path = tmp_path / img_path
 
     datapoints = [
         {
