@@ -50,7 +50,7 @@ class ImageRenderer(Renderer):
             return "\n".join(div_content)
         return ""
 
-    def generate_markdown(self) -> str:  # type: ignore[override]
+    def generate_markdown(self, report_path=None) -> str:  # noqa: ARG002
         content = []
         for datapoint in self.datapoints:
             src = datapoint[self.SRC_FIELD]

@@ -34,6 +34,6 @@ class TableRenderer(Renderer):
     def partial_html(self, **kwargs) -> str:  # noqa: ARG002
         return self.to_tabulate(self.datapoints, tablefmt="html")
 
-    def generate_markdown(self) -> str:  # type: ignore[override]
+    def generate_markdown(self, report_path=None) -> str:  # noqa: ARG002
         table = self.to_tabulate(self.datapoints, tablefmt="github")
         return f"\n{self.name}\n\n{table}"
