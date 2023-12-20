@@ -68,6 +68,6 @@ class Renderer(abc.ABC):
         raise NotImplementedError
 
     @classmethod
-    def matches(cls, filename) -> bool:  # pylint: disable=unused-argument
+    def matches(cls, filename, properties=None) -> bool:  # noqa: ARG003
         "Check if the Renderer is suitable."
         return Path(filename).suffix in cls.EXTENSIONS
