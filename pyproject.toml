@@ -106,7 +106,7 @@ module = [
 ignore_missing_imports = true
 
 [tool.codespell]
-ignore-words-list = " "
+ignore-words-list = "fpr"
 
 [tool.ruff]
 ignore = [
