@@ -526,6 +526,84 @@ def test_optional_anchors_linear(  # noqa: PLR0913
     assert plot_content["layer"][0]["transform"][0]["groupby"] == group_by
 
 
+# https://github.com/iterative/dvc-render/issues/149
+def test_no_revs_with_datapoints():
+    datapoints = [
+        {
+            "rev": "B",
+            "acc": "0.05",
+            "filename": "test",
+            "field": "acc",
+            "step": 1,
+        },
+        {
+            "rev": "B",
+            "acc": "0.1",
+            "filename": "test",
+            "field": "acc",
+            "step": 2,
+        },
+        {
+            "rev": "C",
+            "acc": "0.05",
+            "filename": "test",
+            "field": "acc",
+            "step": 1,
+        },
+        {
+            "rev": "C",
+            "acc": "0.1",
+            "filename": "test",
+            "field": "acc",
+            "step": 2,
+        },
+        {
+            "rev": "D",
+            "acc": "0.05",
+            "filename": "test",
+            "field": "acc",
+            "step": 1,
+        },
+        {
+            "rev": "D",
+            "acc": "0.1",
+            "filename": "test",
+            "field": "acc",
+            "step": 2,
+        },
+        {
+            "acc": "0.05",
+            "filename": "test",
+            "field": "acc",
+            "step": 1,
+        },
+        {
+            "acc": "0.05",
+            "filename": "test",
+            "field": "acc",
+            "step": 2,
+        },
+    ]
+
+    props = {
+        "anchors_y_definitions": [{"filename": "test", "field": "acc"}],
+        "template": "linear",
+        "x": "step",
+        "y": "acc",
+    }
+
+    renderer = VegaRenderer(datapoints, "foo", **props)
+    plot_content = renderer.get_filled_template()
+
+    assert plot_content["encoding"]["color"] == {
+        "field": "rev",
+        "scale": {
+            "domain": ["B", "C", "D"],
+            "range": OPTIONAL_ANCHOR_RANGES["color"][0:3],
+        },
+    }
+
+
 @pytest.mark.parametrize(
     (
         "anchors_y_definitions",
