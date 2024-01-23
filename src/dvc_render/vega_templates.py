@@ -594,6 +594,7 @@ class SmoothLinearTemplate(Template):
                     {"calculate": Template.anchor("pivot_field"), "as": "pivot_field"},
                     {
                         "pivot": "pivot_field",
+                        "op": "mean",
                         "value": Template.anchor("y"),
                         "groupby": [Template.anchor("x")],
                     },

@@ -604,6 +604,46 @@ def test_no_revs_with_datapoints():
     }
 
 
+# https://github.com/iterative/studio/issues/8851
+def test_linear_tooltip_groupby():
+    datapoints = [
+        {
+            "filename": "roc.json",
+            "fpr": 0.00399400898652022,
+            "tpr": 0.193158953722334,
+            "rev": "main",
+            "threshold": 0.84,
+        },
+        {
+            "filename": "roc.json",
+            "fpr": 0.00399400898652022,
+            "tpr": 0.2012072434607646,
+            "rev": "main",
+            "threshold": 0.829854797979798,
+        },
+        {
+            "filename": "roc.json",
+            "fpr": 0.00399400898652022,
+            "tpr": 0.20724346076458752,
+            "rev": "main",
+            "threshold": 0.8266666666666667,
+        },
+    ]
+
+    props = {
+        "anchors_y_definitions": [{"filename": "test", "field": "fpr"}],
+        "revs_with_datapoints": ["main"],
+        "template": "linear",
+        "x": "fpr",
+        "y": "tpr",
+    }
+
+    renderer = VegaRenderer(datapoints, "foo", **props)
+    plot_content = renderer.get_filled_template()
+
+    assert plot_content["layer"][3]["transform"][1]["op"] == "mean"
+
+
 @pytest.mark.parametrize(
     (
         "anchors_y_definitions",
