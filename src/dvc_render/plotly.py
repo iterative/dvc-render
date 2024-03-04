@@ -1,5 +1,5 @@
 import json
-from typing import Any, Dict, Optional
+from typing import Any, Optional
 
 from .base import Renderer
 from .utils import list_dict_to_dict_list
@@ -48,7 +48,7 @@ class ParallelCoordinatesRenderer(Renderer):
     def _get_plotly_data(self):
         tabular_dict = list_dict_to_dict_list(self.datapoints)
 
-        trace: Dict[str, Any] = {"type": "parcoords", "dimensions": []}
+        trace: dict[str, Any] = {"type": "parcoords", "dimensions": []}
         for label, values in tabular_dict.items():
             values = list(map(str, values))
             is_categorical = False
