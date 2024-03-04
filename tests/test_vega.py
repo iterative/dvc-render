@@ -1,6 +1,6 @@
 import json
 import os
-from typing import Any, Dict, List
+from typing import Any
 
 import pytest
 from dvc_render.vega import OPTIONAL_ANCHOR_RANGES, BadTemplateError, VegaRenderer
@@ -1393,16 +1393,16 @@ def test_partial_filled_template(
 
 
 def _get_expected_datapoints(
-    datapoints: List[Dict[str, Any]], expected_dp_keys: List[str]
+    datapoints: list[dict[str, Any]], expected_dp_keys: list[str]
 ):
-    expected_datapoints: List[Dict[str, Any]] = []
+    expected_datapoints: list[dict[str, Any]] = []
     for datapoint in datapoints:
         expected_datapoint = {}
         for key in expected_dp_keys:
             if key == "filename::field":
-                expected_datapoint[
-                    key
-                ] = f"{datapoint['filename']}::{datapoint['field']}"
+                expected_datapoint[key] = (
+                    f"{datapoint['filename']}::{datapoint['field']}"
+                )
             else:
                 value = datapoint.get(key)
                 if value is None:

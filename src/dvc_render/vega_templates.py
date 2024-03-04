@@ -1,7 +1,7 @@
 # pylint: disable=missing-function-docstring
 import json
 from pathlib import Path
-from typing import TYPE_CHECKING, Any, Dict, List, Optional, Union
+from typing import TYPE_CHECKING, Any, Optional, Union
 
 from .exceptions import DvcRenderError
 
@@ -80,11 +80,11 @@ class Template:
     EXTENSION = ".json"
     ANCHOR = "<DVC_METRIC_{}>"
 
-    DEFAULT_CONTENT: Dict[str, Any] = {}
+    DEFAULT_CONTENT: dict[str, Any] = {}
     DEFAULT_NAME: str = ""
 
     def __init__(
-        self, content: Optional[Dict[str, Any]] = None, name: Optional[str] = None
+        self, content: Optional[dict[str, Any]] = None, name: Optional[str] = None
     ):
         if (
             content
@@ -94,7 +94,7 @@ class Template:
         ):
             raise BadTemplateError
         self._original_content = content or self.DEFAULT_CONTENT
-        self.content: Dict[str, Any] = self._original_content
+        self.content: dict[str, Any] = self._original_content
         self.name = name or self.DEFAULT_NAME
         self.filename = Path(self.name).with_suffix(self.EXTENSION)
 
@@ -732,7 +732,7 @@ def get_template(
     raise TemplateNotFoundError(template)
 
 
-def dump_templates(output: "StrPath", targets: Optional[List] = None) -> None:
+def dump_templates(output: "StrPath", targets: Optional[list] = None) -> None:
     "Write TEMPLATES in `.json` format to `output`."
     output = Path(output)
     output.mkdir(exist_ok=True)

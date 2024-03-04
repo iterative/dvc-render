@@ -1,6 +1,6 @@
 import os
 from pathlib import Path
-from typing import TYPE_CHECKING, List, Optional
+from typing import TYPE_CHECKING, Optional
 
 from dvc_render.image import ImageRenderer
 
@@ -50,7 +50,7 @@ class HTML:
             raise MissingPlaceholderError(self.PLOTS_PLACEHOLDER_FORMAT_STR)
 
         self.template = template
-        self.elements: List[str] = []
+        self.elements: list[str] = []
         self.scripts: str = ""
         self.refresh_tag = ""
         if refresh_seconds is not None:
@@ -99,7 +99,7 @@ def _order_image_per_step(renderer: "Renderer") -> tuple:
 
 
 def render_html(
-    renderers: List["Renderer"],
+    renderers: list["Renderer"],
     output_file: "StrPath",
     html_template: Optional["StrPath"] = None,
     refresh_seconds: Optional[int] = None,

@@ -3,7 +3,7 @@ import io
 import json
 from collections import defaultdict
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Any, Optional, Union
 from warnings import warn
 
 from .base import Renderer
@@ -45,7 +45,7 @@ OPTIONAL_ANCHORS = [
     "tooltip",
     "zoom_and_pan",
 ]
-OPTIONAL_ANCHOR_RANGES: Dict[str, Union[List[str], List[List[int]]]] = {
+OPTIONAL_ANCHOR_RANGES: dict[str, Union[list[str], list[list[int]]]] = {
     "stroke_dash": [[1, 0], [8, 8], [8, 4], [4, 4], [4, 2], [2, 1], [1, 1]],
     "color": [
         "#945dd6",
@@ -82,20 +82,20 @@ class VegaRenderer(Renderer):
 
     EXTENSIONS = {".yml", ".yaml", ".json", ".csv", ".tsv"}
 
-    def __init__(self, datapoints: List, name: str, **properties):
+    def __init__(self, datapoints: list, name: str, **properties):
         super().__init__(datapoints, name, **properties)
         self.template = get_template(
             self.properties.get("template", None),
             self.properties.get("template_dir", None),
         )
 
-        self._split_content: Dict[str, str] = {}
+        self._split_content: dict[str, str] = {}
 
     def get_filled_template(  # noqa: C901
         self,
-        split_anchors: Optional[List[str]] = None,
+        split_anchors: Optional[list[str]] = None,
         strict: bool = True,
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """Returns a functional vega specification"""
         self.template.reset()
         if not self.datapoints:
@@ -224,7 +224,7 @@ class VegaRenderer(Renderer):
                 revs.append(rev)
         return revs
 
-    def _process_optional_anchors(self, split_anchors: List[str]):
+    def _process_optional_anchors(self, split_anchors: list[str]):
         optional_anchors = [
             anchor for anchor in OPTIONAL_ANCHORS if self.template.has_anchor(anchor)
         ]
@@ -245,7 +245,7 @@ class VegaRenderer(Renderer):
             split_anchors, optional_anchors, y_definitions
         )
 
-    def _fill_color(self, split_anchors: List[str], optional_anchors: List[str]):
+    def _fill_color(self, split_anchors: list[str], optional_anchors: list[str]):
         all_revs = self.get_revs()
         self._fill_optional_anchor_mapping(
             split_anchors,
@@ -255,7 +255,7 @@ class VegaRenderer(Renderer):
             all_revs,
         )
 
-    def _fill_set_encoding(self, split_anchors: List[str], optional_anchors: List[str]):
+    def _fill_set_encoding(self, split_anchors: list[str], optional_anchors: list[str]):
         for name, encoding in [
             ("zoom_and_pan", {"name": "grid", "select": "interval", "bind": "scales"}),
             ("plot_height", 300),
@@ -264,7 +264,7 @@ class VegaRenderer(Renderer):
             self._fill_optional_anchor(split_anchors, optional_anchors, name, encoding)
 
     def _process_single_source_plot(
-        self, split_anchors: List[str], optional_anchors: List[str]
+        self, split_anchors: list[str], optional_anchors: list[str]
     ):
         self._fill_group_by(split_anchors, optional_anchors, [REV])
         self._fill_optional_anchor(
@@ -276,9 +276,9 @@ class VegaRenderer(Renderer):
 
     def _process_multi_source_plot(
         self,
-        split_anchors: List[str],
-        optional_anchors: List[str],
-        y_definitions: List[Dict[str, str]],
+        split_anchors: list[str],
+        optional_anchors: list[str],
+        y_definitions: list[dict[str, str]],
     ):
         varied_keys, domain = self._collect_variations(y_definitions)
 
@@ -288,8 +288,8 @@ class VegaRenderer(Renderer):
         return varied_keys
 
     def _collect_variations(
-        self, y_definitions: List[Dict[str, str]]
-    ) -> Tuple[List[str], List[str]]:
+        self, y_definitions: list[dict[str, str]]
+    ) -> tuple[list[str], list[str]]:
         varied_values = defaultdict(set)
         for defn in y_definitions:
             for key in FILENAME_FIELD:
@@ -313,10 +313,10 @@ class VegaRenderer(Renderer):
 
     def _fill_optional_multi_source_anchors(
         self,
-        split_anchors: List[str],
-        optional_anchors: List[str],
-        varied_keys: List[str],
-        domain: List[str],
+        split_anchors: list[str],
+        optional_anchors: list[str],
+        varied_keys: list[str],
+        domain: list[str],
     ):
         if not optional_anchors:
             return
@@ -352,9 +352,9 @@ class VegaRenderer(Renderer):
 
     def _fill_group_by(
         self,
-        split_anchors: List[str],
-        optional_anchors: List[str],
-        group_by: List[str],
+        split_anchors: list[str],
+        optional_anchors: list[str],
+        group_by: list[str],
     ):
         self._fill_optional_anchor(
             split_anchors, optional_anchors, "group_by", group_by
@@ -374,9 +374,9 @@ class VegaRenderer(Renderer):
 
     def _fill_tooltip(
         self,
-        split_anchors: List[str],
-        optional_anchors: List[str],
-        additional_fields: Optional[List[str]] = None,
+        split_anchors: list[str],
+        optional_anchors: list[str],
+        additional_fields: Optional[list[str]] = None,
     ):
         if not additional_fields:
             additional_fields = []
@@ -394,8 +394,8 @@ class VegaRenderer(Renderer):
 
     def _fill_optional_anchor(
         self,
-        split_anchors: List[str],
-        optional_anchors: List[str],
+        split_anchors: list[str],
+        optional_anchors: list[str],
         name: str,
         value: Any,
     ):
@@ -410,7 +410,7 @@ class VegaRenderer(Renderer):
 
         self.template.fill_anchor(name, value)
 
-    def _get_domain(self, varied_keys: List[str], varied_values: Dict[str, set]):
+    def _get_domain(self, varied_keys: list[str], varied_values: dict[str, set]):
         if len(varied_keys) == 2:
             domain = list(varied_values[CONCAT_FIELDS])
         else:
@@ -422,11 +422,11 @@ class VegaRenderer(Renderer):
 
     def _fill_optional_anchor_mapping(  # noqa: PLR0913
         self,
-        split_anchors: List[str],
-        optional_anchors: List[str],
+        split_anchors: list[str],
+        optional_anchors: list[str],
         field: str,
         name: str,
-        domain: List[str],
+        domain: list[str],
     ):  # pylint: disable=too-many-arguments
         if name not in optional_anchors:
             return
@@ -445,9 +445,9 @@ class VegaRenderer(Renderer):
         self,
         field: str,
         name: str,
-        domain: List[str],
+        domain: list[str],
     ):
-        full_range_values: List[Any] = OPTIONAL_ANCHOR_RANGES.get(name, [])
+        full_range_values: list[Any] = OPTIONAL_ANCHOR_RANGES.get(name, [])
         anchor_range_values = full_range_values.copy()
 
         anchor_range = []
@@ -470,7 +470,7 @@ class VegaRenderer(Renderer):
             **legend,
         }
 
-    def _update_datapoints(self, varied_keys: Optional[List[str]] = None):
+    def _update_datapoints(self, varied_keys: Optional[list[str]] = None):
         if varied_keys is None:
             return
 

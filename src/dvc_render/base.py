@@ -1,6 +1,7 @@
 import abc
+from collections.abc import Iterable
 from pathlib import Path
-from typing import TYPE_CHECKING, Iterable, List, Optional, Union
+from typing import TYPE_CHECKING, Optional, Union
 
 if TYPE_CHECKING:
     from os import PathLike
@@ -21,7 +22,7 @@ class Renderer(abc.ABC):
 
     def __init__(
         self,
-        datapoints: Optional[List] = None,
+        datapoints: Optional[list] = None,
         name: Optional[str] = None,
         **properties,
     ):

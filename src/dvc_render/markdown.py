@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import TYPE_CHECKING, List, Optional
+from typing import TYPE_CHECKING, Optional
 
 from .exceptions import MissingPlaceholderError
 
@@ -27,7 +27,7 @@ class Markdown:
             )
 
         self.template = template
-        self.elements: List[str] = []
+        self.elements: list[str] = []
 
     def with_element(self, md: str) -> "Markdown":
         "Adds custom markdown element."
@@ -45,7 +45,7 @@ class Markdown:
 
 
 def render_markdown(
-    renderers: List["Renderer"],
+    renderers: list["Renderer"],
     output_file: Optional["StrPath"] = None,
     template_path: Optional["StrPath"] = None,
 ) -> "StrPath":
