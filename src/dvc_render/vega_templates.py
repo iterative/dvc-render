@@ -195,7 +195,7 @@ class ConfusionTemplate(Template):
     DEFAULT_CONTENT = {
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
         "data": {"values": Template.anchor("data")},
-        "title": Template.anchor("title"),
+        "title": {"text": Template.anchor("title"), "anchor": "middle"},
         "facet": {
             "column": {"field": "rev", "sort": []},
             "row": Template.anchor("row"),
@@ -321,7 +321,7 @@ class NormalizedConfusionTemplate(Template):
     DEFAULT_CONTENT = {
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
         "data": {"values": Template.anchor("data")},
-        "title": Template.anchor("title"),
+        "title": {"text": Template.anchor("title"), "anchor": "middle"},
         "facet": {
             "column": {"field": "rev", "sort": []},
             "row": Template.anchor("row"),
