@@ -103,6 +103,7 @@ ignore_missing_imports = true
 
 [tool.codespell]
 ignore-words-list = "fpr"
+skip = "CODE_OF_CONDUCT.rst"
 
 [tool.ruff]
 output-format = "full"
