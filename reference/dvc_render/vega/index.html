@@ -16,7 +16,7 @@
       
       
       <link rel="icon" href="../../../assets/logo.svg">
-      <meta name="generator" content="mkdocs-1.6.0, mkdocs-material-9.5.21">
+      <meta name="generator" content="mkdocs-1.6.0, mkdocs-material-9.5.26">
     
     
       
@@ -24,7 +24,7 @@
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.66ac8b77.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.6543a935.min.css">
       
         
         <link rel="stylesheet" href="../../../assets/stylesheets/palette.06af60db.min.css">
@@ -144,7 +144,7 @@
       
     </form>
     <div class="md-search__output">
-      <div class="md-search__scrollwrap" data-md-scrollfix>
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
         <div class="md-search-result" data-md-component="search-result">
           <div class="md-search-result__meta">
             Initializing search
@@ -748,9 +748,9 @@
 
 
 <a id="dvc_render.vega"></a>
-  <div class="doc doc-contents first">
+    <div class="doc doc-contents first">
 
-  
+
 
   <div class="doc doc-children">
 
@@ -766,22 +766,22 @@
 
 
 <h2 id="dvc_render.vega.VegaRenderer" class="doc doc-heading">
-          <code>VegaRenderer</code>
+            <code>VegaRenderer</code>
 
 
 </h2>
 
 
-  <div class="doc doc-contents ">
-          <p class="doc doc-class-bases">
-            Bases: <code><a class="autorefs autorefs-internal" title="dvc_render.base.Renderer" href="../base/#dvc_render.base.Renderer">Renderer</a></code></p>
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="dvc_render.base.Renderer" href="../base/#dvc_render.base.Renderer">Renderer</a></code></p>
 
-  
+
       <p>Renderer for vega plots.</p>
 
-            <details class="quote">
-              <summary>Source code in <code>dvc_render/vega.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 63</span>
+              <details class="quote">
+                <summary>Source code in <code>dvc_render/vega.py</code></summary>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 63</span>
 <span class="normal"> 64</span>
 <span class="normal"> 65</span>
 <span class="normal"> 66</span>
@@ -1645,12 +1645,11 @@
     <span class="k">def</span> <span class="nf">_set_split_content</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_split_content</span><span class="p">[</span><span class="n">Template</span><span class="o">.</span><span class="n">anchor</span><span class="p">(</span><span class="n">name</span><span class="p">)]</span> <span class="o">=</span> <span class="n">value</span>
 </code></pre></div></td></tr></table></div>
-            </details>
+              </details>
 
-  
+
 
   <div class="doc doc-children">
-
 
 
 
@@ -1663,20 +1662,19 @@
 <div class="doc doc-object doc-function">
 
 
-
 <h3 id="dvc_render.vega.VegaRenderer.get_filled_template" class="doc doc-heading">
-          <code class="highlight language-python"><span class="n">get_filled_template</span><span class="p">(</span><span class="n">split_anchors</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">strict</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></code>
+            <code class="highlight language-python"><span class="n">get_filled_template</span><span class="p">(</span><span class="n">split_anchors</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">strict</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></code>
 
 </h3>
 
 
-  <div class="doc doc-contents ">
-  
+    <div class="doc doc-contents ">
+
       <p>Returns a functional vega specification</p>
 
-          <details class="quote">
-            <summary>Source code in <code>dvc_render/vega.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 94</span>
+            <details class="quote">
+              <summary>Source code in <code>dvc_render/vega.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 94</span>
 <span class="normal"> 95</span>
 <span class="normal"> 96</span>
 <span class="normal"> 97</span>
@@ -1780,29 +1778,27 @@
 
     <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">template</span><span class="o">.</span><span class="n">content</span>
 </code></pre></div></td></tr></table></div>
-          </details>
-  </div>
+            </details>
+    </div>
 
 </div>
-
 
 <div class="doc doc-object doc-function">
 
 
-
 <h3 id="dvc_render.vega.VegaRenderer.get_partial_filled_template" class="doc doc-heading">
-          <code class="highlight language-python"><span class="n">get_partial_filled_template</span><span class="p">()</span></code>
+            <code class="highlight language-python"><span class="n">get_partial_filled_template</span><span class="p">()</span></code>
 
 </h3>
 
 
-  <div class="doc doc-contents ">
-  
+    <div class="doc doc-contents ">
+
       <p>Returns a partially filled template along with the split out anchor content</p>
 
-          <details class="quote">
-            <summary>Source code in <code>dvc_render/vega.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">147</span>
+            <details class="quote">
+              <summary>Source code in <code>dvc_render/vega.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">147</span>
 <span class="normal">148</span>
 <span class="normal">149</span>
 <span class="normal">150</span>
@@ -1820,29 +1816,27 @@
     <span class="p">)</span>
     <span class="k">return</span> <span class="n">content</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;anchor_definitions&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_split_content</span><span class="p">}</span>
 </code></pre></div></td></tr></table></div>
-          </details>
-  </div>
+            </details>
+    </div>
 
 </div>
-
 
 <div class="doc doc-object doc-function">
 
 
-
 <h3 id="dvc_render.vega.VegaRenderer.get_revs" class="doc doc-heading">
-          <code class="highlight language-python"><span class="n">get_revs</span><span class="p">()</span></code>
+            <code class="highlight language-python"><span class="n">get_revs</span><span class="p">()</span></code>
 
 </h3>
 
 
-  <div class="doc doc-contents ">
-  
+    <div class="doc doc-contents ">
+
       <p>Returns all revisions that were collected that have datapoints.</p>
 
-          <details class="quote">
-            <summary>Source code in <code>dvc_render/vega.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">210</span>
+            <details class="quote">
+              <summary>Source code in <code>dvc_render/vega.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">210</span>
 <span class="normal">211</span>
 <span class="normal">212</span>
 <span class="normal">213</span>
@@ -1858,29 +1852,27 @@
         <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_revs_from_datapoints</span><span class="p">()</span>
     <span class="p">)</span>
 </code></pre></div></td></tr></table></div>
-          </details>
-  </div>
+            </details>
+    </div>
 
 </div>
-
 
 <div class="doc doc-object doc-function">
 
 
-
 <h3 id="dvc_render.vega.VegaRenderer.get_template" class="doc doc-heading">
-          <code class="highlight language-python"><span class="n">get_template</span><span class="p">()</span></code>
+            <code class="highlight language-python"><span class="n">get_template</span><span class="p">()</span></code>
 
 </h3>
 
 
-  <div class="doc doc-contents ">
-  
+    <div class="doc doc-contents ">
+
       <p>Returns unfilled template (for Studio)</p>
 
-          <details class="quote">
-            <summary>Source code in <code>dvc_render/vega.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">157</span>
+            <details class="quote">
+              <summary>Source code in <code>dvc_render/vega.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">157</span>
 <span class="normal">158</span>
 <span class="normal">159</span>
 <span class="normal">160</span>
@@ -1890,8 +1882,8 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">template</span><span class="o">.</span><span class="n">content</span>
 </code></pre></div></td></tr></table></div>
-          </details>
-  </div>
+            </details>
+    </div>
 
 </div>
 
@@ -1899,8 +1891,7 @@
 
   </div>
 
-  </div>
-
+    </div>
 
 </div>
 
@@ -1909,7 +1900,7 @@
 
   </div>
 
-  </div>
+    </div>
 
 </div>
 
@@ -1976,7 +1967,7 @@
     <script id="__config" type="application/json">{"base": "../../..", "features": [], "search": "../../../assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.a7c05c9e.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.ad660dcc.min.js"></script>
       
     
   </body>
