@@ -420,7 +420,7 @@ class VegaRenderer(Renderer):
         domain.sort()
         return domain
 
-    def _fill_optional_anchor_mapping(  # noqa: PLR0913
+    def _fill_optional_anchor_mapping(
         self,
         split_anchors: list[str],
         optional_anchors: list[str],
