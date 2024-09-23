@@ -1,4 +1,5 @@
 import pytest
+
 from dvc_render.markdown import (
     PAGE_MARKDOWN,
     Markdown,

@@ -2,6 +2,7 @@
 import os
 
 import pytest
+
 from dvc_render.html import (
     HTML,
     PAGE_HTML,

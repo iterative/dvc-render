@@ -2,6 +2,7 @@ import json
 import os
 
 import pytest
+
 from dvc_render.vega_templates import (
     TEMPLATES,
     LinearTemplate,
