@@ -3,6 +3,7 @@ import os
 from typing import Any
 
 import pytest
+
 from dvc_render.vega import OPTIONAL_ANCHOR_RANGES, BadTemplateError, VegaRenderer
 from dvc_render.vega_templates import NoFieldInDataError, Template
 

@@ -1,6 +1,7 @@
 import os
 
 import pytest
+
 from dvc_render.image import ImageRenderer
 
 # pylint: disable=missing-function-docstring
