@@ -50,7 +50,7 @@ tests = [
 ]
 dev = [
   "dvc-render[tests,docs]",
-  "mypy==1.13.0"
+  "mypy==1.14.0"
 ]
 
 [tool.setuptools.packages.find]
