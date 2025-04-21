@@ -86,11 +86,8 @@ class Template:
     def __init__(
         self, content: Optional[dict[str, Any]] = None, name: Optional[str] = None
     ):
-        if (
-            content
-            and not isinstance(content, dict)
-            or self.DEFAULT_CONTENT
-            and not isinstance(self.DEFAULT_CONTENT, dict)
+        if (content and not isinstance(content, dict)) or (
+            self.DEFAULT_CONTENT and not isinstance(self.DEFAULT_CONTENT, dict)
         ):
             raise BadTemplateError
         self._original_content = content or self.DEFAULT_CONTENT

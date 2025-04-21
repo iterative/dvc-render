@@ -235,7 +235,7 @@ def test_fill_anchor_in_string(tmp_path):
         "transform": [
             {"joinaggregate": [{"op": "mean", "field": "lab", "as": "mean_y"}]},
             {
-                "calculate": "pow(datum.<DVC_METRIC_Y> - " "datum.<DVC_METRIC_X>,2)",
+                "calculate": "pow(datum.<DVC_METRIC_Y> - datum.<DVC_METRIC_X>,2)",
                 "as": "SR",
             },
             {"joinaggregate": [{"op": "sum", "field": "SR", "as": "SSR"}]},
