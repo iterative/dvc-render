@@ -35,6 +35,7 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.pyv }}
+          allow-prereleases: true
 
       - name: Upgrade pip and nox
         run: |
@@ -46,7 +47,7 @@ jobs:
         run: nox -s lint
 
       - name: Run tests
-        run: nox -s tests-${{ matrix.nox_pyv || matrix.pyv }} -- --cov-report=xml
+        run: nox -s tests-${{ matrix.pyv }} -- --cov-report=xml
 
       - name: Upload coverage report
         uses: codecov/codecov-action@v5
